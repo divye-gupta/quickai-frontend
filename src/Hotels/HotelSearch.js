@@ -14,7 +14,6 @@ import {
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import $ from "jquery";
-import "./FlightSearch.css";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
@@ -70,233 +69,36 @@ const muitheme = createMuiTheme({
   },
 });
 
-function FilghtSearch() {
+const HotelSearch = () => {
   const classes = makeStyles();
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-  const [departDate, setDepartDate] = useState();
-  const [returnDate, setReturnDate] = useState();
-  const [flightClass, setFlightClass] = useState(1);
-  const [adultCount, setAdultCount] = useState(1);
-  const [childrenCount, setChildrenCount] = useState(0);
-  const [infantCount, setInfantCount] = useState(0);
-  const [fromData, setFromData] = useState([]);
-  const [toData, setToData] = useState([]);
-  const [flightWay, setFlightWay] = useState(1);
-  const [showRadio, setShowRadio] = useState(false);
-  const history = useHistory();
-  const [{ flightDetails }, dispatch] = useStateValue();
-  const [userId, setUserId] = useState();
+  const [destination, setDestination] = useState("");
+  const [destinationData, setDestinationData] = useState([]);
 
-  useEffect(() => {
-    let id = uuidv4();
-    setUserId(id);
-  }, []);
+  const onDestinationChange = (e) => {
+    e.preventDefault();
 
-  const onFocus = (e) => {
-    e.currentTarget.type = "date";
-  };
-
-  const onBlur = (e) => {
-    e.currentTarget.type = "text";
-    e.currentTarget.placeholder = "Enter a Date";
-  };
-
-  const onFromChange = (event) => {
-    event.preventDefault();
-
-    var query = event.target.value;
-    setFrom(query);
+    const query = e.target.value;
+    setDestination(query);
 
     if (query.length <= 2) {
+      return;
     } else {
-      const getData = async () => {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Query: query }),
-        };
-        fetch("http://travelvogues.com/Api/AirportList", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("list", data);
-            setFromData(data);
-          });
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
       };
-      getData();
-    }
-  };
 
-  useEffect(() => {
-    $(function () {
-      $(".dropdown li").on("mouseenter mouseleave", function (e) {
-        if ($(window).width() > 991) {
-          var elm = $(".dropdown-menu", this);
-          if (elm.length > 0) {
-            var off = elm.offset();
-            var l = off.left;
-            var w = elm.width();
-            var docW = $(window).width();
-            var isEntirelyVisible = l + w <= docW;
-            if (!isEntirelyVisible) {
-              $(elm).addClass("dropdown-menu-right");
-            } else {
-              $(elm).removeClass("dropdown-menu-right");
-            }
-          } else {
-          }
-        }
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = window.location.origin + "/js/theme.js";
-    document.body.appendChild(script);
-  }, []);
-
-  const onToChange = (event) => {
-    event.preventDefault();
-
-    var query = event.target.value;
-    setTo(query);
-    if (query.length <= 2) {
-    } else {
-      const getData = async () => {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Query: query }),
-        };
-        fetch("https://api.travelvogues.com/api/GetAirportList", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            setToData(data);
-          });
-      };
-      getData();
-    }
-  };
-
-  const setFlight = () => {
-    setAdultCount(document.getElementById("flightAdult-travellers").value);
-    setChildrenCount(
-      document.getElementById("flightChildren-travellers").value
-    );
-    setInfantCount(document.getElementById("flightInfants-travellers").value);
-  };
-
-  const addFromData = (event) => {
-    event.preventDefault();
-    if (flightWay == 1) {
-      localStorage.setItem("from", from);
-      localStorage.setItem("to", to);
-      localStorage.setItem("departDate", departDate);
-      localStorage.setItem("returnDate", departDate);
-      localStorage.setItem("flightClass", flightClass);
-      localStorage.setItem("way", flightWay);
-      localStorage.setItem("adultCount", adultCount);
-      localStorage.setItem("childrenCount", childrenCount);
-      localStorage.setItem("infantCount", infantCount);
-
-      setFlight();
-      dispatch({
-        type: "ADD_TO_FLIGHT",
-        item: {
-          way: flightWay,
-          from: from,
-          to: to,
-          departDate: departDate,
-          arriveDate: returnDate,
-          flightClass: flightClass,
-          adultCount: adultCount,
-          childrenCount: childrenCount,
-          infantCount: infantCount,
-        },
-      });
-
-      axios
-        .post("http://localhost:8000/flight", {
-          way: flightWay,
-          from: from,
-          to: to,
-          departDate: departDate,
-          arriveDate: returnDate,
-          flightClass: flightClass,
-          adultCount: adultCount,
-          childrenCount: childrenCount,
-          infantCount: infantCount,
-          userid: userId,
+      fetch(
+        `http://3.108.167.152:8040/api/City?searchTxt=${query}`,
+        requestOptions
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log(data);
+          // setDestinationData(data);
         })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-      history.push("/onewayflights");
-    } else {
-      localStorage.setItem("from", from);
-      localStorage.setItem("to", to);
-      localStorage.setItem("departDate", departDate);
-      localStorage.setItem("returnDate", returnDate);
-      localStorage.setItem("flightClass", flightClass);
-      localStorage.setItem("way", flightWay);
-      localStorage.setItem("adultCount", adultCount);
-      localStorage.setItem("childrenCount", childrenCount);
-      localStorage.setItem("infantCount", infantCount);
-
-      if (new Date(returnDate) - new Date(departDate) < 0) {
-        alert("Depart date Cannot be less Than arrival Date");
-      } else {
-        setFlight();
-        dispatch({
-          type: "ADD_TO_FLIGHT",
-          item: {
-            way: flightWay,
-            from: from,
-            to: to,
-            departDate: departDate,
-            arriveDate: returnDate,
-            flightClass: flightClass,
-            adultCount: adultCount,
-            childrenCount: childrenCount,
-            infantCount: infantCount,
-            userid: userId,
-          },
-        });
-
-        axios
-          .post("http://localhost:8000/flight", {
-            way: flightWay,
-            from: from,
-            to: to,
-            departDate: departDate,
-            arriveDate: returnDate,
-            flightClass: flightClass,
-            adultCount: adultCount,
-            childrenCount: childrenCount,
-            infantCount: infantCount,
-            userid: userId,
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        history.push("/twowayflights");
-      }
+        .catch((err) => console.log(err));
     }
-  };
-
-  const handleFlightWay = (e) => {
-    setShowRadio(!showRadio);
-    setFlightWay(e.target.value);
   };
 
   return (
@@ -306,16 +108,14 @@ function FilghtSearch() {
           <div class="container">
             <div class="header-row">
               <div class="header-column justify-content-start">
-                <div class="logo">
-                  {" "}
-                  <a href="index-2.html" title="Quickai - HTML Template">
-                    <img
-                      src="images/logo.png"
-                      alt="Quickai"
-                      width="127"
-                      height="29"
-                    />
-                  </a>{" "}
+                <div class="logo me-2 me-lg-3">
+                  <a
+                    href="index.html"
+                    class="d-flex"
+                    title="Quickai - HTML Template"
+                  >
+                    <img src="images/logo.png" alt="Quickai" />
+                  </a>
                 </div>
               </div>
               <div class="header-column justify-content-end">
@@ -323,7 +123,6 @@ function FilghtSearch() {
                   <div id="header-nav" class="collapse navbar-collapse">
                     <ul class="navbar-nav">
                       <li class="dropdown active">
-                        {" "}
                         <a class="dropdown-toggle" href="#">
                           Home
                         </a>
@@ -334,7 +133,7 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a class="dropdown-item" href="index-2.html">
+                                <a class="dropdown-item" href="index.html">
                                   Recharge or Bill Payment
                                 </a>
                               </li>
@@ -354,7 +153,7 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a class="dropdown-item" href="index-3.html">
+                                <a class="dropdown-item" href="index-2.html">
                                   Recharge or Bill Payment
                                 </a>
                               </li>
@@ -369,54 +168,53 @@ function FilghtSearch() {
                             </ul>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-4.html">
+                            <a class="dropdown-item" href="index-3.html">
                               Index 3 - (Recharge & Bill)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-5.html">
+                            <a class="dropdown-item" href="index-4.html">
                               Index 4 - (Booking)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-6.html">
+                            <a class="dropdown-item" href="index-5.html">
                               Index 5 - (Recharge & Bill)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-7.html">
+                            <a class="dropdown-item" href="index-6.html">
                               Index 6 - (Booking)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-8.html">
+                            <a class="dropdown-item" href="index-7.html">
                               Index 7 - (Recharge & Bill)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-9.html">
+                            <a class="dropdown-item" href="index-8.html">
                               Index 8 - (Booking)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-10.html">
+                            <a class="dropdown-item" href="index-9.html">
                               Index 9 - (Booking)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-11.html">
+                            <a class="dropdown-item" href="index-10.html">
                               Index 10 - (Recharge & Bill)
                             </a>
                           </li>
                           <li>
-                            <a class="dropdown-item" href="index-12.html">
+                            <a class="dropdown-item" href="index-11.html">
                               Index 11 - (Mobile Top-Up)
                             </a>
                           </li>
                         </ul>
                       </li>
                       <li class="dropdown">
-                        {" "}
                         <a class="dropdown-toggle" href="#">
                           Recharge & Bill Payment
                         </a>
@@ -436,7 +234,7 @@ function FilghtSearch() {
                                       <li>
                                         <a
                                           class="dropdown-item"
-                                          href="index-2.html"
+                                          href="index.html"
                                         >
                                           Layout 1
                                         </a>
@@ -444,7 +242,7 @@ function FilghtSearch() {
                                       <li>
                                         <a
                                           class="dropdown-item"
-                                          href="index-3.html"
+                                          href="index-2.html"
                                         >
                                           Layout 2
                                         </a>
@@ -770,7 +568,6 @@ function FilghtSearch() {
                         </ul>
                       </li>
                       <li class="dropdown dropdown-mega">
-                        {" "}
                         <a class="dropdown-toggle" href="#">
                           Booking
                         </a>
@@ -778,7 +575,6 @@ function FilghtSearch() {
                           <li>
                             <div class="row">
                               <div class="col-lg">
-                                {" "}
                                 <span class="sub-title">Hotels</span>
                                 <ul class="dropdown-mega-submenu">
                                   <li>
@@ -824,6 +620,14 @@ function FilghtSearch() {
                                   <li>
                                     <a
                                       class="dropdown-item"
+                                      href="booking-hotels-confirm-details.html"
+                                    >
+                                      Hotel Confirm Details
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      class="dropdown-item"
                                       target="_blank"
                                       href="booking-hotels-invoice.html"
                                     >
@@ -842,8 +646,7 @@ function FilghtSearch() {
                                 </ul>
                               </div>
                               <div class="col-lg">
-                                {" "}
-                                <span class="sub-title">Flight</span>
+                                <span class="sub-title">Flights</span>
                                 <ul class="dropdown-mega-submenu">
                                   <li>
                                     <a
@@ -915,7 +718,6 @@ function FilghtSearch() {
                                 </ul>
                               </div>
                               <div class="col-lg">
-                                {" "}
                                 <span class="sub-title">Trains</span>
                                 <ul class="dropdown-mega-submenu">
                                   <li>
@@ -971,7 +773,6 @@ function FilghtSearch() {
                                 </ul>
                               </div>
                               <div class="col-lg">
-                                {" "}
                                 <span class="sub-title">Bus</span>
                                 <ul class="dropdown-mega-submenu">
                                   <li>
@@ -1027,7 +828,6 @@ function FilghtSearch() {
                                 </ul>
                               </div>
                               <div class="col-lg">
-                                {" "}
                                 <span class="sub-title">Cars</span>
                                 <ul class="dropdown-mega-submenu">
                                   <li>
@@ -1103,7 +903,6 @@ function FilghtSearch() {
                         </ul>
                       </li>
                       <li class="dropdown">
-                        {" "}
                         <a class="dropdown-toggle" href="#">
                           Features
                         </a>
@@ -1114,22 +913,27 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a class="dropdown-item" href="index-2.html">
+                                <a class="dropdown-item" href="index.html">
                                   Light Version (Default)
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-5.html">
+                                <a class="dropdown-item" href="index-7.html">
+                                  Left Navigation (Alternate)
+                                </a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="index-4.html">
                                   Dark Version
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-6.html">
+                                <a class="dropdown-item" href="index-5.html">
                                   Primary Version
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-9.html">
+                                <a class="dropdown-item" href="index-8.html">
                                   Transparent
                                 </a>
                               </li>
@@ -1149,17 +953,17 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a class="dropdown-item" href="index-2.html">
+                                <a class="dropdown-item" href="index.html">
                                   Light Version (Default)
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-4.html">
+                                <a class="dropdown-item" href="index-3.html">
                                   Dark Version
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-7.html">
+                                <a class="dropdown-item" href="index-6.html">
                                   Primary Version
                                 </a>
                               </li>
@@ -1234,12 +1038,12 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a class="dropdown-item" href="index-2.html">
+                                <a class="dropdown-item" href="index.html">
                                   Light Version Default
                                 </a>
                               </li>
                               <li>
-                                <a class="dropdown-item" href="index-8.html">
+                                <a class="dropdown-item" href="index-7.html">
                                   Alternate Version
                                 </a>
                               </li>
@@ -1272,7 +1076,41 @@ function FilghtSearch() {
                         </ul>
                       </li>
                       <li class="dropdown">
-                        {" "}
+                        <a class="dropdown-toggle" href="#">
+                          Blog
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a class="dropdown-item" href="blog.html">
+                              Blog Standard
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="blog-grid.html">
+                              Blog Grid
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="blog-list.html">
+                              Blog List
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="blog-single.html">
+                              Blog Single Right Sidebar
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              href="blog-single-left-sidebar.html"
+                            >
+                              Blog Single Left Sidebar
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li class="dropdown">
                         <a class="dropdown-toggle" href="#">
                           Pages
                         </a>
@@ -1288,21 +1126,26 @@ function FilghtSearch() {
                             </a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a
-                                  class="dropdown-item"
-                                  href="login-signup.html"
-                                >
-                                  Page
+                                <a class="dropdown-item" href="login.html">
+                                  Login
+                                </a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="signup.html">
+                                  Sign Up
                                 </a>
                               </li>
                               <li>
                                 <a
                                   class="dropdown-item"
-                                  data-toggle="modal"
-                                  data-target="#login-signup"
-                                  href="#"
+                                  href="forgot-password.html"
                                 >
-                                  Dialog Popup
+                                  Forgot Password
+                                </a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="otp.html">
+                                  OTP - One Time Password
                                 </a>
                               </li>
                             </ul>
@@ -1390,6 +1233,20 @@ function FilghtSearch() {
                             </a>
                           </li>
                           <li>
+                            <a class="dropdown-item" href="404.html">
+                              404
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              href="coming-soon.html"
+                              target="_blank"
+                            >
+                              Coming Soon
+                            </a>
+                          </li>
+                          <li>
                             <a class="dropdown-item" href="elements.html">
                               Elements
                             </a>
@@ -1401,48 +1258,58 @@ function FilghtSearch() {
                           </li>
                         </ul>
                       </li>
-                      <li class="login-signup ml-lg-2">
-                        <a
-                          class="pl-lg-4 pr-0"
-                          data-toggle="modal"
-                          data-target="#login-signup"
-                          href="#"
-                          title="Login / Sign up"
-                        >
-                          Login / Sign up{" "}
-                          <span class="d-none d-lg-inline-block">
-                            <i class="fas fa-user"></i>
-                          </span>
-                        </a>
-                      </li>
                     </ul>
                   </div>
                 </nav>
-              </div>
 
-              <button
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#header-nav"
-              >
-                {" "}
-                <span></span> <span></span> <span></span>{" "}
-              </button>
+                <button
+                  class="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#header-nav"
+                >
+                  <span></span> <span></span> <span></span>
+                </button>
+                <div class="vr mx-2 h-25 my-auto"></div>
+                <nav class="login-signup navbar navbar-expand">
+                  <ul class="navbar-nav">
+                    <li class="profile">
+                      <a
+                        class="pe-0"
+                        data-bs-toggle="modal"
+                        data-bs-target="#login-modal"
+                        href="#"
+                        title="Login / Sign up"
+                      >
+                        <span class="d-none d-sm-inline-block">
+                          Login / Sign up
+                        </span>
+                        <span class="user-icon ms-sm-2">
+                          <i class="fas fa-user"></i>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </header>
 
         <div id="content">
-          <div class="hero-wrap py-4 py-md-5">
+          <div class="hero-wrap">
             <div class="hero-mask opacity-7 bg-primary"></div>
             <div
               class="hero-bg"
-              style={{ background: `url(${Background})` }}
+              style={{
+                background: `url(${Background})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
             ></div>
-            <div class="hero-content py-0 py-lg-3">
-              <div class="container">
-                <div class="row">
+            <div class="hero-content d-flex fullscreen-with-header">
+              <div class="container my-auto py-5">
+                <div class="row g-5">
                   <div class="col-lg-6">
                     <div class="position-relative px-4 pt-3 pb-4">
                       <div class="hero-mask opacity-8 bg-dark rounded"></div>
@@ -1452,31 +1319,75 @@ function FilghtSearch() {
                           id="myTab"
                           role="tablist"
                         >
-                          <li class="nav-item">
-                            {" "}
+                          {/* <li class="nav-item">
                             <a
                               class="nav-link active"
                               id="flight-tab"
-                              data-toggle="tab"
+                              data-bs-toggle="tab"
                               href="#flight"
                               role="tab"
                               aria-controls="flight"
                               aria-selected="true"
                             >
                               Flights
-                            </a>{" "}
+                            </a>
+                          </li> */}
+                          <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="hotels-tab"
+                              data-bs-toggle="tab"
+                              href="#hotels"
+                              role="tab"
+                              aria-controls="hotels"
+                              aria-selected="true"
+                            >
+                              Hotels
+                            </a>
                           </li>
-
-                          {/*
-                    <li class="nav-item"> <a class="nav-link" id="hotels-tab" data-toggle="tab" href="#hotels" role="tab" aria-controls="hotels" aria-selected="true">Hotels</a> </li>
-                    <li class="nav-item"> <a class="nav-link" id="trains-tab" data-toggle="tab" href="#trains" role="tab" aria-controls="trains" aria-selected="false">Trains</a> </li>
-                    <li class="nav-item"> <a class="nav-link" id="bus-tab" data-toggle="tab" href="#bus" role="tab" aria-controls="bus" aria-selected="false">Bus</a> </li>
-                    <li class="nav-item"> <a class="nav-link" id="car-tab" data-toggle="tab" href="#car" role="tab" aria-controls="car" aria-selected="false">Cars</a> </li>
-                   */}
+                          {/* <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="trains-tab"
+                              data-bs-toggle="tab"
+                              href="#trains"
+                              role="tab"
+                              aria-controls="trains"
+                              aria-selected="false"
+                            >
+                              Trains
+                            </a>
+                          </li> */}
+                          {/* <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="bus-tab"
+                              data-bs-toggle="tab"
+                              href="#bus"
+                              role="tab"
+                              aria-controls="bus"
+                              aria-selected="false"
+                            >
+                              Bus
+                            </a>
+                          </li> */}
+                          {/* <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="car-tab"
+                              data-bs-toggle="tab"
+                              href="#car"
+                              role="tab"
+                              aria-controls="car"
+                              aria-selected="false"
+                            >
+                              Cars
+                            </a>
+                          </li> */}
                         </ul>
                         <div class="tab-content pt-4" id="myTabContent">
                           <div
-                            class="tab-pane fade show active"
+                            class="tab-pane fade "
                             id="flight"
                             role="tabpanel"
                             aria-labelledby="flight-tab"
@@ -1485,65 +1396,367 @@ function FilghtSearch() {
                               id="bookingFlight"
                               class="search-input-line"
                               method="post"
-                              onSubmit={addFromData}
                             >
                               <div class="text-light mb-2">
-                                <div class="custom-control custom-radio custom-control-inline">
+                                <div class="form-check form-check-inline">
                                   <input
                                     id="oneway"
                                     name="flight-trip"
-                                    class="custom-control-input"
-                                    value="1"
-                                    onChange={handleFlightWay}
-                                    checked={!showRadio}
-                                    required
+                                    class="form-check-input"
+                                    checked=""
+                                    required=""
                                     type="radio"
                                   />
-                                  <label
-                                    class="custom-control-label"
-                                    for="oneway"
-                                  >
+                                  <label class="form-check-label" for="oneway">
                                     One Way
                                   </label>
                                 </div>
-                                <div class="custom-control custom-radio custom-control-inline">
+                                <div class="form-check form-check-inline">
                                   <input
                                     id="roundtrip"
                                     name="flight-trip"
-                                    class="custom-control-input"
-                                    value="2"
-                                    onChange={handleFlightWay}
-                                    checked={showRadio}
-                                    required
+                                    class="form-check-input"
+                                    required=""
                                     type="radio"
                                   />
                                   <label
-                                    class="custom-control-label"
+                                    class="form-check-label"
                                     for="roundtrip"
                                   >
                                     Round Trip
                                   </label>
                                 </div>
                               </div>
-                              <div class="row">
-                                <div class="col-lg-6 form-group ">
+                              <div class="row gy-3 gx-4">
+                                <div class="col-lg-6 position-relative">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="flightFrom"
+                                    required=""
+                                    placeholder="From"
+                                  />
+                                  <span class="icon-inside">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                  </span>
+                                </div>
+                                <div class="col-lg-6 position-relative">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    id="flightTo"
+                                    required=""
+                                    placeholder="To"
+                                  />
+                                  <span class="icon-inside">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                  </span>
+                                </div>
+                                <div class="col-lg-6 position-relative">
+                                  <input
+                                    id="flightDepart"
+                                    type="text"
+                                    class="form-control"
+                                    required=""
+                                    placeholder="Depart Date"
+                                  />
+                                  <span class="icon-inside">
+                                    <i class="far fa-calendar-alt"></i>
+                                  </span>
+                                </div>
+                                <div class="col-lg-6 position-relative">
+                                  <input
+                                    id="flightReturn"
+                                    type="text"
+                                    class="form-control"
+                                    required=""
+                                    placeholder="Return Date"
+                                  />
+                                  <span class="icon-inside">
+                                    <i class="far fa-calendar-alt"></i>
+                                  </span>
+                                </div>
+                                <div class="col-12">
+                                  <div class="travellers-class">
+                                    <input
+                                      type="text"
+                                      id="flightTravellersClass"
+                                      class="travellers-class-input form-control"
+                                      name="flight-travellers-class"
+                                      placeholder="Travellers, Class"
+                                      readonly=""
+                                      required=""
+                                      onkeypress="return false;"
+                                    />
+                                    <a href=""></a>
+                                    <span class="icon-inside">
+                                      <i class="fas fa-caret-down"></i>
+                                    </span>
+
+                                    <div class="travellers-dropdown">
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Adults
+                                            <small class="text-muted">
+                                              (12+ yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#flightAdult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="flightAdult-travellers"
+                                              class="qty-spinner form-control"
+                                              value="1"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#flightAdult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="my-2" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Children
+                                            <small class="text-muted">
+                                              (2-12 yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#flightChildren-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="flightChildren-travellers"
+                                              class="qty-spinner form-control"
+                                              value="0"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#flightChildren-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="my-2" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Infants
+                                            <small class="text-muted">
+                                              (Below 2 yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#flightInfants-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="flightInfants-travellers"
+                                              class="qty-spinner form-control"
+                                              value="0"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#flightInfants-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="mt-2" />
+                                      <div class="mb-3">
+                                        <div class="form-check">
+                                          <input
+                                            id="flightClassEconomic"
+                                            name="flight-class"
+                                            class="flight-class form-check-input"
+                                            value="0"
+                                            checked=""
+                                            required=""
+                                            type="radio"
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="flightClassEconomic"
+                                          >
+                                            Economic
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input
+                                            id="flightClassPremiumEconomic"
+                                            name="flight-class"
+                                            class="flight-class form-check-input"
+                                            value="1"
+                                            required=""
+                                            type="radio"
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="flightClassPremiumEconomic"
+                                          >
+                                            Premium Economic
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input
+                                            id="flightClassBusiness"
+                                            name="flight-class"
+                                            class="flight-class form-check-input"
+                                            value="2"
+                                            required=""
+                                            type="radio"
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="flightClassBusiness"
+                                          >
+                                            Business
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input
+                                            id="flightClassFirstClass"
+                                            name="flight-class"
+                                            class="flight-class form-check-input"
+                                            value="3"
+                                            required=""
+                                            type="radio"
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="flightClassFirstClass"
+                                          >
+                                            First Class
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div class="d-grid">
+                                        <button
+                                          class="btn btn-primary submit-done"
+                                          type="button"
+                                        >
+                                          Done
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12 d-grid mt-4">
+                                  <button class="btn btn-primary" type="submit">
+                                    Search Flights
+                                  </button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          <div
+                            class="tab-pane fade show active"
+                            id="hotels"
+                            role="tabpanel"
+                            aria-labelledby="hotels-tab"
+                          >
+                            <form
+                              id="bookingHotels"
+                              class="search-input-line"
+                              method="post"
+                            >
+                              <div class="row gy-3 gx-4">
+                                <div class="col-12 position-relative">
+                                  {/* <input
+                                    type="text"
+                                    class="form-control"
+                                    id="hotelsFrom"
+                                    required=""
+                                    placeholder="Enter Locality, City"
+                                  /> */}
                                   <Autocomplete
                                     loading={true}
                                     freeSolo
                                     id="combo-box-demo"
-                                    options={fromData}
-                                    getOptionLabel={(airport) =>
-                                      airport.AIRPORTNAME
-                                    }
-                                    onChange={(event, value) =>
-                                      setFrom(value.AirPortCode)
+                                    options={destinationData}
+                                    getOptionLabel={(airport) => {
+                                      console.log(airport);
+                                      return airport.AIRPORTNAME;
+                                    }}
+                                    onChange={
+                                      (event, value) => {
+                                        console.log(value);
+                                        // setDestination(value.AirPortCode)
+                                      }
+                                      // setFrom(value.AirPortCode)
                                     }
                                     renderInput={(params) => (
                                       <>
                                         <CssTextField
                                           className={[classes.root]}
-                                          value={from}
-                                          onChange={onFromChange}
+                                          value={destination}
+                                          onChange={onDestinationChange}
                                           {...params}
                                           label="From"
                                           variant="standard"
@@ -1555,547 +1768,197 @@ function FilghtSearch() {
                                     <i class="fas fa-map-marker-alt"></i>
                                   </span>
                                 </div>
-
-                                <div class="col-lg-6 form-group">
-                                  <Autocomplete
-                                    loading={true}
-                                    freeSolo
-                                    id="combo-box-demo"
-                                    options={toData}
-                                    getOptionLabel={(airport) =>
-                                      airport.AIRPORTNAME
-                                    }
-                                    onChange={(event, value) =>
-                                      setTo(value.AirPortCode)
-                                    }
-                                    renderInput={(params) => (
-                                      <ThemeProvider theme={muitheme}>
-                                        <CssTextField
-                                          className={[classes.root]}
-                                          {...params}
-                                          value={to}
-                                          onChange={onToChange}
-                                          label="To"
-                                          variant="standard"
-                                        />
-                                      </ThemeProvider>
-                                    )}
-                                  />
-                                  <span class="icon-inside">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
-                                </div>
-                              </div>
-
-                              <div class="row">
-                                <div
-                                  class={
-                                    flightWay == 2
-                                      ? "col-lg-6 form-group"
-                                      : "col-lg-12 form-group"
-                                  }
-                                >
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    required
-                                    placeholder="Depart Date"
-                                    onFocus={onFocus}
-                                    onBlur={onBlur}
-                                    value={departDate}
-                                    onChange={(e) =>
-                                      setDepartDate(e.target.value)
-                                    }
-                                  />
-                                </div>
-
-                                {flightWay == 2 ? (
-                                  <div class="col-lg-6 form-group">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      placeholder="Return Date"
-                                      onFocus={onFocus}
-                                      onBlur={onBlur}
-                                      value={returnDate}
-                                      onChange={(e) =>
-                                        setReturnDate(e.target.value)
-                                      }
-                                    />
-                                  </div>
-                                ) : (
-                                  <></>
-                                )}
-                              </div>
-
-                              <div class="travellers-class form-group">
-                                <input
-                                  type="text"
-                                  id="flightTravellersClass"
-                                  class="travellers-class-input form-control"
-                                  name="flight-travellers-class"
-                                  placeholder="Travellers, Class"
-                                  autoComplete="off"
-                                  readonly
-                                  required
-                                />
-                                <a href="#"></a>{" "}
-                                <span class="icon-inside">
-                                  <i class="fas fa-caret-down"></i>
-                                </span>
-                                <div class="travellers-dropdown">
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">
-                                        Adults{" "}
-                                        <small class="text-muted">
-                                          (12+ yrs)
-                                        </small>
-                                      </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#flightAdult-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
-                                        </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="flightAdult-travellers"
-                                          class="qty-spinner form-control"
-                                          value={adultCount}
-                                          onChange={(event) =>
-                                            setAdultCount(event.target.value)
-                                          }
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#flightAdult-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <hr class="my-2" />
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">
-                                        Children{" "}
-                                        <small class="text-muted">
-                                          (2-12 yrs)
-                                        </small>
-                                      </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#flightChildren-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
-                                        </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="flightChildren-travellers"
-                                          class="qty-spinner form-control"
-                                          value={childrenCount}
-                                          onChange={(event) =>
-                                            setChildrenCount(event.target.value)
-                                          }
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#flightChildren-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <hr class="my-2" />
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">
-                                        Infants{" "}
-                                        <small class="text-muted">
-                                          (Below 2 yrs)
-                                        </small>
-                                      </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#flightInfants-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
-                                        </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="flightInfants-travellers"
-                                          class="qty-spinner form-control"
-                                          value={infantCount}
-                                          onChange={(event) =>
-                                            setInfantCount(event.target.value)
-                                          }
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#flightInfants-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <hr class="mt-2" />
-                                  <div class="mb-3">
-                                    <div class="custom-control custom-radio">
-                                      <input
-                                        id="flightClassEconomic"
-                                        name="flight-class"
-                                        class="flight-class custom-control-input"
-                                        value="1"
-                                        checked
-                                        onChange={(e) =>
-                                          setFlightClass(e.target.value)
-                                        }
-                                        required
-                                        type="radio"
-                                      />
-                                      <label
-                                        class="custom-control-label"
-                                        for="flightClassEconomic"
-                                      >
-                                        Economic
-                                      </label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                      <input
-                                        id="flightClassPremiumEconomic"
-                                        name="flight-class"
-                                        class="flight-class custom-control-input"
-                                        value="2"
-                                        onChange={(e) =>
-                                          setFlightClass(e.target.value)
-                                        }
-                                        required
-                                        type="radio"
-                                      />
-                                      <label
-                                        class="custom-control-label"
-                                        for="flightClassPremiumEconomic"
-                                      >
-                                        Premium Economic
-                                      </label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                      <input
-                                        id="flightClassBusiness"
-                                        name="flight-class"
-                                        class="flight-class custom-control-input"
-                                        value="3"
-                                        onChange={(e) =>
-                                          setFlightClass(e.target.value)
-                                        }
-                                        required
-                                        type="radio"
-                                      />
-                                      <label
-                                        class="custom-control-label"
-                                        for="flightClassBusiness"
-                                      >
-                                        Business
-                                      </label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                      <input
-                                        id="flightClassFirstClass"
-                                        name="flight-class"
-                                        class="flight-class custom-control-input"
-                                        value="4"
-                                        onChange={(e) =>
-                                          setFlightClass(e.target.value)
-                                        }
-                                        required
-                                        type="radio"
-                                      />
-                                      <label
-                                        class="custom-control-label"
-                                        for="flightClassFirstClass"
-                                      >
-                                        First Class
-                                      </label>
-                                    </div>
-                                  </div>
-                                  <button
-                                    class="btn btn-primary btn-block submit-done"
-                                    onClick={setFlight}
-                                    type="button"
-                                  >
-                                    Done
-                                  </button>
-                                </div>
-                              </div>
-                              <button class="btn btn-primary btn-block mt-4">
-                                Search Flights
-                              </button>
-                            </form>
-                          </div>
-
-                          <div
-                            class="tab-pane fade"
-                            id="hotels"
-                            role="tabpanel"
-                            aria-labelledby="hotels-tab"
-                          >
-                            <form
-                              id="bookingHotels"
-                              class="search-input-line"
-                              method="post"
-                            >
-                              <div class="row">
-                                <div class="col-lg-12 form-group">
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    id="hotelsFrom"
-                                    required
-                                    placeholder="Enter Locality, City"
-                                  />
-                                  <span class="icon-inside">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-6 form-group">
+                                <div class="col-lg-6 position-relative">
                                   <input
                                     id="hotelsCheckIn"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Check In"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                                <div class="col-lg-6 form-group">
+                                <div class="col-lg-6 position-relative">
                                   <input
                                     id="hotelsCheckOut"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Check Out"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                              </div>
-                              <div class="travellers-class form-group">
-                                <input
-                                  type="text"
-                                  id="hotelsTravellersClass"
-                                  class="travellers-class-input form-control"
-                                  name="hotels-travellers-class"
-                                  placeholder="Rooms / People"
-                                  required
-                                  onKeyPress="return false;"
-                                />
-                                <span class="icon-inside">
-                                  <i class="fas fa-caret-down"></i>
-                                </span>
-                                <div
-                                  class="travellers-dropdown"
-                                  style={{ display: "none" }}
-                                >
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">Rooms</p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#hotels-rooms"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
+                                <div class="col-12">
+                                  <div class="travellers-class">
+                                    <input
+                                      type="text"
+                                      id="hotelsTravellersClass"
+                                      class="travellers-class-input form-control"
+                                      name="hotels-travellers-class"
+                                      placeholder="Rooms / People"
+                                      required=""
+                                      onkeypress="return false;"
+                                    />
+                                    <span class="icon-inside">
+                                      <i class="fas fa-caret-down"></i>
+                                    </span>
+                                    <div
+                                      class="travellers-dropdown"
+                                      style={{ display: "none" }}
+                                    >
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">Rooms</p>
                                         </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="hotels-rooms"
-                                          class="qty-spinner form-control"
-                                          value="1"
-                                          min="40"
-                                          readonly
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#hotels-rooms"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#hotels-rooms"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="hotels-rooms"
+                                              class="qty-spinner form-control"
+                                              value="1"
+                                              min="40"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#hotels-rooms"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
                                         </div>
+                                      </div>
+                                      <hr class="mt-2 mb-4" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Adults
+                                            <small class="text-muted">
+                                              (12+ yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#adult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="adult-travellers"
+                                              class="qty-spinner form-control"
+                                              value="1"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#adult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="my-2" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Children
+                                            <small class="text-muted">
+                                              (1-12 yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#children-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="children-travellers"
+                                              class="qty-spinner form-control"
+                                              value="0"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#children-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="d-grid mt-4">
+                                        <button
+                                          class="btn btn-primary submit-done"
+                                          type="button"
+                                        >
+                                          Done
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
-                                  <hr class="mt-2 mb-4" />
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">
-                                        Adults{" "}
-                                        <small class="text-muted">
-                                          (12+ yrs)
-                                        </small>
-                                      </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#adult-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
-                                        </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="adult-travellers"
-                                          class="qty-spinner form-control"
-                                          value="1"
-                                          readonly
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#adult-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <hr class="my-2" />
-                                  <div class="row align-items-center">
-                                    <div class="col-sm-7">
-                                      <p class="mb-sm-0">
-                                        Children{" "}
-                                        <small class="text-muted">
-                                          (1-12 yrs)
-                                        </small>
-                                      </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                      <div class="qty input-group">
-                                        <div class="input-group-prepend">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#children-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            -
-                                          </button>
-                                        </div>
-                                        <input
-                                          type="text"
-                                          data-ride="spinner"
-                                          id="children-travellers"
-                                          class="qty-spinner form-control"
-                                          value="0"
-                                          readonly
-                                        />
-                                        <div class="input-group-append">
-                                          <button
-                                            type="button"
-                                            class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#children-travellers"
-                                            data-toggle="spinner"
-                                          >
-                                            +
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <button
-                                    class="btn btn-primary btn-block submit-done mt-3"
-                                    onClick={setFlight}
-                                    type="button"
-                                  >
-                                    Done
+                                </div>
+                                <div class="col-12 d-grid mt-4">
+                                  <button class="btn btn-primary" type="submit">
+                                    Search Hotels
                                   </button>
                                 </div>
                               </div>
-                              <button
-                                class="btn btn-primary btn-block mt-4"
-                                type="submit"
-                              >
-                                Search Hotels
-                              </button>
                             </form>
                           </div>
-
                           <div
                             class="tab-pane fade"
                             id="trains"
@@ -2107,225 +1970,230 @@ function FilghtSearch() {
                               class="search-input-line"
                               method="post"
                             >
-                              <div class="row">
-                                <div class="col-12 form-group">
+                              <div class="row g-3">
+                                <div class="col-12 position-relative">
                                   <input
                                     type="text"
                                     class="form-control"
                                     id="trainFrom"
-                                    required
+                                    required=""
                                     placeholder="From"
                                   />
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-
-                                <div class="col-12 form-group">
+                                <div class="col-12 position-relative">
                                   <input
                                     type="text"
                                     class="form-control"
                                     id="trainTo"
-                                    required
+                                    required=""
                                     placeholder="To"
                                   />
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                                <div class="col-12 form-group">
+                                <div class="col-12 position-relative">
                                   <input
                                     id="trainDepart"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Depart Date"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>{" "}
-                                </div>
-                                <div class="col-12 travellers-class form-group">
-                                  <input
-                                    type="text"
-                                    id="trainTravellersClass"
-                                    class="travellers-class-input form-control"
-                                    name="train-travellers-class"
-                                    placeholder="Travellers, Class"
-                                    required
-                                  />
-                                  <span class="icon-inside">
-                                    <i class="fas fa-caret-down"></i>
                                   </span>
+                                </div>
+                                <div class="col-12">
+                                  <div class="travellers-class">
+                                    <input
+                                      type="text"
+                                      id="trainTravellersClass"
+                                      class="travellers-class-input form-control"
+                                      name="train-travellers-class"
+                                      placeholder="Travellers, Class"
+                                      required=""
+                                      onkeypress="return false;"
+                                    />
+                                    <span class="icon-inside">
+                                      <i class="fas fa-caret-down"></i>
+                                    </span>
 
-                                  <div class="travellers-dropdown">
-                                    <div class="row align-items-center">
-                                      <div class="col-sm-7">
-                                        <p class="mb-sm-0">
-                                          Adults{" "}
-                                          <small class="text-muted">
-                                            (12+ yrs)
-                                          </small>
-                                        </p>
-                                      </div>
-                                      <div class="col-sm-5">
-                                        <div class="qty input-group">
-                                          <div class="input-group-prepend">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="decrease"
-                                              data-target="#trainAdult-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              -
-                                            </button>
-                                          </div>
-                                          <input
-                                            type="text"
-                                            data-ride="spinner"
-                                            id="trainAdult-travellers"
-                                            class="qty-spinner form-control"
-                                            value="1"
-                                            readonly
-                                          />
-                                          <div class="input-group-append">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="increase"
-                                              data-target="#trainAdult-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              +
-                                            </button>
+                                    <div class="travellers-dropdown">
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Adults
+                                            <small class="text-muted">
+                                              (12+ yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#trainAdult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="trainAdult-travellers"
+                                              class="qty-spinner form-control"
+                                              value="1"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#trainAdult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                    <hr class="my-2" />
-                                    <div class="row align-items-center">
-                                      <div class="col-sm-7">
-                                        <p class="mb-sm-0">
-                                          Children{" "}
-                                          <small class="text-muted">
-                                            (2-12 yrs)
-                                          </small>
-                                        </p>
-                                      </div>
-                                      <div class="col-sm-5">
-                                        <div class="qty input-group">
-                                          <div class="input-group-prepend">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="decrease"
-                                              data-target="#trainChildren-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              -
-                                            </button>
-                                          </div>
-                                          <input
-                                            type="text"
-                                            data-ride="spinner"
-                                            id="trainChildren-travellers"
-                                            class="qty-spinner form-control"
-                                            value="0"
-                                            readonly
-                                          />
-                                          <div class="input-group-append">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="increase"
-                                              data-target="#trainChildren-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              +
-                                            </button>
+                                      <hr class="my-2" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Children
+                                            <small class="text-muted">
+                                              (2-12 yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#trainChildren-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="trainChildren-travellers"
+                                              class="qty-spinner form-control"
+                                              value="0"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#trainChildren-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                    <hr class="my-2" />
-                                    <div class="row align-items-center">
-                                      <div class="col-sm-7">
-                                        <p class="mb-sm-0">
-                                          Infants{" "}
-                                          <small class="text-muted">
-                                            (Below 2 yrs)
-                                          </small>
-                                        </p>
-                                      </div>
-                                      <div class="col-sm-5">
-                                        <div class="qty input-group">
-                                          <div class="input-group-prepend">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="decrease"
-                                              data-target="#trainInfants-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              -
-                                            </button>
-                                          </div>
-                                          <input
-                                            type="text"
-                                            data-ride="spinner"
-                                            id="trainInfants-travellers"
-                                            class="qty-spinner form-control"
-                                            value="0"
-                                            readonly
-                                          />
-                                          <div class="input-group-append">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="increase"
-                                              data-target="#trainInfants-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              +
-                                            </button>
+                                      <hr class="my-2" />
+                                      <div class="row align-items-center">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">
+                                            Infants
+                                            <small class="text-muted">
+                                              (Below 2 yrs)
+                                            </small>
+                                          </p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#trainInfants-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="trainInfants-travellers"
+                                              class="qty-spinner form-control"
+                                              value="0"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#trainInfants-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
+                                      <div class="my-3">
+                                        <select
+                                          id="train-class"
+                                          name="train-class"
+                                          class="form-select border rounded"
+                                        >
+                                          <option value="0">All Class</option>
+                                          <option value="1">First Class</option>
+                                          <option value="2">
+                                            Second Class
+                                          </option>
+                                          <option value="3">
+                                            First Class Sleeper (SL)
+                                          </option>
+                                          <option value="4">
+                                            Second Class Sleeper (SL)
+                                          </option>
+                                          <option value="5">Business</option>
+                                        </select>
+                                      </div>
+                                      <div class="d-grid">
+                                        <button
+                                          class="btn btn-primary rounded submit-done"
+                                          type="button"
+                                        >
+                                          Done
+                                        </button>
+                                      </div>
                                     </div>
-                                    <div class="form-group mt-3">
-                                      <select
-                                        id="train-class"
-                                        name="train-class"
-                                        class="custom-select"
-                                      >
-                                        <option value="0">All Class</option>
-                                        <option value="1">First Class</option>
-                                        <option value="2">Second Class</option>
-                                        <option value="3">
-                                          First Class Sleeper (SL)
-                                        </option>
-                                        <option value="4">
-                                          Second Class Sleeper (SL)
-                                        </option>
-                                        <option value="5">Business</option>
-                                      </select>
-                                    </div>
-                                    <button
-                                      class="btn btn-primary btn-block submit-done"
-                                      type="button"
-                                    >
-                                      Done
-                                    </button>
                                   </div>
                                 </div>
+                                <div class="col-12 d-grid mt-4">
+                                  <button class="btn btn-primary" type="submit">
+                                    Search Trains
+                                  </button>
+                                </div>
                               </div>
-                              <button
-                                class="btn btn-primary btn-block mt-2"
-                                type="submit"
-                              >
-                                Search Trains
-                              </button>
                             </form>
                           </div>
                           <div
@@ -2339,115 +2207,117 @@ function FilghtSearch() {
                               class="search-input-line"
                               method="post"
                             >
-                              <div class="row">
-                                <div class="col-12 form-group">
+                              <div class="row g-3">
+                                <div class="col-12 position-relative">
                                   <input
                                     type="text"
                                     class="form-control"
                                     id="busFrom"
-                                    required
+                                    required=""
                                     placeholder="From"
                                   />
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                                <div class="col-12 form-group">
+                                <div class="col-12 position-relative">
                                   <input
                                     type="text"
                                     class="form-control"
                                     id="busTo"
-                                    required
+                                    required=""
                                     placeholder="To"
                                   />
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                                <div class="col-12 form-group">
+                                <div class="col-12 position-relative">
                                   <input
                                     id="busDepart"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Depart Date"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>{" "}
-                                </div>
-                                <div class="col-12 travellers-class form-group">
-                                  <input
-                                    type="text"
-                                    id="busTravellersClass"
-                                    class="travellers-class-input form-control"
-                                    name="bus-travellers-class"
-                                    placeholder="Seats"
-                                    required
-                                    onkeypress="return false;"
-                                  />
-                                  <span class="icon-inside">
-                                    <i class="fas fa-caret-down"></i>
                                   </span>
+                                </div>
+                                <div class="col-12">
+                                  <div class="travellers-class">
+                                    <input
+                                      type="text"
+                                      id="busTravellersClass"
+                                      class="travellers-class-input form-control"
+                                      name="bus-travellers-class"
+                                      placeholder="Seats"
+                                      required=""
+                                      onkeypress="return false;"
+                                    />
+                                    <span class="icon-inside">
+                                      <i class="fas fa-caret-down"></i>
+                                    </span>
 
-                                  <div class="travellers-dropdown">
-                                    <div class="row align-items-center mb-3">
-                                      <div class="col-sm-7">
-                                        <p class="mb-sm-0">Seats</p>
-                                      </div>
-                                      <div class="col-sm-5">
-                                        <div class="qty input-group">
-                                          <div class="input-group-prepend">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="decrease"
-                                              data-target="#adult-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              -
-                                            </button>
-                                          </div>
-                                          <input
-                                            type="text"
-                                            data-ride="spinner"
-                                            id="adult-travellers"
-                                            class="qty-spinner form-control"
-                                            value="1"
-                                            readonly
-                                          />
-                                          <div class="input-group-append">
-                                            <button
-                                              type="button"
-                                              class="btn bg-light-4"
-                                              data-value="increase"
-                                              data-target="#adult-travellers"
-                                              data-toggle="spinner"
-                                            >
-                                              +
-                                            </button>
+                                    <div class="travellers-dropdown">
+                                      <div class="row align-items-center mb-3">
+                                        <div class="col-sm-7 col-lg-8">
+                                          <p class="mb-sm-0">Seats</p>
+                                        </div>
+                                        <div class="col-sm-5 col-lg-4">
+                                          <div class="qty input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="decrease"
+                                                data-target="#adult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                -
+                                              </button>
+                                            </div>
+                                            <input
+                                              type="text"
+                                              data-ride="spinner"
+                                              id="adult-travellers"
+                                              class="qty-spinner form-control"
+                                              value="1"
+                                              readonly=""
+                                            />
+                                            <div class="input-group-append">
+                                              <button
+                                                type="button"
+                                                class="btn bg-light-4"
+                                                data-value="increase"
+                                                data-target="#adult-travellers"
+                                                data-toggle="spinner"
+                                              >
+                                                +
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
+                                      <div class="d-grid">
+                                        <button
+                                          class="btn btn-primary submit-done"
+                                          type="button"
+                                        >
+                                          Done
+                                        </button>
+                                      </div>
                                     </div>
-                                    <button
-                                      class="btn btn-primary btn-block submit-done"
-                                      type="button"
-                                    >
-                                      Done
-                                    </button>
                                   </div>
                                 </div>
+                                <div class="col-12 d-grid mt-4">
+                                  <button class="btn btn-primary" type="submit">
+                                    Search Bus
+                                  </button>
+                                </div>
                               </div>
-                              <button
-                                class="btn btn-primary btn-block mt-2"
-                                type="submit"
-                              >
-                                Search Bus
-                              </button>
                             </form>
                           </div>
-
                           <div
                             class="tab-pane fade"
                             id="car"
@@ -2459,37 +2329,35 @@ function FilghtSearch() {
                               class="search-input-line"
                               method="post"
                             >
-                              <div class="row">
-                                <div class="col-lg form-group">
+                              <div class="row gx-4 gy-3">
+                                <div class="col-12 position-relative">
                                   <input
                                     type="text"
                                     class="form-control ui-autocomplete-input"
                                     id="carsCity"
-                                    required
+                                    required=""
                                     placeholder="Enter City"
                                     autocomplete="off"
                                   />
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
-                                  </span>{" "}
+                                  </span>
                                 </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-8 form-group">
+                                <div class="col-8 position-relative">
                                   <input
                                     id="carsPickup"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Pick-up date"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
                                   </span>
                                 </div>
-                                <div class="col-4 form-group">
+                                <div class="col-4 position-relative">
                                   <select
-                                    class="custom-select"
+                                    class="form-select"
                                     id="carsPickuptime"
                                     required=""
                                   >
@@ -2543,23 +2411,21 @@ function FilghtSearch() {
                                     <option>11:30 pm</option>
                                   </select>
                                 </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-8 form-group">
+                                <div class="col-8 position-relative">
                                   <input
                                     id="carsDropoff"
                                     type="text"
                                     class="form-control"
-                                    required
+                                    required=""
                                     placeholder="Drop-off date"
                                   />
                                   <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
                                   </span>
                                 </div>
-                                <div class="col-4 form-group">
+                                <div class="col-4 position-relative">
                                   <select
-                                    class="custom-select"
+                                    class="form-select"
                                     id="carsDropofftime"
                                     required=""
                                   >
@@ -2614,71 +2480,68 @@ function FilghtSearch() {
                                   </select>
                                 </div>
                               </div>
-                              <div class="custom-control custom-checkbox d-inline-block text-white-50 mb-4 mt-2">
+                              <div class="form-check text-white-50 my-4">
                                 <input
                                   type="checkbox"
                                   id="terms"
                                   name="termsConditions"
                                   checked=""
-                                  class="custom-control-input"
+                                  class="form-check-input"
                                 />
                                 <label
-                                  class="custom-control-label d-block"
+                                  class="form-check-label d-block"
                                   for="terms"
                                 >
-                                  Driver aged 25 - 70{" "}
+                                  Driver aged 25 - 70
                                   <span
                                     class="text-info"
-                                    data-toggle="tooltip"
-                                    data-original-title="Car rental suppliers may charge more if a driver is under 30 or over 60. Please check the car's terms &amp; conditions."
+                                    data-bs-toggle="tooltip"
+                                    title="Car rental suppliers may charge more if a driver is under 30 or over 60. Please check the car's terms &amp; conditions."
                                   >
                                     <i class="far fa-question-circle"></i>
                                   </span>
                                 </label>
                               </div>
-                              <button
-                                class="btn btn-primary btn-block"
-                                type="submit"
-                              >
-                                Search Cars
-                              </button>
+                              <div class="d-grid">
+                                <button class="btn btn-primary" type="submit">
+                                  Search Cars
+                                </button>
+                              </div>
                             </form>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-6 mt-5 mt-lg-0">
-                    <h2 class="text-9 font-weight-600 text-light">
-                      Why Booking with Travel Vogues ?
+                  <div class="col-lg-6">
+                    <h2 class="text-9 fw-600 text-white">
+                      Why Booking with Quickai ?
                     </h2>
-                    <p class="lead mb-4 text-light">
+                    <p class="lead mb-4 text-white">
                       Online Booking. Save Time and Money!
                     </p>
-                    <div class="row">
+                    <div class="row g-4">
                       <div class="col-12">
-                        <div class="featured-box style-3 mb-4">
-                          <div class="featured-box-icon border rounded-circle text-light">
-                            {" "}
+                        <div class="featured-box style-3">
+                          <div class="featured-box-icon border border-light rounded-circle text-white">
                             <i class="fas fa-dollar-sign"></i>
                           </div>
-                          <h3 class="text-light">Cheapest Price</h3>
-                          <p class="text-light opacity-8">
+                          <h3 class="text-white">Cheapest Price</h3>
+                          <p class="text-white mb-0">
                             Always get cheapest price with the best in the
                             industry. So you get the best deal every time.
                           </p>
                         </div>
                       </div>
                       <div class="col-12">
-                        <div class="featured-box style-3 mb-4">
-                          <div class="featured-box-icon border rounded-circle text-light">
-                            {" "}
+                        <div class="featured-box style-3">
+                          <div class="featured-box-icon border border-light rounded-circle text-white">
                             <i class="fas fa-times"></i>
                           </div>
-                          <h3 class="text-light">
+                          <h3 class="text-white">
                             Easy Cancellation & Refunds
                           </h3>
-                          <p class="text-light opacity-8">
+                          <p class="text-white mb-0">
                             Get instant refund and get any booking fees waived
                             off! Easy cancellation process is available.
                           </p>
@@ -2686,12 +2549,11 @@ function FilghtSearch() {
                       </div>
                       <div class="col-12">
                         <div class="featured-box style-3">
-                          <div class="featured-box-icon border rounded-circle text-light">
-                            {" "}
+                          <div class="featured-box-icon border border-light rounded-circle text-white">
                             <i class="fas fa-percentage"></i>
                           </div>
-                          <h3 class="text-light">No Booking Charges</h3>
-                          <p class="text-light opacity-8 mb-0">
+                          <h3 class="text-white">No Booking Charges</h3>
+                          <p class="text-white mb-0">
                             No hidden charges, no payment fees, and free
                             customer service. So you get the best deal every
                             time!
@@ -2704,7 +2566,7 @@ function FilghtSearch() {
               </div>
             </div>
           </div>
-          <div class="section bg-light shadow-md">
+          <div class="section bg-white shadow-md">
             <div class="container">
               <div
                 class="owl-carousel owl-theme banner"
@@ -2718,7 +2580,6 @@ function FilghtSearch() {
                 data-items-lg="3"
               >
                 <div class="item rounded">
-                  {" "}
                   <a href="#">
                     <div class="caption">
                       <h2>20% OFF</h2>
@@ -2729,11 +2590,10 @@ function FilghtSearch() {
                       class="img-fluid"
                       src="images/slider/booking-banner-4.jpg"
                       alt="banner"
-                    />{" "}
-                  </a>{" "}
+                    />
+                  </a>
                 </div>
                 <div class="item rounded">
-                  {" "}
                   <a href="#">
                     <div class="caption">
                       <h2>10% OFF</h2>
@@ -2744,11 +2604,10 @@ function FilghtSearch() {
                       class="img-fluid"
                       src="images/slider/booking-banner-5.jpg"
                       alt="banner"
-                    />{" "}
-                  </a>{" "}
+                    />
+                  </a>
                 </div>
                 <div class="item rounded">
-                  {" "}
                   <a href="#">
                     <div class="caption">
                       <h2>25% OFF</h2>
@@ -2759,651 +2618,681 @@ function FilghtSearch() {
                       class="img-fluid"
                       src="images/slider/booking-banner-6.jpg"
                       alt="banner"
-                    />{" "}
-                  </a>{" "}
+                    />
+                  </a>
                 </div>
               </div>
-              <h2 class="text-9 font-weight-600 text-center mt-5">
+              <h2 class="text-9 fw-600 text-center mt-5">
                 Start your travel planning here
               </h2>
-              <p class="lead text-dark text-center mb-5">
+              <p class="lead text-dark text-center mb-4">
                 Search Hotels, Flights, Trains & Bus
               </p>
-              <div class="row">
+              <div class="row gy-4 gx-5">
                 <div class="col-md-6 col-lg-4">
                   <div
-                    class="accordion accordion-alternate popularRoutes mx-lg-2"
+                    class="accordion accordion-flush arrow-end"
                     id="popularRoutes"
                   >
-                    <div class="card">
-                      <div class="card-header" id="one">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseOne"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="one">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseOne"
                           aria-expanded="false"
                           aria-controls="collapseOne"
                         >
-                          {" "}
-                          New Delhi{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          New Delhi
+                        </button>
+                      </h2>
                       <div
                         id="collapseOne"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="one"
-                        data-parent="#popularRoutes"
+                        data-bs-parent="#popularRoutes"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - New Delhi{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - New Delhi
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - New Delhi{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - New Delhi
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - New Delhi{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - New Delhi
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - New Delhi{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - New Delhi
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - New Delhi{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - New Delhi
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - New Delhi{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - New Delhi
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Bhopal To Indore{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Bhopal To Indore
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Bangalore to Chennai{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Bangalore to Chennai
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - New Delhi{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - New Delhi
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="two">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseTwo"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="two">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwo"
                           aria-expanded="false"
                           aria-controls="collapseTwo"
                         >
-                          {" "}
-                          Bengaluru{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Bengaluru
+                        </button>
+                      </h2>
                       <div
                         id="collapseTwo"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="two"
-                        data-parent="#popularRoutes"
+                        data-bs-parent="#popularRoutes"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Bengaluru{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Bengaluru
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Bengaluru{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Bengaluru
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Bengaluru{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Bengaluru
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Bengaluru{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Bengaluru
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Bengaluru{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Bengaluru
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Bengaluru{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Bengaluru
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Bengaluru{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Bengaluru
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Bengaluru{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Bengaluru
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Bengaluru{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Bengaluru
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="three">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseThree"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="three">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseThree"
                           aria-expanded="false"
                           aria-controls="collapseThree"
                         >
-                          {" "}
-                          Chennai{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Chennai
+                        </button>
+                      </h2>
                       <div
                         id="collapseThree"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="three"
-                        data-parent="#popularRoutes"
+                        data-bs-parent="#popularRoutes"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Chennai{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Chennai
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Chennai{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Chennai
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Chennai{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Chennai
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Chennai{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Chennai
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Chennai{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Chennai
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Chennai{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Chennai
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Chennai{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Chennai
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Chennai{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Chennai
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Chennai{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Chennai
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="four">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseFour"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="four">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseFour"
                           aria-expanded="false"
                           aria-controls="collapseFour"
                         >
-                          {" "}
-                          Mumbai{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Mumbai
+                        </button>
+                      </h2>
                       <div
                         id="collapseFour"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="four"
-                        data-parent="#popularRoutes"
+                        data-bs-parent="#popularRoutes"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Mumbai{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Mumbai
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Mumbai{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Mumbai
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Mumbai{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Mumbai
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Mumbai{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Mumbai
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Mumbai{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Mumbai
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Mumbai{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Mumbai
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Mumbai{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Mumbai
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Mumbai{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Mumbai
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Mumbai{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Mumbai
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="five">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseFive"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="five">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseFive"
                           aria-expanded="false"
                           aria-controls="collapseFive"
                         >
-                          {" "}
-                          Hyderabad{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Hyderabad
+                        </button>
+                      </h2>
                       <div
                         id="collapseFive"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="five"
-                        data-parent="#popularRoutes"
+                        data-bs-parent="#popularRoutes"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Hyderabad{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Hyderabad
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Hyderabad{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Hyderabad
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Hyderabad{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Hyderabad
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Hyderabad{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Hyderabad
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Hyderabad{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Hyderabad
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Hyderabad{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Hyderabad
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Hyderabad{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Hyderabad
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Hyderabad{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Hyderabad
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Hyderabad{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Hyderabad
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
@@ -3414,626 +3303,656 @@ function FilghtSearch() {
                 </div>
                 <div class="col-md-6 col-lg-4">
                   <div
-                    class="accordion accordion-alternate popularRoutes mx-lg-2"
+                    class="accordion accordion-flush arrow-end"
                     id="popularRoutes2"
                   >
-                    <div class="card">
-                      <div class="card-header" id="six">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseSix"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="six">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseSix"
                           aria-expanded="false"
                           aria-controls="collapseSix"
                         >
-                          {" "}
-                          Chicago{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Chicago
+                        </button>
+                      </h2>
                       <div
                         id="collapseSix"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="six"
-                        data-parent="#popularRoutes2"
+                        data-bs-parent="#popularRoutes2"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Chicago{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Chicago
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Chicago{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Chicago
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Chicago{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Chicago
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Chicago{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Chicago
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Chicago{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Chicago
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Chicago{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Chicago
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Bhopal To Chicago{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Bhopal To Chicago
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Bangalore to Chicago{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Bangalore to Chicago
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Chicago{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Chicago
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="seven">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseSeven"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="seven">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseSeven"
                           aria-expanded="false"
                           aria-controls="collapseTwo"
                         >
-                          {" "}
-                          New York{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          New York
+                        </button>
+                      </h2>
                       <div
                         id="collapseSeven"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="seven"
-                        data-parent="#popularRoutes2"
+                        data-bs-parent="#popularRoutes2"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - New York{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - New York
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - New York{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - New York
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - New York{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - New York
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - New York{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - New York
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - New York{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - New York
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - New York{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - New York
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - New York{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - New York
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - New York{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - New York
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - New York{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - New York
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="eight">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseEight"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="eight">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseEight"
                           aria-expanded="false"
                           aria-controls="collapseEight"
                         >
-                          {" "}
-                          London{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          London
+                        </button>
+                      </h2>
                       <div
                         id="collapseEight"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="eight"
-                        data-parent="#popularRoutes2"
+                        data-bs-parent="#popularRoutes2"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - London{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - London
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - London{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - London
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - London{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - London
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - London{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - London
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - London{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - London
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - London{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - London
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - London{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - London
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="nine">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseNine"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="nine">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseNine"
                           aria-expanded="false"
                           aria-controls="collapseNine"
                         >
-                          {" "}
-                          Panaji{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Panaji
+                        </button>
+                      </h2>
                       <div
                         id="collapseNine"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="nine"
-                        data-parent="#popularRoutes2"
+                        data-bs-parent="#popularRoutes2"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Panaji{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Panaji
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Panaji{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Panaji
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Panaji{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Panaji
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Panaji{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Panaji
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Panaji{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Panaji
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Panaji{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Panaji
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Panaji{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Panaji
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Panaji{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Panaji
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Panaji{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Panaji
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="ten">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseTen"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="ten">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseTen"
                           aria-expanded="false"
                           aria-controls="collapseTen"
                         >
-                          {" "}
-                          Ahmedabad{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Ahmedabad
+                        </button>
+                      </h2>
                       <div
                         id="collapseTen"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="ten"
-                        data-parent="#popularRoutes2"
+                        data-bs-parent="#popularRoutes2"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Ahmedabad{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Ahmedabad
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Ahmedabad{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Ahmedabad
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Ahmedabad{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Ahmedabad
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Ahmedabad{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Ahmedabad
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Ahmedabad{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Ahmedabad
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Ahmedabad{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Ahmedabad
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Ahmedabad{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Ahmedabad
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Ahmedabad{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Ahmedabad
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Ahmedabad{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Ahmedabad
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
@@ -4044,637 +3963,668 @@ function FilghtSearch() {
                 </div>
                 <div class="col-md-6 col-lg-4">
                   <div
-                    class="accordion accordion-alternate popularRoutes mx-lg-2"
+                    class="accordion accordion-flush arrow-end"
                     id="popularRoutes3"
                   >
-                    <div class="card">
-                      <div class="card-header" id="eleven">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseEleven"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="eleven">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseEleven"
                           aria-expanded="false"
                           aria-controls="collapseEleven"
                         >
-                          {" "}
-                          Bangkok{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Bangkok
+                        </button>
+                      </h2>
                       <div
                         id="collapseEleven"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="eleven"
-                        data-parent="#popularRoutes3"
+                        data-bs-parent="#popularRoutes3"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Bangkok{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Bangkok
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Bangkok{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Bangkok
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Bangkok{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Bangkok
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Bangkok{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Bangkok
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Bangkok{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Bangkok
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Bangkok{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Bangkok
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Bangkok{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Bangkok
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Bangkok{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Bangkok
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Bangkok{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Bangkok
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="twelve">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseTwelve"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="twelve">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwelve"
                           aria-expanded="false"
                           aria-controls="collapseTwelve"
                         >
-                          {" "}
-                          Singapore{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Singapore
+                        </button>
+                      </h2>
                       <div
                         id="collapseTwelve"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="twelve"
-                        data-parent="#popularRoutes3"
+                        data-bs-parent="#popularRoutes3"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Singapore{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Singapore
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Singapore{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Singapore
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Singapore{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Singapore
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Singapore{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Singapore
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Singapore{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Singapore
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Singapore{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Singapore
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Bhopal To Singapore{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Bhopal To Singapore
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Bangalore to Singapore{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Bangalore to Singapore
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Singapore{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Singapore
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="thirteen">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseThirteen"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="thirteen">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseThirteen"
                           aria-expanded="false"
                           aria-controls="collapseThirteen"
                         >
-                          {" "}
-                          Los Angeles{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Los Angeles
+                        </button>
+                      </h2>
                       <div
                         id="collapseThirteen"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="thirteen"
-                        data-parent="#popularRoutes3"
+                        data-bs-parent="#popularRoutes3"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Los Angeles{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Los Angeles
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Los Angeles{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Los Angeles
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Los Angeles{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Los Angeles
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Los Angeles{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Los Angeles
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Los Angeles{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Los Angeles
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Los Angeles{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Los Angeles
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Los Angeles{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Los Angeles
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Los Angeles{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Los Angeles
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Los Angeles{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Los Angeles
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="fourteen">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseFourteen"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="fourteen">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseFourteen"
                           aria-expanded="false"
                           aria-controls="collapseFourteen"
                         >
-                          {" "}
-                          San Francisco{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          San Francisco
+                        </button>
+                      </h2>
                       <div
                         id="collapseFourteen"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="fourteen"
-                        data-parent="#popularRoutes3"
+                        data-bs-parent="#popularRoutes3"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - San Francisco{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - San Francisco
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - San Francisco{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - San Francisco
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - San Francisco{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - San Francisco
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - San Francisco{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - San Francisco
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - San Francisco{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - San Francisco
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - San Francisco{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - San Francisco
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - San Francisco{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - San Francisco
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - San Francisco{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - San Francisco
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - San Francisco{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - San Francisco
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="fifteen">
-                        <h5
-                          class="collapsed mb-0"
-                          data-toggle="collapse"
-                          data-target="#collapseFifteen"
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="fifteen">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseFifteen"
                           aria-expanded="false"
                           aria-controls="collapseFifteen"
                         >
-                          Hong Kong{" "}
-                          <span class="nav">
-                            <a href="#">HOTELS</a>
-                            <a href="#">FLIGHTS</a>
-                            <a href="#">TRAINS</a>
-                            <a href="#">BUS</a>
-                          </span>{" "}
-                        </h5>
-                      </div>
+                          Hong Kong
+                        </button>
+                      </h2>
                       <div
                         id="collapseFifteen"
-                        class="collapse"
+                        class="accordion-collapse collapse"
                         aria-labelledby="fifteen"
-                        data-parent="#popularRoutes3"
+                        data-bs-parent="#popularRoutes3"
                       >
-                        <div class="card-body">
-                          <ul class="routes-list">
-                            <li>
+                        <div class="accordion-body ps-0">
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-bed"></i>
-                            </li>
+                            </span>
+                            Hotels
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                The Orchid Hotel{" "}
-                                <span class="ml-auto">$ 210+</span>
+                                The Orchid Hotel
+                                <span class="ms-auto">$ 210+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Whistling Meadows Resort{" "}
-                                <span class="ml-auto">$ 675+</span>
+                                Whistling Meadows Resort
+                                <span class="ms-auto">$ 675+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Radisson Blu Hotel{" "}
-                                <span class="ml-auto">$ 280+</span>
+                                Radisson Blu Hotel
+                                <span class="ms-auto">$ 280+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                The Lotus Hotel{" "}
-                                <span class="ml-auto">$ 412+</span>
+                                The Lotus Hotel
+                                <span class="ms-auto">$ 412+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-plane"></i>
-                            </li>
+                            </span>
+                            Flights
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Jaipur - Hong Kong{" "}
-                                <span class="ml-auto">$ 1,015+</span>
+                                Jaipur - Hong Kong
+                                <span class="ms-auto">$ 1,015+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Varanasi - Hong Kong{" "}
-                                <span class="ml-auto">$ 3,152+</span>
+                                Varanasi - Hong Kong
+                                <span class="ms-auto">$ 3,152+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Amritsar - Hong Kong{" "}
-                                <span class="ml-auto">$ 4,137+</span>
+                                Amritsar - Hong Kong
+                                <span class="ms-auto">$ 4,137+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Ahmedabad - Hong Kong{" "}
-                                <span class="ml-auto">$ 925+</span>
+                                Ahmedabad - Hong Kong
+                                <span class="ms-auto">$ 925+</span>
                               </a>
                             </li>
                           </ul>
-                          <ul class="routes-list">
-                            <li>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
                               <i class="fas fa-train"></i>
-                            </li>
+                            </span>
+                            Trains
+                          </a>
+                          <ul class="routes-list">
                             <li>
                               <a href="#">
-                                Surat - Hong Kong{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Hong Kong
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Hong Kong{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Hong Kong
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                           </ul>
+                          <a class="text-3" href="#">
+                            <span class="me-2">
+                              <i class="fas fa-bus"></i>
+                            </span>
+                            Bus
+                          </a>
                           <ul class="routes-list">
                             <li>
-                              <i class="fas fa-bus"></i>
-                            </li>
-                            <li>
                               <a href="#">
-                                Surat - Hong Kong{" "}
-                                <span class="ml-auto">$ 1,209+</span>
+                                Surat - Hong Kong
+                                <span class="ms-auto">$ 1,209+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Kolkata - Hong Kong{" "}
-                                <span class="ml-auto">$ 1,999+</span>
+                                Kolkata - Hong Kong
+                                <span class="ms-auto">$ 1,999+</span>
                               </a>
                             </li>
                             <li>
                               <a href="#">
-                                Srinagar - Hong Kong{" "}
-                                <span class="ml-auto">$ 2,100+</span>
+                                Srinagar - Hong Kong
+                                <span class="ms-auto">$ 2,100+</span>
                               </a>
                             </li>
                           </ul>
@@ -4683,10 +4633,10 @@ function FilghtSearch() {
                     </div>
                   </div>
                 </div>
-                <div class="col-12 mt-4">
+                <div class="col-12">
                   <p class="text-center mb-0">
                     <a href="#" class="btn btn-link">
-                      View All <i class="fas fa-arrow-right ml-1"></i>
+                      View All <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                   </p>
                 </div>
@@ -4694,74 +4644,64 @@ function FilghtSearch() {
             </div>
           </div>
 
-          <section class="section bg-secondary text-light shadow-md">
+          <section class="section bg-secondary shadow-md">
             <div class="container">
-              <h2 class="text-9 text-light font-weight-600 text-center">
-                Refer & Earn
-              </h2>
-              <p class="lead text-center mb-5">
+              <h2 class="text-9 text-white fw-600 text-center">Refer & Earn</h2>
+              <p class="lead text-center text-light mb-5">
                 Refer your friends and earn up to $20.
               </p>
-              <div class="row">
+              <div class="row g-4">
                 <div class="col-md-4">
                   <div class="featured-box style-3">
-                    <div class="featured-box-icon bg-primary text-light rounded-circle">
-                      {" "}
-                      <i class="fas fa-bullhorn"></i>{" "}
+                    <div class="featured-box-icon bg-primary text-white rounded-circle">
+                      <i class="fas fa-bullhorn"></i>
                     </div>
-                    <h3 class="text-light">You Refer Friends</h3>
-                    <p class="text-3 opacity-8">
+                    <h3 class="text-white">You Refer Friends</h3>
+                    <p class="text-3 text-light">
                       Share your referral link with friends. They get $10.
                     </p>
                   </div>
                 </div>
-                <div class="col-md-4 mt-4 mt-md-0">
+                <div class="col-md-4">
                   <div class="featured-box style-3">
-                    <div class="featured-box-icon bg-primary text-light rounded-circle">
-                      {" "}
-                      <i class="fas fa-sign-in-alt"></i>{" "}
+                    <div class="featured-box-icon bg-primary text-white rounded-circle">
+                      <i class="fas fa-sign-in-alt"></i>
                     </div>
-                    <h3 class="text-light">Your Friends Register</h3>
-                    <p class="text-3 opacity-8">
+                    <h3 class="text-white">Your Friends Register</h3>
+                    <p class="text-3 text-light">
                       Your friends Register with using your referral link.
                     </p>
                   </div>
                 </div>
-                <div class="col-md-4 mt-4 mt-md-0">
+                <div class="col-md-4">
                   <div class="featured-box style-3">
-                    <div class="featured-box-icon bg-primary text-light rounded-circle">
-                      {" "}
-                      <i class="fas fa-dollar-sign"></i>{" "}
+                    <div class="featured-box-icon bg-primary text-white rounded-circle">
+                      <i class="fas fa-dollar-sign"></i>
                     </div>
-                    <h3 class="text-light">Earn You</h3>
-                    <p class="text-3 opacity-8">
+                    <h3 class="text-white">Earn You</h3>
+                    <p class="text-3 text-light">
                       You get $20. You can use these credits to take recharge.
                     </p>
                   </div>
                 </div>
               </div>
               <div class="text-center pt-4">
-                {" "}
                 <a href="#" class="btn btn-outline-light">
                   Get Started Earn
-                </a>{" "}
+                </a>
               </div>
             </div>
           </section>
+
           <section class="section pb-0">
             <div class="container">
               <div class="row">
                 <div class="col-lg-6 text-center">
-                  {" "}
-                  <img
-                    class="img-fluid"
-                    alt=""
-                    src="images/app-mobile-2.png"
-                  />{" "}
+                  <img class="img-fluid" alt="" src="images/app-mobile-2.png" />
                 </div>
-                <div class="col-lg-6 text-center text-lg-left">
-                  <h2 class="text-9 font-weight-600 my-4">
-                    Download Our Travel Vogues
+                <div class="col-lg-6 text-center text-lg-start">
+                  <h2 class="text-9 fw-600 my-4">
+                    Download Our Quickai
                     <br class="d-none d-lg-inline-block" />
                     Mobile App Now
                   </h2>
@@ -4770,18 +4710,17 @@ function FilghtSearch() {
                     Recharge & Bill Payment, Booking and more....
                   </p>
                   <div class="pt-3">
-                    {" "}
                     <a
                       href="#"
-                      class="mr-4 btn btn-outline-primary shadow-none"
+                      class="me-4 btn btn-outline-primary shadow-none"
                     >
-                      <i class="fab fa-apple mr-1"></i> App Store
-                    </a>{" "}
+                      <i class="fab fa-apple me-1"></i> App Store
+                    </a>
                     <a
                       href="#"
-                      class="mr-4 btn btn-outline-primary shadow-none"
+                      class="me-4 btn btn-outline-primary shadow-none"
                     >
-                      <i class="fab fa-android mr-1"></i> Play Store
+                      <i class="fab fa-android me-1"></i> Play Store
                     </a>
                   </div>
                 </div>
@@ -4789,15 +4728,15 @@ function FilghtSearch() {
             </div>
           </section>
         </div>
+
         <footer id="footer">
-          <section class="section bg-light shadow-md pt-4 pb-3">
+          <section class="section bg-white shadow-md pt-4 pb-3">
             <div class="container">
               <div class="row">
                 <div class="col-sm-6 col-md-3">
                   <div class="featured-box text-center">
                     <div class="featured-box-icon">
-                      {" "}
-                      <i class="fas fa-lock"></i>{" "}
+                      <i class="fas fa-lock"></i>
                     </div>
                     <h4>100% Secure Payments</h4>
                     <p>
@@ -4808,8 +4747,7 @@ function FilghtSearch() {
                 <div class="col-sm-6 col-md-3">
                   <div class="featured-box text-center">
                     <div class="featured-box-icon">
-                      {" "}
-                      <i class="fas fa-thumbs-up"></i>{" "}
+                      <i class="fas fa-thumbs-up"></i>
                     </div>
                     <h4>Trust pay</h4>
                     <p>100% Payment Protection. Easy Return Policy.</p>
@@ -4818,8 +4756,7 @@ function FilghtSearch() {
                 <div class="col-sm-6 col-md-3">
                   <div class="featured-box text-center">
                     <div class="featured-box-icon">
-                      {" "}
-                      <i class="fas fa-bullhorn"></i>{" "}
+                      <i class="fas fa-bullhorn"></i>
                     </div>
                     <h4>Refer & Earn</h4>
                     <p>Invite a friend to sign up and earn up to $100.</p>
@@ -4828,12 +4765,11 @@ function FilghtSearch() {
                 <div class="col-sm-6 col-md-3">
                   <div class="featured-box text-center">
                     <div class="featured-box-icon">
-                      {" "}
-                      <i class="far fa-life-ring"></i>{" "}
+                      <i class="far fa-life-ring"></i>
                     </div>
                     <h4>24X7 Support</h4>
                     <p>
-                      We're here to help. Have a query and need help ?{" "}
+                      We're here to help. Have a query and need help ?
                       <a href="#">Click here</a>
                     </p>
                   </div>
@@ -4842,15 +4778,14 @@ function FilghtSearch() {
             </div>
           </section>
           <div class="container mt-4">
-            <div class="row">
-              <div class="col-md-4 mb-3 mb-md-0">
+            <div class="row g-4">
+              <div class="col-md-4">
                 <p>Payment</p>
                 <ul class="payments-types">
                   <li>
                     <a href="#" target="_blank">
-                      {" "}
                       <img
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         src="images/payment/visa.png"
                         alt="visa"
                         title="Visa"
@@ -4859,9 +4794,8 @@ function FilghtSearch() {
                   </li>
                   <li>
                     <a href="#" target="_blank">
-                      {" "}
                       <img
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         src="images/payment/discover.png"
                         alt="discover"
                         title="Discover"
@@ -4870,9 +4804,8 @@ function FilghtSearch() {
                   </li>
                   <li>
                     <a href="#" target="_blank">
-                      {" "}
                       <img
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         src="images/payment/paypal.png"
                         alt="paypal"
                         title="PayPal"
@@ -4881,9 +4814,8 @@ function FilghtSearch() {
                   </li>
                   <li>
                     <a href="#" target="_blank">
-                      {" "}
                       <img
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         src="images/payment/american.png"
                         alt="american express"
                         title="American Express"
@@ -4892,9 +4824,8 @@ function FilghtSearch() {
                   </li>
                   <li>
                     <a href="#" target="_blank">
-                      {" "}
                       <img
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         src="images/payment/mastercard.png"
                         alt="discover"
                         title="Discover"
@@ -4903,7 +4834,7 @@ function FilghtSearch() {
                   </li>
                 </ul>
               </div>
-              <div class="col-md-4 mb-3 mb-md-0">
+              <div class="col-md-4">
                 <p>Subscribe</p>
                 <div class="input-group newsletter">
                   <input
@@ -4913,11 +4844,12 @@ function FilghtSearch() {
                     id="newsletterEmail"
                     type="text"
                   />
-                  <span class="input-group-append">
-                    <button class="btn btn-secondary" type="submit">
-                      Subscribe
-                    </button>
-                  </span>{" "}
+                  <button
+                    class="btn btn-secondary shadow-none px-3"
+                    type="submit"
+                  >
+                    Subscribe
+                  </button>
                 </div>
               </div>
               <div class="col-md-4 d-flex align-items-md-end flex-column">
@@ -4925,7 +4857,7 @@ function FilghtSearch() {
                 <ul class="social-icons">
                   <li class="social-icons-facebook">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.facebook.com/"
                       target="_blank"
                       title="Facebook"
@@ -4935,7 +4867,7 @@ function FilghtSearch() {
                   </li>
                   <li class="social-icons-twitter">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.twitter.com/"
                       target="_blank"
                       title="Twitter"
@@ -4945,7 +4877,7 @@ function FilghtSearch() {
                   </li>
                   <li class="social-icons-google">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.google.com/"
                       target="_blank"
                       title="Google"
@@ -4955,7 +4887,7 @@ function FilghtSearch() {
                   </li>
                   <li class="social-icons-linkedin">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.linkedin.com/"
                       target="_blank"
                       title="Linkedin"
@@ -4965,7 +4897,7 @@ function FilghtSearch() {
                   </li>
                   <li class="social-icons-youtube">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.youtube.com/"
                       target="_blank"
                       title="Youtube"
@@ -4975,7 +4907,7 @@ function FilghtSearch() {
                   </li>
                   <li class="social-icons-instagram">
                     <a
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       href="http://www.instagram.com/"
                       target="_blank"
                       title="Instagram"
@@ -4991,44 +4923,38 @@ function FilghtSearch() {
             <div class="footer-copyright">
               <ul class="nav justify-content-center">
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link active" href="#">
                     About Us
-                  </a>{" "}
+                  </a>
                 </li>
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link" href="#">
                     Faq
-                  </a>{" "}
+                  </a>
                 </li>
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link" href="#">
                     Contact
-                  </a>{" "}
+                  </a>
                 </li>
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link" href="#">
                     Support
-                  </a>{" "}
+                  </a>
                 </li>
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link" href="#">
                     Terms of Use
-                  </a>{" "}
+                  </a>
                 </li>
                 <li class="nav-item">
-                  {" "}
                   <a class="nav-link" href="#">
                     Privacy Policy
-                  </a>{" "}
+                  </a>
                 </li>
               </ul>
               <p class="copyright-text">
-                Copyright © 2018 <a href="#">Quickai</a>. All Rights Reserved.
+                Copyright © 2022 <a href="#">Quickai</a>. All Rights Reserved.
               </p>
             </div>
           </div>
@@ -5037,7 +4963,7 @@ function FilghtSearch() {
 
       <a
         id="back-to-top"
-        data-toggle="tooltip"
+        data-bs-toggle="tooltip"
         title="Back to Top"
         href="javascript:void(0)"
       >
@@ -5214,6 +5140,6 @@ function FilghtSearch() {
       </div>
     </>
   );
-}
+};
 
-export default FilghtSearch;
+export default HotelSearch;

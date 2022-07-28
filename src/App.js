@@ -23,13 +23,17 @@ import DistributorProfile from "./Dashboard/Distributor/DistributorProfile";
 import DistributorTransactions from "./Dashboard/Distributor/DistributorTransactions";
 import DashboardPage from "./Dashboard/DashboardPage/DashboardPage";
 
+import HotelSearch from "./Hotels/HotelSearch";
+
 function App() {
   return (
     <Router>
       <Switch>
+        {/* login signup */}
         <Route path="/login" component={Login}></Route>
         <Route path="/register" component={SignUp}></Route>
 
+        {/* flight routes  */}
         <Route path="/flightsearch" component={FlightSearch}></Route>
         <Route
           path="/onewayflights"
@@ -44,6 +48,9 @@ function App() {
           component={BookingFlightsConfirmDetails}
         ></Route>
         <Route path="/payment" component={Payment}></Route>
+
+        {/* hotels route */}
+        <Route path="/hotelsearch" component={HotelSearch}></Route>
 
         <Route path="/dashboard">
           <Dashboard title="Dashboard">
