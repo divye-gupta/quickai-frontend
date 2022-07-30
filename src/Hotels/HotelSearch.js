@@ -12,11 +12,13 @@ import {
   ThemeProvider,
   withStyles,
 } from "@material-ui/core";
+import "./HotelSearch.css";
 import { Autocomplete } from "@material-ui/lab";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 const CssTextField = withStyles({
   root: {
     "& .MuiFormLabel-root": {
@@ -55,6 +57,11 @@ const CssTextField = withStyles({
       color: "#889099",
     },
   },
+  textField: {
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(1),
+    width: 200,
+  },
 })(TextField);
 
 const muitheme = createMuiTheme({
@@ -79,16 +86,31 @@ const HotelSearch = () => {
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
 
+  const [{ hotelDetails }, dispatch] = useStateValue();
+
+  const [userId, setUserId] = useState();
+
+  useEffect(() => {
+    let id = uuidv4();
+    setUserId(id);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("here");
-    const obj = {
+    const date1 = new Date(checkinDate.split("/").reverse().join("/"));
+    const date2 = new Date(checkoutDate);
+    if (date1 > date2)
+      return alert(
+        `Please enter a checkout date after the given check-in date ${checkinDate}`
+      );
+
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const item = {
       ...destination[0],
       CheckInDate: checkinDate,
       PreferredCurrency: "INR",
-      NoOfNights: 1,
-      CountryCode: "IN",
-      // CityId: 130443,
+      NoOfNights: diffDays,
       ResultCount: null,
       GuestNationality: "IN",
       NoOfRooms: rooms,
@@ -106,17 +128,22 @@ const HotelSearch = () => {
       EndUserIp: "192.168.10.26",
       TokenId: "228d4294-cb64-47a1-81c1-2f763e1cf0c5",
     };
-    console.log(obj);
-  };
 
-  const onFocus = (e) => {
-    e.currentTarget.type = "date";
+    delete item.CountryName;
+    delete item.StateProvince;
+    delete item.CityName;
+    delete item.Type;
+    localStorage.setItem("hotel-search-options", JSON.stringify(item));
+
+    dispatch({
+      type: "ADD_TO_HOTEL",
+      item,
+    });
   };
 
   const increase = (type) => {
     switch (type) {
       case "Rooms": {
-        console.log(rooms, "here");
         setRooms(rooms + 1);
         break;
       }
@@ -132,7 +159,6 @@ const HotelSearch = () => {
   const decrease = (type) => {
     switch (type) {
       case "Rooms": {
-        console.log(rooms, "here");
         setRooms((rooms) => (rooms > 1 ? rooms - 1 : rooms));
         break;
       }
@@ -143,6 +169,10 @@ const HotelSearch = () => {
       default:
         setChildren((children) => (children >= 1 ? children - 1 : children));
     }
+  };
+
+  const onFocus = (e) => {
+    e.currentTarget.type = "date";
   };
 
   const onBlur = (e) => {
@@ -172,7 +202,6 @@ const HotelSearch = () => {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data.Destinations);
         setDestinationData(data.Destinations);
       })
       .catch((err) => console.log(err));
@@ -211,14 +240,6 @@ const HotelSearch = () => {
   useEffect(() => {
     getCountryList();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(destination);
-  // }, [destination]);
-
-  // useEffect(() => {
-  //   console.log(rooms);
-  // }, [rooms]);
 
   return (
     <>
@@ -1855,7 +1876,6 @@ const HotelSearch = () => {
                                     options={destinationData}
                                     getOptionLabel={(option) => option.CityName}
                                     onChange={(event, value) => {
-                                      console.log(value);
                                       setDestination([value]);
                                     }}
                                     renderInput={(params) => (
@@ -1877,18 +1897,20 @@ const HotelSearch = () => {
                                 <div class="col-lg-6 position-relative">
                                   <input
                                     id="hotelsCheckIn"
-                                    type="text"
+                                    type="date"
                                     class="form-control"
                                     required
-                                    onFocus={onFocus}
-                                    onBlur={onBlur}
                                     placeholder="Check In"
                                     onChange={(e) => {
                                       const date = e.target.value;
-                                      const newDate = date.split("-").join("/");
+                                      const newDate = date
+                                        .split("-")
+                                        .reverse()
+                                        .join("/");
                                       setCheckinDate(newDate);
                                     }}
                                   />
+
                                   {/* <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
                                   </span> */}
@@ -1896,11 +1918,9 @@ const HotelSearch = () => {
                                 <div class="col-lg-6 position-relative">
                                   <input
                                     id="hotelsCheckOut"
-                                    type="text"
+                                    type="date"
                                     class="form-control"
                                     required
-                                    onFocus={onFocus}
-                                    onBlur={onBlur}
                                     placeholder="Check Out"
                                     onChange={(e) => {
                                       const date = e.target.value;
@@ -1958,9 +1978,6 @@ const HotelSearch = () => {
                                               class="qty-spinner form-control"
                                               value={rooms}
                                               readOnly=""
-                                              // onChange={(e) => {
-                                              //   console.log(e.target.value);
-                                              // }}
                                             />
                                             <div class="input-group-append">
                                               <button

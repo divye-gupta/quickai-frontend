@@ -24,6 +24,7 @@ import DistributorTransactions from "./Dashboard/Distributor/DistributorTransact
 import DashboardPage from "./Dashboard/DashboardPage/DashboardPage";
 
 import HotelSearch from "./Hotels/HotelSearch";
+import HotelSearchDetails from "./Hotels/HotelSearchDetails";
 
 function App() {
   return (
@@ -51,6 +52,8 @@ function App() {
 
         {/* hotels route */}
         <Route path="/hotelsearch" component={HotelSearch}></Route>
+
+        <Route path="/hotelslist" component={HotelSearchDetails}></Route>
 
         <Route path="/dashboard">
           <Dashboard title="Dashboard">
