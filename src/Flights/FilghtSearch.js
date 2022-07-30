@@ -1672,9 +1672,10 @@ function FilghtSearch() {
                                           id="flightAdult-travellers"
                                           class="qty-spinner form-control"
                                           value={adultCount}
-                                          onChange={(event) =>
-                                            setAdultCount(event.target.value)
-                                          }
+                                          onChange={(event) => {
+                                            console.log(event.target.value);
+                                            setAdultCount(event.target.value);
+                                          }}
                                         />
                                         <div class="input-group-append">
                                           <button

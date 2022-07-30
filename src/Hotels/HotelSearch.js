@@ -71,35 +71,154 @@ const muitheme = createMuiTheme({
 
 const HotelSearch = () => {
   const classes = makeStyles();
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState([]);
   const [destinationData, setDestinationData] = useState([]);
+  const [checkoutDate, setCheckoutDate] = useState();
+  const [checkinDate, setCheckinDate] = useState();
+  const [rooms, setRooms] = useState(0);
+  const [adults, setAdults] = useState(0);
+  const [children, setChildren] = useState(0);
 
-  const onDestinationChange = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("here");
+    const obj = {
+      ...destination[0],
+      CheckInDate: checkinDate,
+      PreferredCurrency: "INR",
+      NoOfNights: 1,
+      CountryCode: "IN",
+      // CityId: 130443,
+      ResultCount: null,
+      GuestNationality: "IN",
+      NoOfRooms: rooms,
+      RoomGuests: [
+        {
+          NoOfAdults: adults,
+          NoOfChild: children,
+          ChildAge: null,
+        },
+      ],
+      MaxRating: 5,
+      MinRating: 0,
+      ReviewScore: null,
+      IsNearBySearchAllowed: false,
+      EndUserIp: "192.168.10.26",
+      TokenId: "228d4294-cb64-47a1-81c1-2f763e1cf0c5",
+    };
+    console.log(obj);
+  };
 
-    const query = e.target.value;
-    setDestination(query);
+  const onFocus = (e) => {
+    e.currentTarget.type = "date";
+  };
 
-    if (query.length <= 2) {
-      return;
-    } else {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      fetch(
-        `http://3.108.167.152:8040/api/City?searchTxt=${query}`,
-        requestOptions
-      )
-        .then((resp) => resp.json())
-        .then((data) => {
-          console.log(data);
-          // setDestinationData(data);
-        })
-        .catch((err) => console.log(err));
+  const increase = (type) => {
+    switch (type) {
+      case "Rooms": {
+        console.log(rooms, "here");
+        setRooms(rooms + 1);
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => adults + 1);
+        break;
+      }
+      default:
+        setChildren((children) => children + 1);
     }
   };
+
+  const decrease = (type) => {
+    switch (type) {
+      case "Rooms": {
+        console.log(rooms, "here");
+        setRooms((rooms) => (rooms > 1 ? rooms - 1 : rooms));
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => (adults > 1 ? adults - 1 : adults));
+        break;
+      }
+      default:
+        setChildren((children) => (children >= 1 ? children - 1 : children));
+    }
+  };
+
+  const onBlur = (e) => {
+    e.currentTarget.type = "text";
+    e.currentTarget.placeholder = "Enter a Date";
+  };
+
+  const getCountryList = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        ClientId: "ApiIntegrationNew",
+        EndUserIp: "192.168.10.26",
+        TokenId: "228d4294-cb64-47a1-81c1-2f763e1cf0c5",
+        CountryCode: "IN",
+        SearchType: "1",
+      }),
+    };
+
+    fetch(
+      "/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+      requestOptions
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data.Destinations);
+        setDestinationData(data.Destinations);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    $(function () {
+      $(".dropdown li").on("mouseenter mouseleave", function (e) {
+        if ($(window).width() > 991) {
+          var elm = $(".dropdown-menu", this);
+          if (elm.length > 0) {
+            var off = elm.offset();
+            var l = off.left;
+            var w = elm.width();
+            var docW = $(window).width();
+            var isEntirelyVisible = l + w <= docW;
+            if (!isEntirelyVisible) {
+              $(elm).addClass("dropdown-menu-right");
+            } else {
+              $(elm).removeClass("dropdown-menu-right");
+            }
+          } else {
+          }
+        }
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = window.location.origin + "/js/theme.js";
+    document.body.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    getCountryList();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(destination);
+  // }, [destination]);
+
+  // useEffect(() => {
+  //   console.log(rooms);
+  // }, [rooms]);
 
   return (
     <>
@@ -1724,39 +1843,26 @@ const HotelSearch = () => {
                             <form
                               id="bookingHotels"
                               class="search-input-line"
-                              method="post"
+                              // method="post"
+                              // onSubmit={(e) => handleSubmit(e)}
                             >
                               <div class="row gy-3 gx-4">
                                 <div class="col-12 position-relative">
-                                  {/* <input
-                                    type="text"
-                                    class="form-control"
-                                    id="hotelsFrom"
-                                    required=""
-                                    placeholder="Enter Locality, City"
-                                  /> */}
                                   <Autocomplete
                                     loading={true}
                                     freeSolo
                                     id="combo-box-demo"
                                     options={destinationData}
-                                    getOptionLabel={(airport) => {
-                                      console.log(airport);
-                                      return airport.AIRPORTNAME;
+                                    getOptionLabel={(option) => option.CityName}
+                                    onChange={(event, value) => {
+                                      console.log(value);
+                                      setDestination([value]);
                                     }}
-                                    onChange={
-                                      (event, value) => {
-                                        console.log(value);
-                                        // setDestination(value.AirPortCode)
-                                      }
-                                      // setFrom(value.AirPortCode)
-                                    }
                                     renderInput={(params) => (
                                       <>
                                         <CssTextField
                                           className={[classes.root]}
                                           value={destination}
-                                          onChange={onDestinationChange}
                                           {...params}
                                           label="From"
                                           variant="standard"
@@ -1773,35 +1879,50 @@ const HotelSearch = () => {
                                     id="hotelsCheckIn"
                                     type="text"
                                     class="form-control"
-                                    required=""
+                                    required
+                                    onFocus={onFocus}
+                                    onBlur={onBlur}
                                     placeholder="Check In"
+                                    onChange={(e) => {
+                                      const date = e.target.value;
+                                      const newDate = date.split("-").join("/");
+                                      setCheckinDate(newDate);
+                                    }}
                                   />
-                                  <span class="icon-inside">
+                                  {/* <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>
+                                  </span> */}
                                 </div>
                                 <div class="col-lg-6 position-relative">
                                   <input
                                     id="hotelsCheckOut"
                                     type="text"
                                     class="form-control"
-                                    required=""
+                                    required
+                                    onFocus={onFocus}
+                                    onBlur={onBlur}
                                     placeholder="Check Out"
+                                    onChange={(e) => {
+                                      const date = e.target.value;
+                                      const newDate = date.split("-").join("/");
+                                      setCheckoutDate(newDate);
+                                    }}
                                   />
-                                  <span class="icon-inside">
+                                  {/* <span class="icon-inside">
                                     <i class="far fa-calendar-alt"></i>
-                                  </span>
+                                  </span> */}
                                 </div>
                                 <div class="col-12">
                                   <div class="travellers-class">
                                     <input
                                       type="text"
-                                      id="hotelsTravellersClass"
+                                      // id="hotelsTravellersClass"
                                       class="travellers-class-input form-control"
-                                      name="hotels-travellers-class"
-                                      placeholder="Rooms / People"
-                                      required=""
-                                      onkeypress="return false;"
+                                      // name="hotels-travellers-class"
+                                      placeholder="-"
+                                      value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
+                                      required
+                                      // onkeypress="return false;"
                                     />
                                     <span class="icon-inside">
                                       <i class="fas fa-caret-down"></i>
@@ -1820,9 +1941,12 @@ const HotelSearch = () => {
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="decrease"
-                                                data-target="#hotels-rooms"
+                                                // data-value="decrease"
+                                                // data-target="#hotels-rooms"
                                                 data-toggle="spinner"
+                                                onClick={(e) =>
+                                                  decrease("Rooms")
+                                                }
                                               >
                                                 -
                                               </button>
@@ -1832,17 +1956,22 @@ const HotelSearch = () => {
                                               data-ride="spinner"
                                               id="hotels-rooms"
                                               class="qty-spinner form-control"
-                                              value="1"
-                                              min="40"
-                                              readonly=""
+                                              value={rooms}
+                                              readOnly=""
+                                              // onChange={(e) => {
+                                              //   console.log(e.target.value);
+                                              // }}
                                             />
                                             <div class="input-group-append">
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="increase"
-                                                data-target="#hotels-rooms"
+                                                // data-value="increase"
+                                                // data-target="#hotels-rooms"
                                                 data-toggle="spinner"
+                                                onClick={() =>
+                                                  increase("Rooms")
+                                                }
                                               >
                                                 +
                                               </button>
@@ -1866,9 +1995,12 @@ const HotelSearch = () => {
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="decrease"
-                                                data-target="#adult-travellers"
+                                                // data-value="decrease"
+                                                // data-target="#adult-travellers"
                                                 data-toggle="spinner"
+                                                onClick={() =>
+                                                  decrease("Adults")
+                                                }
                                               >
                                                 -
                                               </button>
@@ -1878,16 +2010,19 @@ const HotelSearch = () => {
                                               data-ride="spinner"
                                               id="adult-travellers"
                                               class="qty-spinner form-control"
-                                              value="1"
+                                              value={adults}
                                               readonly=""
                                             />
                                             <div class="input-group-append">
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="increase"
-                                                data-target="#adult-travellers"
+                                                // data-value="increase"
+                                                // data-target="#adult-travellers"
                                                 data-toggle="spinner"
+                                                onClick={() =>
+                                                  increase("Adults")
+                                                }
                                               >
                                                 +
                                               </button>
@@ -1911,9 +2046,12 @@ const HotelSearch = () => {
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="decrease"
-                                                data-target="#children-travellers"
+                                                // data-value="decrease"
+                                                // data-target="#children-travellers"
                                                 data-toggle="spinner"
+                                                onClick={() =>
+                                                  decrease("Children")
+                                                }
                                               >
                                                 -
                                               </button>
@@ -1923,16 +2061,19 @@ const HotelSearch = () => {
                                               data-ride="spinner"
                                               id="children-travellers"
                                               class="qty-spinner form-control"
-                                              value="0"
+                                              value={children}
                                               readonly=""
                                             />
                                             <div class="input-group-append">
                                               <button
                                                 type="button"
                                                 class="btn bg-light-4"
-                                                data-value="increase"
-                                                data-target="#children-travellers"
+                                                // data-value="increase"
+                                                // data-target="#children-travellers"
                                                 data-toggle="spinner"
+                                                onClick={() =>
+                                                  increase("Children")
+                                                }
                                               >
                                                 +
                                               </button>
@@ -1952,7 +2093,10 @@ const HotelSearch = () => {
                                   </div>
                                 </div>
                                 <div class="col-12 d-grid mt-4">
-                                  <button class="btn btn-primary" type="submit">
+                                  <button
+                                    class="btn btn-primary"
+                                    onClick={handleSubmit}
+                                  >
                                     Search Hotels
                                   </button>
                                 </div>
