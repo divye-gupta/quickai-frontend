@@ -89,6 +89,7 @@ const HotelSearch = () => {
   const [{ hotelDetails }, dispatch] = useStateValue();
 
   const [userId, setUserId] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     let id = uuidv4();
@@ -109,6 +110,7 @@ const HotelSearch = () => {
     const item = {
       ...destination[0],
       CheckInDate: checkinDate,
+      CityId: destination[0].DestinationId,
       PreferredCurrency: "INR",
       NoOfNights: diffDays,
       ResultCount: null,
@@ -133,12 +135,19 @@ const HotelSearch = () => {
     delete item.StateProvince;
     delete item.CityName;
     delete item.Type;
+    delete item.DestinationId;
+
+    // console.log(destination[0]);
+    // console.log(item);
+
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
 
     dispatch({
       type: "ADD_TO_HOTEL",
       item,
     });
+
+    history.push("/hotelslist");
   };
 
   const increase = (type) => {
@@ -190,7 +199,7 @@ const HotelSearch = () => {
       body: JSON.stringify({
         ClientId: "ApiIntegrationNew",
         EndUserIp: "192.168.10.26",
-        TokenId: "228d4294-cb64-47a1-81c1-2f763e1cf0c5",
+        TokenId: "fefb3c1f-665c-4a6e-9514-70b53ea9cab9",
         CountryCode: "IN",
         SearchType: "1",
       }),

@@ -1,6 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const HotelSearchDetails = () => {
+  const [hotelData, setHotelData] = useState([]);
+  const [APIdata, setAPIdata] = useState("");
+
+  const getHotelList = (data) => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: data,
+    };
+
+    fetch(
+      "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
+      requestOptions
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data.HotelSearchResult.HotelResults);
+
+        setHotelData([...data.HotelSearchResult.HotelResults]);
+        console.log("here");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    const data = localStorage.getItem("hotel-search-options");
+
+    if (data !== undefined) {
+      console.log("Here");
+      setAPIdata(data);
+      getHotelList(data);
+    }
+  }, []);
+
   return (
     <>
       <div id="main-wrapper">
@@ -1991,10 +2028,137 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-
+                </div>{" "}
                 <div class="hotels-list">
-                  <div class="hotels-item bg-white shadow-md rounded p-3">
+                  {hotelData?.length > 0 &&
+                    hotelData.map((hotel) => {
+                      console.log(hotel);
+                      return (
+                        <>
+                          <div class="hotels-item bg-white shadow-md rounded p-3">
+                            <div class="row">
+                              <div class="col-md-4">
+                                {" "}
+                                <a href="#">
+                                  <img
+                                    class="img-fluid rounded align-top"
+                                    src="images/brands/hotels/hotel-1.jpg"
+                                    alt="hotels"
+                                  />
+                                </a>{" "}
+                              </div>
+                              <div class="col-md-8 ps-3 ps-md-0 mt-3 mt-md-0">
+                                <div class="row g-0">
+                                  <div class="col-sm-9">
+                                    <h4>
+                                      <a href="#" class="text-dark text-5">
+                                        {hotel.HotelName}
+                                      </a>
+                                    </h4>
+                                    <p class="mb-2">
+                                      {" "}
+                                      <span class="me-2">
+                                        {" "}
+                                        <i class="fas fa-star text-warning"></i>{" "}
+                                        <i class="fas fa-star text-warning"></i>{" "}
+                                        <i class="fas fa-star text-warning"></i>{" "}
+                                        <i class="fas fa-star text-warning"></i>{" "}
+                                      </span>{" "}
+                                      <span class="text-black-50">
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        {hotel.HotelAddress}
+                                      </span>{" "}
+                                    </p>
+                                    <p class="hotels-amenities d-flex align-items-center mb-2 text-4">
+                                      {" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Internet/Wi-Fi"
+                                      >
+                                        <i class="fas fa-wifi"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Restaurant"
+                                      >
+                                        <i class="fas fa-utensils"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Bar"
+                                      >
+                                        <i class="fas fa-glass-martini"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Swimming Pool"
+                                      >
+                                        <i class="fas fa-swimmer"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Business Facilities"
+                                      >
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Spa"
+                                      >
+                                        <i class="fas fa-spa"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Gym"
+                                      >
+                                        <i class="fas fa-dumbbell"></i>
+                                      </span>{" "}
+                                      <span class="cf border rounded-pill text-1 text-nowrap px-2">
+                                        Couple Friendly
+                                      </span>{" "}
+                                    </p>
+                                    <p class="reviews mb-2">
+                                      {" "}
+                                      <span class="reviews-score px-2 py-1 rounded fw-600 text-light">
+                                        8.2
+                                      </span>{" "}
+                                      <span class="fw-600">Excellent</span>{" "}
+                                      <a class="text-black-50" href="#">
+                                        (245 reviews)
+                                      </a>{" "}
+                                    </p>
+                                    <p class="text-danger mb-0">
+                                      Last Booked - 18 hours ago
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3 text-end d-flex d-sm-block align-items-center">
+                                    <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
+                                      16% Off!
+                                    </div>
+                                    <div class="d-block text-3 text-black-50 mb-0 mb-sm-2 me-2 me-sm-0 order-1">
+                                      <del class="d-block">$250</del>
+                                    </div>
+                                    <div class="text-dark text-7 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
+                                      $210
+                                    </div>
+                                    <div class="text-black-50 mb-0 mb-sm-2 order-3 d-none d-sm-block">
+                                      1 Room/Night
+                                    </div>
+                                    <a
+                                      href="#"
+                                      class="btn btn-sm btn-primary order-4 ms-auto"
+                                    >
+                                      Book Now
+                                    </a>{" "}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  {/* <div class="hotels-item bg-white shadow-md rounded p-3">
                     <div class="row">
                       <div class="col-md-4">
                         {" "}
@@ -2547,9 +2711,8 @@ const HotelSearchDetails = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
-
                 <ul class="pagination justify-content-center mt-4 mb-0">
                   <li class="page-item disabled">
                     {" "}
