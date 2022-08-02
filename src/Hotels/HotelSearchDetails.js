@@ -20,7 +20,7 @@ const HotelSearchDetails = () => {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data.HotelSearchResult.HotelResults);
+        console.log(data);
 
         setHotelData([...data.HotelSearchResult.HotelResults]);
         console.log("here");
@@ -2042,7 +2042,7 @@ const HotelSearchDetails = () => {
                                 <a href="#">
                                   <img
                                     class="img-fluid rounded align-top"
-                                    src="images/brands/hotels/hotel-1.jpg"
+                                    src={hotel.HotelPicture}
                                     alt="hotels"
                                   />
                                 </a>{" "}
@@ -2058,11 +2058,21 @@ const HotelSearchDetails = () => {
                                     <p class="mb-2">
                                       {" "}
                                       <span class="me-2">
-                                        {" "}
+                                        {[...Array(hotel.StarRating)].map(
+                                          (e, i) => (
+                                            <>
+                                              {" "}
+                                              <i
+                                                class="fas fa-star text-warning"
+                                                key={i}
+                                              ></i>
+                                            </>
+                                          )
+                                        )}
+                                        {/* <i class="fas fa-star text-warning"></i>{" "}
                                         <i class="fas fa-star text-warning"></i>{" "}
                                         <i class="fas fa-star text-warning"></i>{" "}
-                                        <i class="fas fa-star text-warning"></i>{" "}
-                                        <i class="fas fa-star text-warning"></i>{" "}
+                                        <i class="fas fa-star text-warning"></i>{" "} */}
                                       </span>{" "}
                                       <span class="text-black-50">
                                         <i class="fas fa-map-marker-alt"></i>{" "}
@@ -2122,7 +2132,9 @@ const HotelSearchDetails = () => {
                                       <span class="reviews-score px-2 py-1 rounded fw-600 text-light">
                                         8.2
                                       </span>{" "}
-                                      <span class="fw-600">Excellent</span>{" "}
+                                      <span class="fw-600">
+                                        {hotel.HotelPromotion}
+                                      </span>{" "}
                                       <a class="text-black-50" href="#">
                                         (245 reviews)
                                       </a>{" "}
@@ -2132,14 +2144,18 @@ const HotelSearchDetails = () => {
                                     </p>
                                   </div>
                                   <div class="col-sm-3 text-end d-flex d-sm-block align-items-center">
-                                    <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
-                                      16% Off!
-                                    </div>
-                                    <div class="d-block text-3 text-black-50 mb-0 mb-sm-2 me-2 me-sm-0 order-1">
-                                      <del class="d-block">$250</del>
-                                    </div>
+                                    {hotel.Price.Discount > 0 && (
+                                      <>
+                                        <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
+                                          16% Off!
+                                        </div>
+                                        <div class="d-block text-3 text-black-50 mb-0 mb-sm-2 me-2 me-sm-0 order-1">
+                                          <del class="d-block">$250</del>
+                                        </div>
+                                      </>
+                                    )}
                                     <div class="text-dark text-7 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
-                                      $210
+                                      Rs. {hotel.Price.PublishedPriceRoundedOff}
                                     </div>
                                     <div class="text-black-50 mb-0 mb-sm-2 order-3 d-none d-sm-block">
                                       1 Room/Night
