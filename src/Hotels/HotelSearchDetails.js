@@ -1,8 +1,28 @@
+import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useStateValue } from "../ContextApi/StateProvider";
 
 const HotelSearchDetails = () => {
   const [hotelData, setHotelData] = useState([]);
   const [APIdata, setAPIdata] = useState("");
+  const [{ hotelList }, dispatch] = useStateValue();
+  const history = useHistory();
+
+  const viewHotel = (ResultIndex, HotelId, Hotel) => {
+    console.log(hotelData);
+    dispatch({
+      type: "ADD_TO_HOTEL_DATA",
+      hotelDataSelected: Hotel,
+    });
+    history.push(
+      `/hoteldetails/${hotelData[0]?.TraceId}/${ResultIndex}/${HotelId}`
+    );
+    console.log(ResultIndex, HotelId);
+  };
+  const bookHotel = () => {
+    console.log("Book Hotel");
+  };
 
   const getHotelList = (data) => {
     const requestOptions = {
@@ -13,7 +33,6 @@ const HotelSearchDetails = () => {
       },
       body: data,
     };
-
     fetch(
       "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
       requestOptions
@@ -22,21 +41,34 @@ const HotelSearchDetails = () => {
       .then((data) => {
         console.log(data);
 
-        setHotelData([...data.HotelSearchResult.HotelResults]);
-        console.log("here");
+        dispatch({
+          type: "ADD_TO_HOTEL_LIST",
+          item: data.HotelSearchResult,
+        });
+
+        setHotelData([data.HotelSearchResult]);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
+    // console.log(hotel.CityName);
     const data = localStorage.getItem("hotel-search-options");
 
     if (data !== undefined) {
-      console.log("Here");
+      console.log(data);
       setAPIdata(data);
-      getHotelList(data);
+      if (hotelList === null) {
+        getHotelList(data);
+      } else {
+        setHotelData([hotelList]);
+      }
     }
   }, []);
+
+  useEffect(() => {
+    console.log(hotelList);
+  }, [hotelData]);
 
   return (
     <>
@@ -1474,27 +1506,27 @@ const HotelSearchDetails = () => {
               <aside class="col-lg-3">
                 <div class="bg-white shadow-md rounded p-3">
                   <h3 class="text-5">Filter</h3>
-                  <hr class="mx-n3" />
+                  <hr className="mx-n3 margin-bottom" />
                   <div
                     class="accordion accordion-flush style-2 mt-n3"
                     id="toggleAlternate"
                   >
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="hotelName">
-                        <button
+                      <h4 class="accordion-header" id="hotelName">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#togglehotelName"
                           aria-expanded="true"
                           aria-controls="togglehotelName"
-                        >
-                          Hotel Name
-                        </button>
-                      </h2>
+                        > */}
+                        Hotel Name
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="togglehotelName"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list"
                         aria-labelledby="hotelName"
                       >
                         <div class="accordion-body">
@@ -1513,21 +1545,21 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="price">
-                        <button
+                      <h4 class="accordion-header" id="price">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#togglePrice"
                           aria-expanded="true"
                           aria-controls="togglePrice"
-                        >
-                          Price
-                        </button>
-                      </h2>
+                        > */}
+                        Price
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="togglePrice"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list"
                         aria-labelledby="price"
                       >
                         <div class="accordion-body">
@@ -1544,21 +1576,21 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="propertyTypes">
-                        <button
+                      <h4 class="accordion-header" id="propertyTypes">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#togglepropertyTypes"
                           aria-expanded="true"
                           aria-controls="togglepropertyTypes"
-                        >
-                          Property Types
-                        </button>
-                      </h2>
+                        > */}
+                        Property Types
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="togglepropertyTypes"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list"
                         aria-labelledby="propertyTypes"
                       >
                         <div class="accordion-body">
@@ -1692,21 +1724,21 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="starCategory">
-                        <button
+                      <h4 class="accordion-header" id="starCategory">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#togglestarCategory"
                           aria-expanded="true"
                           aria-controls="togglestarCategory"
-                        >
-                          Star Category
-                        </button>
-                      </h2>
+                        > */}
+                        Star Category
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="togglestarCategory"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list"
                         aria-labelledby="starCategory"
                       >
                         <div class="accordion-body">
@@ -1784,21 +1816,21 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="userReview">
-                        <button
+                      <h4 class="accordion-header" id="userReview">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#toggleuserReview"
                           aria-expanded="true"
                           aria-controls="toggleuserReview"
-                        >
-                          User Review
-                        </button>
-                      </h2>
+                        > */}
+                        User Review
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="toggleuserReview"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list"
                         aria-labelledby="userReview"
                       >
                         <div class="accordion-body">
@@ -1868,21 +1900,21 @@ const HotelSearchDetails = () => {
                       </div>
                     </div>
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="amenities">
-                        <button
+                      <h4 class="accordion-header" id="amenities">
+                        {/* <button
                           class="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#toggleamenities"
                           aria-expanded="true"
                           aria-controls="toggleamenities"
-                        >
-                          Amenities
-                        </button>
-                      </h2>
+                        > */}
+                        Amenities
+                        {/* </button> */}
+                      </h4>
                       <div
                         id="toggleamenities"
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse show filter-list "
                         aria-labelledby="amenities"
                       >
                         <div class="accordion-body pb-0">
@@ -2000,7 +2032,10 @@ const HotelSearchDetails = () => {
                       {" "}
                       <span class="me-3">
                         <span class="text-4">Ahmedabad:</span>{" "}
-                        <span class="fw-600">860 Hotels</span> found
+                        <span class="fw-600">
+                          {hotelData[0]?.HotelResults?.length || 0} Hotels
+                        </span>{" "}
+                        found
                       </span>{" "}
                       <span class="text-warning text-nowrap">
                         Prices inclusive of taxes
@@ -2030,9 +2065,8 @@ const HotelSearchDetails = () => {
                   </div>
                 </div>{" "}
                 <div class="hotels-list">
-                  {hotelData?.length > 0 &&
-                    hotelData.map((hotel) => {
-                      console.log(hotel);
+                  {hotelData[0]?.HotelResults?.length > 0 &&
+                    hotelData[0]?.HotelResults?.map((hotel) => {
                       return (
                         <>
                           <div class="hotels-item bg-white shadow-md rounded p-3">
@@ -2041,9 +2075,9 @@ const HotelSearchDetails = () => {
                                 {" "}
                                 <a href="#">
                                   <img
-                                    class="img-fluid rounded align-top"
+                                    class="img-fluid rounded align-top hotel-list-img"
                                     src={hotel.HotelPicture}
-                                    alt="hotels"
+                                    alt="Hotel Image not available"
                                   />
                                 </a>{" "}
                               </div>
@@ -2143,7 +2177,7 @@ const HotelSearchDetails = () => {
                                       Last Booked - 18 hours ago
                                     </p>
                                   </div>
-                                  <div class="col-sm-3 text-end d-flex d-sm-block align-items-center">
+                                  <div class="col-sm-3 text-end d-flex d-sm-block align-items-center hotel-details-right">
                                     {hotel.Price.Discount > 0 && (
                                       <>
                                         <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
@@ -2154,18 +2188,37 @@ const HotelSearchDetails = () => {
                                         </div>
                                       </>
                                     )}
-                                    <div class="text-dark text-7 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
-                                      Rs. {hotel.Price.PublishedPriceRoundedOff}
+                                    <div class="text-dark text-6 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
+                                      ₹{hotel.Price.PublishedPriceRoundedOff}
                                     </div>
                                     <div class="text-black-50 mb-0 mb-sm-2 order-3 d-none d-sm-block">
                                       1 Room/Night
                                     </div>
-                                    <a
-                                      href="#"
-                                      class="btn btn-sm btn-primary order-4 ms-auto"
-                                    >
-                                      Book Now
-                                    </a>{" "}
+                                    <div className="hotel-btns">
+                                      <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        className="show-details-outline"
+                                        onClick={() =>
+                                          viewHotel(
+                                            hotel.ResultIndex,
+                                            hotel.HotelCode,
+                                            hotel
+                                          )
+                                        }
+                                      >
+                                        Show Details
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                          bookHotel();
+                                        }}
+                                      >
+                                        Book Now
+                                      </Button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

@@ -1,6 +1,8 @@
 export const initialState = {
   flight: null,
   hotel: null,
+  hotelList: null,
+  hotelDataSelected: null,
 };
 
 const reducer = (state, action) => {
@@ -13,18 +15,37 @@ const reducer = (state, action) => {
         flight: action.item,
       };
 
-    case "ADD_TO_HOTEL":
+    case "ADD_TO_HOTEL": {
       console.log("Add to hotel");
       return {
         ...state,
         hotel: action.item,
       };
+    }
+
+    case "ADD_TO_HOTEL_LIST": {
+      console.log("add_to_hotel_list");
+      return {
+        ...state,
+        hotelList: action.item,
+      };
+    }
+
+    case "ADD_TO_HOTEL_DATA": {
+      console.log("Add_to_hotel_data");
+      return {
+        ...state,
+        hotelDataSelected: action.item,
+      };
+    }
 
     default:
       return {
         ...state,
         flight: null,
         hotel: null,
+        hotelList: null,
+        hotelDataSelected: null,
       };
   }
 };

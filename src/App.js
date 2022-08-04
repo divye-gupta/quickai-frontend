@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useParams,
+} from "react-router-dom";
 import "./App.css";
 import FlightSearch from "./Flights/FilghtSearch";
 import OneWayFlightSearchDetails from "./Flights/OneWayFlightSearchDetails";
@@ -25,6 +30,7 @@ import DashboardPage from "./Dashboard/DashboardPage/DashboardPage";
 
 import HotelSearch from "./Hotels/HotelSearch";
 import HotelSearchDetails from "./Hotels/HotelSearchDetails";
+import HotelDetails from "./Hotels/HotelDetails";
 
 function App() {
   return (
@@ -55,12 +61,19 @@ function App() {
 
         <Route path="/hotelslist" component={HotelSearchDetails}></Route>
 
+        <Route
+          path="/hoteldetails/:traceid/:hotelindex/:hotelid"
+          component={HotelDetails}
+        ></Route>
+
+        {/* dashboard */}
         <Route path="/dashboard">
           <Dashboard title="Dashboard">
             <DashboardPage />
           </Dashboard>
         </Route>
 
+        {/* admin flight route */}
         <Route path="/adminflightsearch">
           <Dashboard title="Flight Search">
             <AdminFilghtSearch />

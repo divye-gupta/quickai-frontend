@@ -128,8 +128,13 @@ const HotelSearch = () => {
       ReviewScore: null,
       IsNearBySearchAllowed: false,
       EndUserIp: "192.168.10.26",
-      TokenId: "729a994d-7415-44cd-9b15-69f8229e4d67",
+      TokenId: "036c48a3-4f70-49f0-bf3c-787f6e99bbf3",
     };
+
+    dispatch({
+      type: "ADD_TO_HOTEL",
+      item: item,
+    });
 
     delete item.CountryName;
     delete item.StateProvince;
@@ -141,11 +146,6 @@ const HotelSearch = () => {
     // console.log(item);
 
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
-
-    dispatch({
-      type: "ADD_TO_HOTEL",
-      item,
-    });
 
     history.push("/hotelslist");
   };
@@ -199,7 +199,7 @@ const HotelSearch = () => {
       body: JSON.stringify({
         ClientId: "ApiIntegrationNew",
         EndUserIp: "192.168.10.26",
-        TokenId: "fefb3c1f-665c-4a6e-9514-70b53ea9cab9",
+        TokenId: "036c48a3-4f70-49f0-bf3c-787f6e99bbf3",
         CountryCode: "IN",
         SearchType: "1",
       }),
@@ -213,7 +213,7 @@ const HotelSearch = () => {
       .then((data) => {
         setDestinationData(data.Destinations);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.message));
   };
 
   useEffect(() => {
@@ -2807,7 +2807,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="one">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseOne"
@@ -2940,7 +2940,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="two">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseTwo"
@@ -3073,7 +3073,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="three">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseThree"
@@ -3206,7 +3206,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="four">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseFour"
@@ -3339,7 +3339,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="five">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseFive"
@@ -3479,7 +3479,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="six">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseSix"
@@ -3612,7 +3612,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="seven">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseSeven"
@@ -3745,7 +3745,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="eight">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseEight"
@@ -3866,7 +3866,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="nine">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseNine"
@@ -3999,7 +3999,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="ten">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseTen"
@@ -4139,7 +4139,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="eleven">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseEleven"
@@ -4272,7 +4272,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="twelve">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseTwelve"
@@ -4405,7 +4405,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="thirteen">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseThirteen"
@@ -4538,7 +4538,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="fourteen">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseFourteen"
@@ -4671,7 +4671,7 @@ const HotelSearch = () => {
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="fifteen">
                         <button
-                          class="accordion-button collapsed"
+                          class="accordion-button collapsed invisible-background-btn"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseFifteen"

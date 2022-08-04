@@ -13,3 +13,46 @@
 .daterangepicker {
   display: none !important;
 }
+
+.hotel-list-img {
+  height: 200px;
+  width: 300px;
+}
+
+.filter-list {
+  margin-bottom: 20px;
+}
+
+.margin-bottom {
+  margin-bottom: 35px;
+}
+
+.invisible-background-btn {
+  border: none !important;
+  outline: none !important;
+  background-color: transparent;
+  transition: all 0.25s;
+}
+
+.invisible-background-btn:hover {
+  transform: translateY(-3px);
+}
+
+.hotel-details-right {
+  padding: 0 5px !important;
+}
+
+.hotel-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 50%;
+}
+
+.hotel-details-btn {
+  border: 1px solid #0071cc !important;
+}
+
+.show-details-outline {
+  padding: 5px !important;
+}
