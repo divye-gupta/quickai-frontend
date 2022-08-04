@@ -10,6 +10,8 @@ import useLocalStorage from "react-use-localstorage";
 import { CircularProgress, Modal } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory, useParams } from "react-router-dom";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 const HotelDetails = () => {
   const history = useHistory();
@@ -36,7 +38,7 @@ const HotelDetails = () => {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
+        // console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
         setHotelInfoResult(data.HotelInfoResult);
         document
           .getElementById("known-for")
@@ -45,12 +47,13 @@ const HotelDetails = () => {
             data?.HotelInfoResult?.HotelDetails?.Description
           );
 
-        document
-          .getElementById("tourist-attractions")
-          .insertAdjacentHTML(
-            "beforeend",
-            data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
-          );
+        if (data?.HotelInfoResult?.HotelDetails?.Attractions)
+          document
+            .getElementById("tourist-attractions")
+            .insertAdjacentHTML(
+              "beforeend",
+              data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
+            );
       })
       .catch((err) => console.log(err));
   };
@@ -1331,7 +1334,7 @@ const HotelDetails = () => {
             <div class="row">
               <div class="col-lg-8">
                 <div class="bg-white shadow-md rounded p-3 p-sm-4 confirm-details">
-                  <div
+                  {/* <div
                     class="owl-carousel owl-theme single-slider mb-3"
                     data-animateout="fadeOut"
                     data-animatein="fadeIn"
@@ -1340,24 +1343,24 @@ const HotelDetails = () => {
                     data-autoheight="true"
                     data-nav="true"
                     data-items="1"
-                  >
+                  > */}
+                  <Carousel>
                     {hotelInfoResult?.HotelDetails?.Images?.length > 0 &&
                       hotelInfoResult?.HotelDetails?.Images?.map(
                         (images, idx) => {
                           return (
-                            <div class="item" key={idx}>
-                              <a href="#">
-                                <img
-                                  class="img-fluid"
-                                  src={images}
-                                  alt="Hotel photo"
-                                />
-                              </a>
+                            <div key={idx}>
+                              <img
+                                class="img-fluid"
+                                src={images}
+                                alt="Hotel photo"
+                              />
                             </div>
                           );
                         }
                       )}
-                    {/* <div class="item">
+                  </Carousel>
+                  {/* <div class="item">
                       <a href="#">
                         <img class="img-fluid" src={hotel1} alt="Hotel photo" />
                       </a>
@@ -1371,7 +1374,7 @@ const HotelDetails = () => {
                         />
                       </a>
                     </div> */}
-                    {/* <div class="item">
+                  {/* <div class="item">
                       <a href="#">
                         <img
                           class="img-fluid"
@@ -1380,7 +1383,7 @@ const HotelDetails = () => {
                         />
                       </a>
                     </div> */}
-                    {/* <div class="item">
+                  {/* <div class="item">
                       <a href="#">
                         <img
                           class="img-fluid"
@@ -1389,7 +1392,7 @@ const HotelDetails = () => {
                         />
                       </a>
                     </div> */}
-                  </div>
+                  {/* </div> */}
 
                   <nav
                     id="navbar-sticky"
