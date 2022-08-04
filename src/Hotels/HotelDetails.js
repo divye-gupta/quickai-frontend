@@ -36,8 +36,21 @@ const HotelDetails = () => {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
+        console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
         setHotelInfoResult(data.HotelInfoResult);
+        document
+          .getElementById("known-for")
+          .insertAdjacentHTML(
+            "beforeend",
+            data?.HotelInfoResult?.HotelDetails?.Description
+          );
+
+        document
+          .getElementById("tourist-attractions")
+          .insertAdjacentHTML(
+            "beforeend",
+            data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
+          );
       })
       .catch((err) => console.log(err));
   };
@@ -1328,7 +1341,23 @@ const HotelDetails = () => {
                     data-nav="true"
                     data-items="1"
                   >
-                    <div class="item">
+                    {hotelInfoResult?.HotelDetails?.Images?.length > 0 &&
+                      hotelInfoResult?.HotelDetails?.Images?.map(
+                        (images, idx) => {
+                          return (
+                            <div class="item" key={idx}>
+                              <a href="#">
+                                <img
+                                  class="img-fluid"
+                                  src={images}
+                                  alt="Hotel photo"
+                                />
+                              </a>
+                            </div>
+                          );
+                        }
+                      )}
+                    {/* <div class="item">
                       <a href="#">
                         <img class="img-fluid" src={hotel1} alt="Hotel photo" />
                       </a>
@@ -1341,8 +1370,8 @@ const HotelDetails = () => {
                           alt="Standard Room photo"
                         />
                       </a>
-                    </div>
-                    <div class="item">
+                    </div> */}
+                    {/* <div class="item">
                       <a href="#">
                         <img
                           class="img-fluid"
@@ -1350,8 +1379,8 @@ const HotelDetails = () => {
                           alt="Deluxe Room photo"
                         />
                       </a>
-                    </div>
-                    <div class="item">
+                    </div> */}
+                    {/* <div class="item">
                       <a href="#">
                         <img
                           class="img-fluid"
@@ -1359,7 +1388,7 @@ const HotelDetails = () => {
                           alt="Premium Room photo"
                         />
                       </a>
-                    </div>
+                    </div> */}
                   </div>
 
                   <nav
@@ -1403,17 +1432,21 @@ const HotelDetails = () => {
                     </ul>
                   </nav>
 
-                  <p id="known-for">
-                    Lisque persius interesset his et, in quot quidam persequeris
-                    vim, ad mea essent possim iriure. Mutat tacimates id sit.
-                    Ridens mediocritatem ius an, eu nec magna imperdiet.
-                    Mediocrem qualisque in has. Enim utroque perfecto id mei, ad
-                    eam tritani labores facilisis, ullum sensibus no cum. Eius
-                    eleifend in quo. At mei alia iriure propriae.
-                  </p>
+                  <p id="known-for"></p>
                   <div class="row">
                     <div class="col-12 col-sm-6">
                       <ul class="simple-ul">
+                        {hotelInfoResult?.HotelDetails?.HotelFacilities
+                          ?.length > 0 &&
+                          hotelInfoResult?.HotelDetails?.HotelFacilities?.map(
+                            (facilities) => {
+                              return <li>{facilities}</li>;
+                            }
+                          )}
+                      </ul>
+                    </div>
+                    {/* <div class="col-12 col-sm-6">
+                      <ul class="simple-ul">
                         <li>Libero massa dapibus dui, eu</li>
                         <li>Celerisque nec, rhoncus eget</li>
                         <li>Praesent vitae dui</li>
@@ -1427,8 +1460,31 @@ const HotelDetails = () => {
                         <li>Praesent vitae dui</li>
                         <li>Ut euismod, turpis sollicitudin</li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-6" id="tourist-attractions">
+                      <h3>Tourist Attractions</h3>
+                    </div>
+                    {/* <div class="col-12 col-sm-6">
+                      <ul class="simple-ul">
+                        <li>Libero massa dapibus dui, eu</li>
+                        <li>Celerisque nec, rhoncus eget</li>
+                        <li>Praesent vitae dui</li>
+                        <li>Ut euismod, turpis sollicitudin</li>
+                      </ul>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <ul class="simple-ul">
+                        <li>Libero massa dapibus dui, eu</li>
+                        <li>Celerisque nec, rhoncus eget</li>
+                        <li>Praesent vitae dui</li>
+                        <li>Ut euismod, turpis sollicitudin</li>
+                      </ul>
+                    </div> */}
+                  </div>
+
                   <hr />
                   <div class="featured-box style-1">
                     <div class="featured-box-icon text-muted">
@@ -1766,7 +1822,21 @@ const HotelDetails = () => {
                   </h2>
                   <p class="hotels-amenities-detail text-5">
                     {" "}
-                    <span
+                    {/* {hotelInfoResult?.HotelDetails?.HotelFacilities?.length >
+                      0 &&
+                      hotelInfoResult?.HotelDetails?.HotelFacilities?.map(
+                        (facilities) => {
+                          return (
+                            <span
+                              class="border rounded"
+                              data-bs-toggle="tooltip"
+                            >
+                              {facilities}
+                            </span>
+                          );
+                        }
+                      )} */}
+                    {/* <span
                       class="border rounded"
                       data-bs-toggle="tooltip"
                       title="Internet/Wi-Fi"
@@ -1814,7 +1884,7 @@ const HotelDetails = () => {
                       title="Gym"
                     >
                       <i class="fas fa-dumbbell"></i>
-                    </span>{" "}
+                    </span>{" "} */}
                   </p>
 
                   <hr class="my-4" />
@@ -1828,7 +1898,9 @@ const HotelDetails = () => {
                         id="review-summary"
                         class="bg-primary text-white rounded px-2 py-4 mb-4 mb-sm-0 text-center"
                       >
-                        <div class="text-10 fw-600 lh-1 d-block">4.5</div>
+                        <div class="text-10 fw-600 lh-1 d-block">
+                          {hotelInfoResult?.HotelDetails?.StarRating}
+                        </div>
                         <div class="fw-500 text-3 my-1">Excellent</div>
                         <small class="d-block">Based on 245 reviews</small>{" "}
                       </div>
@@ -2138,26 +2210,33 @@ const HotelDetails = () => {
                   <h2 id="hotel-policy" class="text-6 mb-3 mt-2">
                     Hotel Policy
                   </h2>
-                  <p>
-                    The standard check-in time is 12:00 PM and the standard
-                    check-out time is 11:00 AM. Early check-in or late check-out
-                    is strictly subjected to availability and may be chargeable
-                    by the hotel. Any early check-in or late check-out request
-                    must be directed and reconfirmed with hotel directly,
-                    Accommodation, 24 hours House Keeping, Hot and Cold water
-                    available, Internet, Telephone.
-                  </p>
-                  <p>
-                    Hotel Policy: Most hotels do not allow unmarried/unrelated
-                    couples to check-in. This is at the full discretion of the
-                    hotel management. No refund would be applicable in case the
-                    hotel denies check-in under such circumstances., Most hotels
-                    do not allow same city/local ID Proofs for check-in. Kindly
-                    check with your hotel about the same before checking in.
-                    This is at full discretion of the hotel management. No
-                    refund would be applicable in case the hotel denies check-in
-                    under such circumstances.
-                  </p>
+                  {hotelInfoResult?.HotelDetails?.HotelPolicy === null ? (
+                    <>
+                      <p>
+                        The standard check-in time is 12:00 PM and the standard
+                        check-out time is 11:00 AM. Early check-in or late
+                        check-out is strictly subjected to availability and may
+                        be chargeable by the hotel. Any early check-in or late
+                        check-out request must be directed and reconfirmed with
+                        hotel directly, Accommodation, 24 hours House Keeping,
+                        Hot and Cold water available, Internet, Telephone.
+                      </p>
+                      <p>
+                        Hotel Policy: Most hotels do not allow
+                        unmarried/unrelated couples to check-in. This is at the
+                        full discretion of the hotel management. No refund would
+                        be applicable in case the hotel denies check-in under
+                        such circumstances., Most hotels do not allow same
+                        city/local ID Proofs for check-in. Kindly check with
+                        your hotel about the same before checking in. This is at
+                        full discretion of the hotel management. No refund would
+                        be applicable in case the hotel denies check-in under
+                        such circumstances.
+                      </p>
+                    </>
+                  ) : (
+                    hotelInfoResult?.HotelDetails?.HotelPolicy
+                  )}
                 </div>
               </div>
 
