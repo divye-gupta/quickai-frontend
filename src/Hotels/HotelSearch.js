@@ -110,6 +110,7 @@ const HotelSearch = () => {
     const item = {
       ...destination[0],
       CheckInDate: checkinDate,
+      CheckOutDate: checkoutDate.split("/").reverse().join("/"),
       CityId: destination[0].DestinationId,
       PreferredCurrency: "INR",
       NoOfNights: diffDays,
@@ -1933,6 +1934,8 @@ const HotelSearch = () => {
                                     placeholder="Check Out"
                                     onChange={(e) => {
                                       const date = e.target.value;
+                                      console.log(date);
+
                                       const newDate = date.split("-").join("/");
                                       setCheckoutDate(newDate);
                                     }}

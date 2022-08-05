@@ -53,13 +53,16 @@ const HotelSearchDetails = () => {
 
   useEffect(() => {
     // console.log(hotel.CityName);
-    const data = localStorage.getItem("hotel-search-options");
+    const data = JSON.parse(localStorage.getItem("hotel-search-options"));
 
     if (data !== undefined) {
       console.log(data);
-      setAPIdata(data);
+      delete data.CheckOutDate;
+
+      const stringData = JSON.stringify(data);
+      setAPIdata(stringData);
       if (hotelList === null) {
-        getHotelList(data);
+        getHotelList(stringData);
       } else {
         setHotelData([hotelList]);
       }
@@ -2066,10 +2069,13 @@ const HotelSearchDetails = () => {
                 </div>{" "}
                 <div class="hotels-list">
                   {hotelData[0]?.HotelResults?.length > 0 &&
-                    hotelData[0]?.HotelResults?.map((hotel) => {
+                    hotelData[0]?.HotelResults?.map((hotel, idx) => {
                       return (
                         <>
-                          <div class="hotels-item bg-white shadow-md rounded p-3">
+                          <div
+                            class="hotels-item bg-white shadow-md rounded p-3"
+                            key={idx}
+                          >
                             <div class="row">
                               <div class="col-md-4">
                                 {" "}
