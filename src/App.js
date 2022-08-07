@@ -31,6 +31,7 @@ import DashboardPage from "./Dashboard/DashboardPage/DashboardPage";
 import HotelSearch from "./Hotels/HotelSearch";
 import HotelSearchDetails from "./Hotels/HotelSearchDetails";
 import HotelDetails from "./Hotels/HotelDetails";
+import HotelConfirm from "./Hotels/HotelConfirm";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
           path="/hoteldetails/:traceid/:hotelindex/:hotelid"
           component={HotelDetails}
         ></Route>
+        <Route path="/hotelconfirm" component={HotelConfirm}></Route>
 
         {/* dashboard */}
         <Route path="/dashboard">

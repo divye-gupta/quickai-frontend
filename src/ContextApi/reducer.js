@@ -3,6 +3,7 @@ export const initialState = {
   hotel: null,
   hotelList: null,
   hotelDataSelected: null,
+  hotelBookingDetails: null,
 };
 
 const reducer = (state, action) => {
@@ -39,6 +40,14 @@ const reducer = (state, action) => {
       };
     }
 
+    case "ADD_HOTEL_BOOKING_DETAILS": {
+      console.log("Add_to_hotel_data", action.item);
+      return {
+        ...state,
+        hotelBookingDetails: action.item,
+      };
+    }
+
     default:
       return {
         ...state,
@@ -46,6 +55,7 @@ const reducer = (state, action) => {
         hotel: null,
         hotelList: null,
         hotelDataSelected: null,
+        hotelBookingDetails: null,
       };
   }
 };

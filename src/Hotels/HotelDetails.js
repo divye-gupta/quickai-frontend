@@ -11,12 +11,110 @@ import { Carousel } from "react-responsive-carousel";
 
 const HotelDetails = () => {
   const history = useHistory();
+  const [{ hotelBookingDetails }, dispatch] = useStateValue();
   const { traceid, hotelindex, hotelid } = useParams();
   const [hotelInfoResult, setHotelInfoResult] = useState([]);
 
   const [roomInfoResult, setRoomInfoResult] = useState([]);
   const [checkinDate, setCheckinDate] = useState("");
   const [checkoutDate, setCheckoutDate] = useState("");
+  const [roomSelection, setRoomSelection] = useState([]);
+  const [rooms, setRooms] = useState(0);
+  const [adults, setAdults] = useState(0);
+  const [children, setChildren] = useState(0);
+  const [roomPrice, setRoomPrice] = useState(0);
+  const [localData, setLocalData] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+
+  const selectHotelRoom = (e) => {
+    const idx = e.target.value;
+    console.log(roomSelection);
+    setSelectedRoom([roomSelection[0][idx]]);
+    const price = roomSelection[0][idx]?.Price?.PublishedPriceRoundedOff;
+    // console.log(price);
+    setRoomPrice(price);
+  };
+
+  const bookNow = (e) => {
+    e.preventDefault();
+    const booknowObj = {
+      ResultIndex: hotelindex,
+      HotelCode: hotelid,
+      HotelName: hotelInfoResult?.HotelDetails?.HotelName,
+      GuestNationality: "IN",
+      NoOfRooms: localData[0]?.NoOfRooms,
+      ClientReferenceNo: 0,
+      IsVoucherBooking: true,
+      HotelRoomsDetails: [
+        {
+          RoomIndex: selectedRoom[0]?.RoomIndex,
+          RoomTypeCode: selectedRoom[0]?.RoomTypeCode,
+          RoomTypeName: selectedRoom[0]?.RoomTypeName,
+          RatePlanCode: selectedRoom[0]?.RatePlanCode,
+          BedTypeCode: null,
+          SmokingPreference: selectedRoom[0]?.SmokingPreference,
+          Supplements: null,
+          Price: {
+            CurrencyCode: selectedRoom[0]?.Price?.CurrencyCode,
+            RoomPrice: selectedRoom[0]?.Price?.RoomPrice,
+            Tax: selectedRoom[0]?.Price?.Tax,
+            ExtraGuestCharge: selectedRoom[0]?.Price?.ExtraGuestCharge,
+            ChildCharge: selectedRoom[0]?.Price?.ChildCharge,
+            OtherCharges: selectedRoom[0]?.Price?.OtherCharges,
+            Discount: selectedRoom[0]?.Price?.Discount,
+            PublishedPrice: selectedRoom[0]?.Price?.PublishedPrice,
+            PublishedPriceRoundedOff:
+              selectedRoom[0]?.Price?.PublishedPriceRoundedOff,
+            OfferedPrice: selectedRoom[0]?.Price?.OfferedPrice,
+            OfferedPriceRoundedOff:
+              selectedRoom[0]?.Price?.OfferedPriceRoundedOff,
+            AgentCommission: selectedRoom[0]?.Price?.AgentCommission,
+            AgentMarkUp: selectedRoom[0]?.Price?.AgentMarkUp,
+            TDS: selectedRoom[0]?.Price?.TDS,
+          },
+        },
+      ],
+      EndUserIp: "192.168.10.26",
+      TokenId: "dbfa92dd-75cb-4948-8718-d5794f1d3211",
+      TraceId: traceid,
+    };
+
+    dispatch({
+      type: "ADD_HOTEL_BOOKING_DETAILS",
+      hotelBookingDetails: booknowObj,
+    });
+    console.log(booknowObj);
+  };
+
+  const increase = (type) => {
+    switch (type) {
+      case "Rooms": {
+        setRooms(rooms + 1);
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => adults + 1);
+        break;
+      }
+      default:
+        setChildren((children) => children + 1);
+    }
+  };
+
+  const decrease = (type) => {
+    switch (type) {
+      case "Rooms": {
+        setRooms((rooms) => (rooms > 1 ? rooms - 1 : rooms));
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => (adults > 1 ? adults - 1 : adults));
+        break;
+      }
+      default:
+        setChildren((children) => (children >= 1 ? children - 1 : children));
+    }
+  };
 
   const hotelInfo = () => {
     const requestOptions = {
@@ -84,6 +182,7 @@ const HotelDetails = () => {
         if (!data) return alert("Room details not available");
 
         setRoomInfoResult([data?.GetHotelRoomResult]);
+        setRoomSelection([data?.GetHotelRoomResult?.HotelRoomsDetails]);
       })
       .catch((err) => console.log(err));
   };
@@ -92,25 +191,34 @@ const HotelDetails = () => {
     const data = JSON.parse(localStorage.getItem("hotel-search-options"));
 
     if (data !== undefined) {
+      setLocalData([data]);
+
       const checkinDate = new Date(
         data.CheckInDate.split("/").reverse().join("/")
       );
       const checkoutDate = new Date(
         data.CheckOutDate.split("/").reverse().join("/")
       );
-      console.log(checkinDate);
+
       checkinDate.setDate(checkinDate.getDate() + 1);
       checkoutDate.setDate(checkoutDate.getDate() + 1);
       const defaultCheckinValue = checkinDate.toISOString().substring(0, 10);
       const defaultCheckoutValue = checkoutDate.toISOString().substring(0, 10);
-      console.log(defaultCheckinValue);
+
       setCheckinDate(defaultCheckinValue);
       setCheckoutDate(defaultCheckoutValue);
+      setRooms(data?.NoOfRooms);
+      setAdults(data?.RoomGuests[0]?.NoOfAdults);
+      setChildren(data?.RoomGuests[0]?.NoOfChild);
     }
   }, []);
 
+  // useEffect(() => {
+  //   console.log(localData[0]);
+  // }, [localData]);
+
   useEffect(() => {
-    console.log(traceid, hotelindex, hotelid);
+    // console.log(traceid, hotelindex, hotelid);
     hotelInfo();
     roomInfo();
   }, []);
@@ -1559,7 +1667,7 @@ const HotelDetails = () => {
                   {roomInfoResult?.length > 0 &&
                     roomInfoResult[0]?.HotelRoomsDetails?.map(
                       (hotelRoom, roomIdx) => {
-                        console.log(hotelRoom);
+                        // console.log(hotelRoom);
                         return (
                           <>
                             <div class="row g-4" key={roomIdx}>
@@ -2461,30 +2569,35 @@ const HotelDetails = () => {
                         <div class="travellers-class">
                           <input
                             type="text"
-                            id="hotelsTravellersClass"
+                            // id="hotelsTravellersClass"
                             class="travellers-class-input form-control"
-                            name="hotels-travellers-class"
-                            placeholder="Rooms / People"
-                            required=""
-                            onkeypress="return false;"
+                            // name="hotels-travellers-class"
+                            placeholder="-"
+                            value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
+                            required
+                            // onkeypress="return false;"
                           />
                           <span class="icon-inside">
                             <i class="fas fa-caret-down"></i>
                           </span>
-                          <div class="travellers-dropdown">
+                          <div
+                            class="travellers-dropdown"
+                            style={{ display: "none" }}
+                          >
                             <div class="row align-items-center">
                               <div class="col-sm-7">
                                 <p class="mb-sm-0">Rooms</p>
                               </div>
-                              <div class="col-sm-5">
+                              <div class="col-sm-5 ">
                                 <div class="qty input-group">
                                   <div class="input-group-prepend">
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="decrease"
-                                      data-target="#hotels-rooms"
+                                      // data-value="decrease"
+                                      // data-target="#hotels-rooms"
                                       data-toggle="spinner"
+                                      onClick={(e) => decrease("Rooms")}
                                     >
                                       -
                                     </button>
@@ -2494,16 +2607,17 @@ const HotelDetails = () => {
                                     data-ride="spinner"
                                     id="hotels-rooms"
                                     class="qty-spinner form-control"
-                                    value="1"
-                                    readonly=""
+                                    value={rooms}
+                                    readOnly=""
                                   />
                                   <div class="input-group-append">
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="increase"
-                                      data-target="#hotels-rooms"
+                                      // data-value="increase"
+                                      // data-target="#hotels-rooms"
                                       data-toggle="spinner"
+                                      onClick={() => increase("Rooms")}
                                     >
                                       +
                                     </button>
@@ -2513,21 +2627,22 @@ const HotelDetails = () => {
                             </div>
                             <hr class="mt-2 mb-4" />
                             <div class="row align-items-center">
-                              <div class="col-sm-7">
+                              <div class="col-sm-7 ">
                                 <p class="mb-sm-0">
-                                  Adults{" "}
+                                  Adults
                                   <small class="text-muted">(12+ yrs)</small>
                                 </p>
                               </div>
-                              <div class="col-sm-5">
+                              <div class="col-sm-5 ">
                                 <div class="qty input-group">
                                   <div class="input-group-prepend">
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="decrease"
-                                      data-target="#adult-travellers"
+                                      // data-value="decrease"
+                                      // data-target="#adult-travellers"
                                       data-toggle="spinner"
+                                      onClick={() => decrease("Adults")}
                                     >
                                       -
                                     </button>
@@ -2537,16 +2652,17 @@ const HotelDetails = () => {
                                     data-ride="spinner"
                                     id="adult-travellers"
                                     class="qty-spinner form-control"
-                                    value="1"
+                                    value={adults}
                                     readonly=""
                                   />
                                   <div class="input-group-append">
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="increase"
-                                      data-target="#adult-travellers"
+                                      // data-value="increase"
+                                      // data-target="#adult-travellers"
                                       data-toggle="spinner"
+                                      onClick={() => increase("Adults")}
                                     >
                                       +
                                     </button>
@@ -2556,9 +2672,9 @@ const HotelDetails = () => {
                             </div>
                             <hr class="my-2" />
                             <div class="row align-items-center">
-                              <div class="col-sm-7">
+                              <div class="col-sm-7 ">
                                 <p class="mb-sm-0">
-                                  Children{" "}
+                                  Children
                                   <small class="text-muted">(1-12 yrs)</small>
                                 </p>
                               </div>
@@ -2568,9 +2684,10 @@ const HotelDetails = () => {
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="decrease"
-                                      data-target="#children-travellers"
+                                      // data-value="decrease"
+                                      // data-target="#children-travellers"
                                       data-toggle="spinner"
+                                      onClick={() => decrease("Children")}
                                     >
                                       -
                                     </button>
@@ -2580,16 +2697,17 @@ const HotelDetails = () => {
                                     data-ride="spinner"
                                     id="children-travellers"
                                     class="qty-spinner form-control"
-                                    value="0"
+                                    value={children}
                                     readonly=""
                                   />
                                   <div class="input-group-append">
                                     <button
                                       type="button"
                                       class="btn bg-light-4"
-                                      data-value="increase"
-                                      data-target="#children-travellers"
+                                      // data-value="increase"
+                                      // data-target="#children-travellers"
                                       data-toggle="spinner"
+                                      onClick={() => increase("Children")}
                                     >
                                       +
                                     </button>
@@ -2597,9 +2715,9 @@ const HotelDetails = () => {
                                 </div>
                               </div>
                             </div>
-                            <div class="d-grid">
+                            <div class="d-grid mt-4">
                               <button
-                                class="btn btn-primary submit-done mt-3"
+                                class="btn btn-primary submit-done"
                                 type="button"
                               >
                                 Done
@@ -2609,26 +2727,46 @@ const HotelDetails = () => {
                         </div>
                       </div>
                       <div class="col-12">
-                        <select class="form-select" id="operator" required="">
-                          <option value="">Room Type</option>
+                        <select
+                          class="form-select form-control"
+                          id="operator"
+                          onChange={(e) => {
+                            selectHotelRoom(e);
+                          }}
+                          required=""
+                        >
+                          {roomSelection[0]?.length > 0 &&
+                            roomSelection[0]?.map((room, idx) => {
+                              // console.log(room);
+                              return (
+                                <option value={idx}>{room.RoomTypeName}</option>
+                              );
+                            })}
+                          {/* <option value="">Room Type</option>
                           <option>Standard Room</option>
                           <option>Deluxe Room</option>
-                          <option>Premium Room</option>
+                          <option>Premium Room</option> */}
                         </select>
                       </div>
                     </div>
                     <div class="d-flex align-items-center my-4">
                       <div class="text-dark text-8 lh-1 fw-500 me-2 me-lg-3">
-                        $210
+                        {roomPrice === 0 ? "-" : ` ₹${roomPrice}`}
                       </div>
-                      <div class="d-block text-4 text-black-50 me-2 me-lg-3">
+                      {/* <div class="d-block text-4 text-black-50 me-2 me-lg-3">
                         <del class="d-block">$250</del>
                       </div>
-                      <div class="text-success text-3">16% Off!</div>
+                      <div class="text-success text-3">16% Off!</div> */}
                       <div class="text-black-50 ms-auto">1 Room/Night</div>
                     </div>
                     <div class="d-grid">
-                      <button class="btn btn-primary" type="submit">
+                      <button
+                        onClick={(e) => {
+                          bookNow(e);
+                        }}
+                        class="btn btn-primary"
+                        // type="submit"
+                      >
                         Book Now
                       </button>
                     </div>

@@ -22,6 +22,7 @@ const HotelSearchDetails = () => {
   };
   const bookHotel = () => {
     console.log("Book Hotel");
+    history.push("/hotelconfirm");
   };
 
   const getHotelList = (data) => {
