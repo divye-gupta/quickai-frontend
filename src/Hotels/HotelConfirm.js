@@ -3,6 +3,7 @@ import { useStateValue } from "../ContextApi/StateProvider";
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails }, dispatch] = useStateValue();
+  const [blockRoomData, setBlockRoomData] = useState([]);
 
   const blockRoomConfirmation = () => {
     const requestOptions = {
@@ -11,22 +12,36 @@ const HotelConfirm = () => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      body: hotelBookingDetails,
+      body: JSON.stringify(hotelBookingDetails),
     };
     fetch(
-      "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom",
+      "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/",
       requestOptions
     )
       .then((resp) => resp.json())
       .then((data) => {
         // handle data here
+        console.log(data);
+        const addressString =
+          data.BlockRoomResult?.AddressLine1 +
+          data.BlockRoomResult?.AddressLine2;
+
+        console.log(addressString);
+        setBlockRoomData([data.BlockRoomResult]);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     console.log(hotelBookingDetails);
+    if (hotelBookingDetails !== null) {
+      blockRoomConfirmation();
+    }
   }, []);
+
+  useEffect(() => {
+    console.log(blockRoomData);
+  }, [blockRoomData]);
 
   return (
     <>
@@ -1278,17 +1293,18 @@ const HotelConfirm = () => {
                       />{" "}
                     </div>
                     <div class="col-12 col-md-7">
-                      <h4 class="text-5">{hotelBookingDetails.HotelName}</h4>
-                      <p class="text-muted mb-1">
-                        <i class="fas fa-map-marker-alt"></i> Ashram Road,
-                        Ahmedabad, Gujarat, India.
+                      <h4 class="text-5">{blockRoomData[0]?.HotelName}</h4>
+                      <p className="text-muted mb-1" id="hotel-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {blockRoomData[0]?.AddressLine1 +
+                          blockRoomData[0]?.AddressLine2}
                       </p>
                       <ul class="list-inline text-muted mb-2">
                         <li class="list-inline-item">
                           <span class="me-1 text-black-50">
                             <i class="fas fa-home"></i>
                           </span>{" "}
-                          {hotelBookingDetails.RoomTypeName}
+                          {blockRoomData[0]?.HotelRoomsDetails[0]?.RoomTypeName}
                         </li>
                         <li class="list-inline-item">
                           <span class="me-1 text-black-50">
@@ -1575,7 +1591,10 @@ const HotelConfirm = () => {
                     <li class="mb-2 fw-500">
                       Base price{" "}
                       <span class="float-end text-4 fw-500 text-dark">
-                        $210
+                        {
+                          blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                            ?.RoomPrice
+                        }
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
@@ -1584,7 +1603,12 @@ const HotelConfirm = () => {
                     </li>
                     <li class="mb-2 fw-500">
                       Extra Guests Cost{" "}
-                      <span class="float-end text-4 fw-500 text-dark">$80</span>
+                      <span class="float-end text-4 fw-500 text-dark">
+                        {
+                          blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                            ?.ExtraGuestCharge
+                        }
+                      </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
                         For 1 Night, 1 Guest
