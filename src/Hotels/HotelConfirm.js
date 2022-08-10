@@ -1,6 +1,36 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { useStateValue } from "../ContextApi/StateProvider";
 
 const HotelConfirm = () => {
+
+  const [{hotelBookingDetails},dispatch] = useStateValue();
+
+  const blockRoomConfirmation = () =>{
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: hotelBookingDetails,
+    };
+    fetch(
+      "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom",
+      requestOptions
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        // handle data here
+      })
+      .catch((err) => console.log(err));
+  }
+
+
+  useEffect(()=>{
+    console.log(hotelBookingDetails);
+  },[])
+
+
   return (
     <>
       <div id="main-wrapper">
@@ -1251,7 +1281,7 @@ const HotelConfirm = () => {
                       />{" "}
                     </div>
                     <div class="col-12 col-md-7">
-                      <h4 class="text-5">The Orchid Hotel</h4>
+                      <h4 class="text-5">{hotelBookingDetails.HotelName}</h4>
                       <p class="text-muted mb-1">
                         <i class="fas fa-map-marker-alt"></i> Ashram Road,
                         Ahmedabad, Gujarat, India.
@@ -1261,7 +1291,7 @@ const HotelConfirm = () => {
                           <span class="me-1 text-black-50">
                             <i class="fas fa-home"></i>
                           </span>{" "}
-                          Deluxe Room
+                          {hotelBookingDetails.RoomTypeName}
                         </li>
                         <li class="list-inline-item">
                           <span class="me-1 text-black-50">
