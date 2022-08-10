@@ -25,6 +25,7 @@ const HotelDetails = () => {
   const [roomPrice, setRoomPrice] = useState(0);
   const [localData, setLocalData] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
+  const [smokingPreference, setSmokingPreference] = useState(0);
 
   const selectHotelRoom = (e) => {
     const idx = e.target.value;
@@ -33,6 +34,23 @@ const HotelDetails = () => {
     const price = roomSelection[0][idx]?.Price?.PublishedPriceRoundedOff;
     // console.log(price);
     setRoomPrice(price);
+
+    switch (roomSelection[0][idx]?.SmokingPreference) {
+      case "NoPreference": {
+        setSmokingPreference(0);
+        break;
+      }
+      case "Smoking": {
+        setSmokingPreference(1);
+        break;
+      }
+      case "NonSmoking": {
+        setSmokingPreference(2);
+        break;
+      }
+      default:
+        setSmokingPreference(3);
+    }
   };
 
   const bookNow = (e) => {
@@ -52,7 +70,7 @@ const HotelDetails = () => {
           RoomTypeName: selectedRoom[0]?.RoomTypeName,
           RatePlanCode: selectedRoom[0]?.RatePlanCode,
           BedTypeCode: null,
-          SmokingPreference: selectedRoom[0]?.SmokingPreference,
+          SmokingPreference: smokingPreference,
           Supplements: null,
           Price: {
             CurrencyCode: selectedRoom[0]?.Price?.CurrencyCode,
@@ -71,20 +89,21 @@ const HotelDetails = () => {
             AgentCommission: selectedRoom[0]?.Price?.AgentCommission,
             AgentMarkUp: selectedRoom[0]?.Price?.AgentMarkUp,
             TDS: selectedRoom[0]?.Price?.TDS,
+            ServiceTax: selectedRoom[0]?.Price?.ServiceTax,
           },
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "2ec03882-74f8-4b90-bc88-0da8402f3860",
+      TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
       TraceId: traceid,
     };
 
     dispatch({
       type: "ADD_HOTEL_BOOKING_DETAILS",
-      hotelBookingDetails: booknowObj,
+      item: booknowObj,
     });
     console.log(booknowObj);
-    history.push('/hotelconfirm');
+    history.push("/hotelconfirm");
   };
 
   const increase = (type) => {
@@ -128,7 +147,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "2ec03882-74f8-4b90-bc88-0da8402f3860",
+        TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
         TraceId: traceid,
       }),
     };
@@ -139,6 +158,7 @@ const HotelDetails = () => {
       .then((resp) => resp.json())
       .then((data) => {
         // console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
+        console.log(data);
         setHotelInfoResult(data.HotelInfoResult);
         document
           .getElementById("known-for")
@@ -169,7 +189,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "2ec03882-74f8-4b90-bc88-0da8402f3860",
+        TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
         TraceId: traceid,
       }),
     };
