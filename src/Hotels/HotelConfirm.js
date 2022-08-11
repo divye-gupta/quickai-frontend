@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
+import './HotelConfirm.css'
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails }, dispatch] = useStateValue();
@@ -1583,7 +1584,7 @@ const HotelConfirm = () => {
                 </div>
               </div>
 
-              <aside class="col-lg-4 mt-4 mt-lg-0">
+              <aside class="col-lg-4 mt-4 mt-lg-0 asidetag">
                 <div class="bg-white shadow-md rounded p-3">
                   <h3 class="text-5 mb-3">Invoice Details</h3>
                   <hr class="mx-n3" />
@@ -1616,12 +1617,12 @@ const HotelConfirm = () => {
                     </li>
                     <li class="mb-2 fw-500">
                       Taxes & Fees{" "}
-                      <span class="float-end text-4 fw-500 text-dark">$25</span>
+                      <span class="float-end text-4 fw-500 text-dark">{blockRoomData[0]?.HotelRoomsDetails[0]?.Price.OtherCharges +blockRoomData[0]?.HotelRoomsDetails[0]?.Price.Tax}</span>
                     </li>
                   </ul>
                   <div class="text-dark bg-light-4 text-4 fw-600 p-3">
                     {" "}
-                    Total Amount <span class="float-end text-6">$315</span>{" "}
+                    Total Amount <span class="float-end text-6">₹{blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff}</span>{" "}
                   </div>
                   <h3 class="text-4 mb-3 mt-4">Promo Code</h3>
                   <div class="input-group mb-3">
