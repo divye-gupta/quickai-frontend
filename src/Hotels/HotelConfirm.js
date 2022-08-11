@@ -1,10 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
-import './HotelConfirm.css'
+import "./HotelConfirm.css";
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails }, dispatch] = useStateValue();
   const [blockRoomData, setBlockRoomData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [localData, setLocalData] = useState([]);
+  const [checkinDate, setCheckinDate] = useState("");
+  const [checkoutDate, setCheckoutDate] = useState("");
+  const [rooms, setRooms] = useState(0);
+  const [adults, setAdults] = useState(0);
+  const [children, setChildren] = useState(0);
+
+  const increase = (type) => {
+    switch (type) {
+      case "Rooms": {
+        setRooms(rooms + 1);
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => adults + 1);
+        break;
+      }
+      default:
+        setChildren((children) => children + 1);
+    }
+  };
+
+  const decrease = (type) => {
+    switch (type) {
+      case "Rooms": {
+        setRooms((rooms) => (rooms > 1 ? rooms - 1 : rooms));
+        break;
+      }
+      case "Adults": {
+        setAdults((adults) => (adults > 1 ? adults - 1 : adults));
+        break;
+      }
+      default:
+        setChildren((children) => (children >= 1 ? children - 1 : children));
+    }
+  };
 
   const blockRoomConfirmation = () => {
     const requestOptions = {
@@ -29,6 +66,10 @@ const HotelConfirm = () => {
 
         console.log(addressString);
         setBlockRoomData([data.BlockRoomResult]);
+        setTotalPrice(
+          data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
+            data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
+        );
       })
       .catch((err) => console.log(err));
   };
@@ -41,8 +82,30 @@ const HotelConfirm = () => {
   }, []);
 
   useEffect(() => {
-    console.log(blockRoomData);
-  }, [blockRoomData]);
+    const data = JSON.parse(localStorage.getItem("hotel-search-options"));
+
+    if (data !== undefined) {
+      setLocalData([data]);
+
+      const checkinDate = new Date(
+        data.CheckInDate.split("/").reverse().join("/")
+      );
+      const checkoutDate = new Date(
+        data.CheckOutDate.split("/").reverse().join("/")
+      );
+
+      checkinDate.setDate(checkinDate.getDate() + 1);
+      checkoutDate.setDate(checkoutDate.getDate() + 1);
+      const defaultCheckinValue = checkinDate.toISOString().substring(0, 10);
+      const defaultCheckoutValue = checkoutDate.toISOString().substring(0, 10);
+
+      setCheckinDate(defaultCheckinValue);
+      setCheckoutDate(defaultCheckoutValue);
+      setRooms(data?.NoOfRooms);
+      setAdults(data?.RoomGuests[0]?.NoOfAdults);
+      setChildren(data?.RoomGuests[0]?.NoOfChild);
+    }
+  }, []);
 
   return (
     <>
@@ -1336,15 +1399,23 @@ const HotelConfirm = () => {
                             <div class="position-relative">
                               <input
                                 id="hotelsCheckIn"
-                                value="10-19-2022"
-                                type="text"
+                                type="date"
                                 class="form-control"
-                                required=""
+                                required
+                                defaultValue={checkinDate}
                                 placeholder="Check In"
+                                onChange={(e) => {
+                                  const date = e.target.value;
+                                  const newDate = date
+                                    .split("-")
+                                    .reverse()
+                                    .join("/");
+                                  setCheckinDate(newDate);
+                                }}
                               />
-                              <span class="icon-inside">
+                              {/* <span class="icon-inside">
                                 <i class="far fa-calendar-alt"></i>
-                              </span>{" "}
+                              </span>{" "} */}
                             </div>
                           </div>
                           <div class="col-md-6 col-lg">
@@ -1354,15 +1425,20 @@ const HotelConfirm = () => {
                             <div class="position-relative">
                               <input
                                 id="hotelsCheckOut"
-                                value="10-21-2022"
-                                type="text"
+                                type="date"
                                 class="form-control"
-                                required=""
+                                required
+                                defaultValue={checkoutDate}
                                 placeholder="Check Out"
+                                onChange={(e) => {
+                                  const date = e.target.value;
+                                  const newDate = date.split("-").join("/");
+                                  setCheckoutDate(newDate);
+                                }}
                               />
-                              <span class="icon-inside">
+                              {/* <span class="icon-inside">
                                 <i class="far fa-calendar-alt"></i>
-                              </span>{" "}
+                              </span>{" "} */}
                             </div>
                           </div>
                           <div class="col-md-6 col-lg">
@@ -1376,18 +1452,21 @@ const HotelConfirm = () => {
                               <div class="position-relative">
                                 <input
                                   type="text"
-                                  id="hotelsTravellersClass"
-                                  value="1 Room / 3 People"
-                                  class="travellers-class-input pe-3 form-control"
-                                  name="hotels-travellers-class"
-                                  placeholder="Rooms / People"
-                                  required=""
-                                  onkeypress="return false;"
+                                  // id="hotelsTravellersClass"
+                                  class="travellers-class-input form-control"
+                                  // name="hotels-travellers-class"
+                                  placeholder="-"
+                                  value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
+                                  required
+                                  // onkeypress="return false;"
                                 />
                                 <span class="icon-inside">
                                   <i class="fas fa-caret-down"></i>
                                 </span>
-                                <div class="travellers-dropdown">
+                                <div
+                                  class="travellers-dropdown"
+                                  style={{ display: "none" }}
+                                >
                                   <div class="row align-items-center">
                                     <div class="col-sm-7">
                                       <p class="mb-sm-0">Rooms</p>
@@ -1398,9 +1477,10 @@ const HotelConfirm = () => {
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#hotels-rooms"
+                                            // data-value="decrease"
+                                            // data-target="#hotels-rooms"
                                             data-toggle="spinner"
+                                            onClick={(e) => decrease("Rooms")}
                                           >
                                             -
                                           </button>
@@ -1410,16 +1490,17 @@ const HotelConfirm = () => {
                                           data-ride="spinner"
                                           id="hotels-rooms"
                                           class="qty-spinner form-control"
-                                          value="1"
+                                          value={rooms}
                                           readonly=""
                                         />
                                         <div class="input-group-append">
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#hotels-rooms"
+                                            // data-value="increase"
+                                            // data-target="#hotels-rooms"
                                             data-toggle="spinner"
+                                            onClick={() => increase("Rooms")}
                                           >
                                             +
                                           </button>
@@ -1443,9 +1524,10 @@ const HotelConfirm = () => {
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#adult-travellers"
+                                            // data-value="decrease"
+                                            // data-target="#adult-travellers"
                                             data-toggle="spinner"
+                                            onClick={() => decrease("Adults")}
                                           >
                                             -
                                           </button>
@@ -1455,16 +1537,17 @@ const HotelConfirm = () => {
                                           data-ride="spinner"
                                           id="adult-travellers"
                                           class="qty-spinner form-control"
-                                          value="1"
+                                          value={adults}
                                           readonly=""
                                         />
                                         <div class="input-group-append">
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#adult-travellers"
+                                            // data-value="increase"
+                                            // data-target="#adult-travellers"
                                             data-toggle="spinner"
+                                            onClick={() => increase("Adults")}
                                           >
                                             +
                                           </button>
@@ -1488,9 +1571,10 @@ const HotelConfirm = () => {
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="decrease"
-                                            data-target="#children-travellers"
+                                            // data-value="decrease"
+                                            // data-target="#children-travellers"
                                             data-toggle="spinner"
+                                            onClick={() => decrease("Children")}
                                           >
                                             -
                                           </button>
@@ -1507,9 +1591,10 @@ const HotelConfirm = () => {
                                           <button
                                             type="button"
                                             class="btn bg-light-4"
-                                            data-value="increase"
-                                            data-target="#children-travellers"
+                                            // data-value="increase"
+                                            // data-target="#children-travellers"
                                             data-toggle="spinner"
+                                            onClick={() => increase("Children")}
                                           >
                                             +
                                           </button>
@@ -1599,7 +1684,12 @@ const HotelConfirm = () => {
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
-                        For 1 Night, 1 Room, 3 Guests
+                        {`For ${localData[0]?.NoOfNights} Night(s), ${
+                          localData[0]?.NoOfRooms
+                        } Room(s), ${
+                          localData[0]?.RoomGuests[0]?.NoOfAdults +
+                          localData[0]?.RoomGuests[0]?.NoOfChild
+                        } Guest(s)`}
                       </span>
                     </li>
                     <li class="mb-2 fw-500">
@@ -1612,17 +1702,26 @@ const HotelConfirm = () => {
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
-                        For 1 Night, 1 Guest
+                        {`For ${localData[0]?.NoOfNights} Night(s), 1 Guest`}
                       </span>
                     </li>
                     <li class="mb-2 fw-500">
                       Taxes & Fees{" "}
-                      <span class="float-end text-4 fw-500 text-dark">{blockRoomData[0]?.HotelRoomsDetails[0]?.Price.OtherCharges +blockRoomData[0]?.HotelRoomsDetails[0]?.Price.Tax}</span>
+                      <span class="float-end text-4 fw-500 text-dark">
+                        {totalPrice.toFixed(2)}
+                      </span>
                     </li>
                   </ul>
                   <div class="text-dark bg-light-4 text-4 fw-600 p-3">
                     {" "}
-                    Total Amount <span class="float-end text-6">₹{blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff}</span>{" "}
+                    Total Amount{" "}
+                    <span class="float-end text-6">
+                      ₹
+                      {
+                        blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                          .PublishedPriceRoundedOff
+                      }
+                    </span>{" "}
                   </div>
                   <h3 class="text-4 mb-3 mt-4">Promo Code</h3>
                   <div class="input-group mb-3">

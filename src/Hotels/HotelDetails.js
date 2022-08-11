@@ -226,6 +226,8 @@ const HotelDetails = () => {
       const defaultCheckinValue = checkinDate.toISOString().substring(0, 10);
       const defaultCheckoutValue = checkoutDate.toISOString().substring(0, 10);
 
+      console.log(defaultCheckinValue, defaultCheckoutValue);
+
       setCheckinDate(defaultCheckinValue);
       setCheckoutDate(defaultCheckoutValue);
       setRooms(data?.NoOfRooms);
