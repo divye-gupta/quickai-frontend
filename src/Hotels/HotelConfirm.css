@@ -29,3 +29,16 @@
   .paymentdiv{
     width: 100%;
   }
+  .roomsnguests{
+    padding-top: 8px;
+  }
+  .checkoutdate{
+    display: flex;
+    align-items: center;
+    height: 75%;
+  }
+  .checkindate{
+    display: flex;
+    align-items: center;
+    height: 75%;
+  }

@@ -1408,7 +1408,7 @@ const HotelConfirm = () => {
                             <label class="form-label" for="hotelsCheckIn">
                               Check In
                             </label>
-                            <div class="position-relative">
+                            <div class="position-relative checkoutdate">
                               <input
                                 id="hotelsCheckIn"
                                 type="date"
@@ -1434,7 +1434,7 @@ const HotelConfirm = () => {
                             <label class="form-label" for="hotelsCheckOut">
                               Check Out
                             </label>
-                            <div class="position-relative">
+                            <div class="position-relative checkoutdate">
                               <input
                                 id="hotelsCheckOut"
                                 type="date"
@@ -1461,7 +1461,7 @@ const HotelConfirm = () => {
                               >
                                 Rooms & Guests
                               </label>
-                              <div class="position-relative">
+                              <div class="position-relative roomsnguests">
                                 <input
                                   type="text"
                                   // id="hotelsTravellersClass"
