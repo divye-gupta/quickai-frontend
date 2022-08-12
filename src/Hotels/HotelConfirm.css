@@ -17,3 +17,15 @@
     padding-left: 0px;
     padding-right: 30px;
   }
+
+  .updatebtn{
+    display: flex;
+    align-items: center;
+  }
+  .paymentbtn{
+    position: relative;
+    left: 12%;
+  }
+  .paymentdiv{
+    width: 100%;
+  }

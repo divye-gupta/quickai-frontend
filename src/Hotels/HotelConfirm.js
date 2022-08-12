@@ -1626,7 +1626,7 @@ const HotelConfirm = () => {
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-6 col-lg d-grid align-items-end">
+                          <div class="col-md-6 col-lg d-grid align-items-end updatebtn">
                             <button
                               class="btn btn-outline-primary shadow-none"
                               type="submit"
@@ -1794,9 +1794,9 @@ const HotelConfirm = () => {
                       </a>
                     </li>
                   </ul>
-                  <div class="d-grid">
+                  <div class="d-grid paymentdiv">
                     <button
-                      class="btn btn-primary"
+                      class="btn btn-primary paymentbtn"
                       onclick="location.href='payment.html';"
                       type="submit"
                     >
