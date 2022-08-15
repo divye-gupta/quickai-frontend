@@ -94,7 +94,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
+      TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
       TraceId: traceid,
     };
 
@@ -147,7 +147,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
+        TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
         TraceId: traceid,
       }),
     };
@@ -189,7 +189,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "545b573d-a823-49cd-94d0-620b4431b4d2",
+        TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
         TraceId: traceid,
       }),
     };
@@ -204,6 +204,11 @@ const HotelDetails = () => {
 
         setRoomInfoResult([data?.GetHotelRoomResult]);
         setRoomSelection([data?.GetHotelRoomResult?.HotelRoomsDetails]);
+        setSelectedRoom([data?.GetHotelRoomResult?.HotelRoomsDetails[0]]);
+        setRoomPrice(
+          data?.GetHotelRoomResult?.HotelRoomsDetails[0]?.Price
+            ?.PublishedPriceRoundedOff
+        );
       })
       .catch((err) => console.log(err));
   };

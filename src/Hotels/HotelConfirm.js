@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
 import * as ReactDOM from "react-dom";
+import he from "he";
 import "./HotelConfirm.css";
 
 const HotelConfirm = () => {
@@ -59,22 +60,20 @@ const HotelConfirm = () => {
     )
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
+        console.log(data?.BlockRoomResult?.HotelPolicyDetail);
+        const str = he.decode(data?.BlockRoomResult?.HotelPolicyDetail);
+        console.log(str);
         // handle data here
         // console.log(data?.BlockRoomResult?.HotelPolicyDetail);
         document
           .getElementById("hotel-policy-details")
-          .insertAdjacentHTML(
-            "beforeend",
-            data?.BlockRoomResult?.HotelPolicyDetail.split(
-              'india - land of mystries "//" "  /// "  |<ul></ul>'
-            )[1]
-          );
-        console.log(
-          data.BlockRoomResult.HotelPolicyDetail.split(
-            'india - land of mystries "//" "  /// "  |'
-          )
-        );
+          .insertAdjacentHTML("beforeend", str);
+
+        // console.log(
+        //   data.BlockRoomResult.HotelPolicyDetail.split(
+        //     'india - land of mystries "//" "  /// "  |'
+        //   )
+        // );
         setBlockRoomData([data.BlockRoomResult]);
         setTotalPrice(
           data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
@@ -1640,7 +1639,13 @@ const HotelConfirm = () => {
                   </div>
                   <hr />
                   <h3 class="text-5 mb-4 mt-4">Hotels Rules</h3>
-                  <div class="row mb-3" id="hotel-policy-details">
+                  <div
+                    class="row mb-4"
+                    id="hotel-policy-details"
+                    style={{ padding: "0 1rem" }}
+                  >
+                    {/* {blockRoomData.length > 0 &&
+                      he.decode(blockRoomData[0]?.HotelPolicyDetail)} */}
                     {/* <div class="col-6 col-xl-4">
                       <span class="text-muted text-3 me-2">
                         <i class="fas fa-paw"></i>
@@ -1689,10 +1694,10 @@ const HotelConfirm = () => {
                     <li class="mb-2 fw-500">
                       Base price{" "}
                       <span class="float-end text-4 fw-500 text-dark">
-                        {blockRoomData[0]?.HotelRoomsDetails[0]?.Price
-                          ?.RoomPrice *
-                          localData[0]?.NoOfNights *
-                          localData[0]?.NoOfRooms}
+                        {
+                          blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                            ?.RoomPrice
+                        }
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">

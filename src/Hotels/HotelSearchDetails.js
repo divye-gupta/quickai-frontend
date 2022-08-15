@@ -2075,7 +2075,7 @@ const HotelSearchDetails = () => {
                         <>
                           <div
                             class="hotels-item bg-white shadow-md rounded p-3"
-                            key={idx}
+                            key={hotel.HotelCode}
                           >
                             <div class="row">
                               <div class="col-md-4">
