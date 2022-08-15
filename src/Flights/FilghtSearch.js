@@ -88,6 +88,30 @@ function FilghtSearch() {
   const [{ flightDetails }, dispatch] = useStateValue();
   const [userId, setUserId] = useState();
 
+  const getData = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        ClientId: "ApiIntegrationNew",
+        EndUserIp: "192.168.10.26",
+        TokenId: "1850d73e-8472-4226-9ed8-15af223964b2",
+        CountryCode: "IN",
+        SearchType: "1",
+      }),
+    };
+    fetch("http://3.108.167.152:8040/api/City?searchTxt=del", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("list", data);
+        setFromData(data);
+        setToData(data);
+      });
+  };
+
   useEffect(() => {
     let id = uuidv4();
     setUserId(id);
@@ -102,109 +126,45 @@ function FilghtSearch() {
     e.currentTarget.placeholder = "Enter a Date";
   };
 
+
   const onFromChange = (event) => {
     event.preventDefault();
-
     var query = event.target.value;
     setFrom(query);
-
-    if (query.length <= 2) {
-    } else {
-      const getData = async () => {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Query: query }),
-        };
-        fetch("http://travelvogues.com/Api/AirportList", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("list", data);
-            setFromData(data);
-          });
-      };
-      getData();
-    }
   };
 
-  useEffect(() => {
-    $(function () {
-      $(".dropdown li").on("mouseenter mouseleave", function (e) {
-        if ($(window).width() > 991) {
-          var elm = $(".dropdown-menu", this);
-          if (elm.length > 0) {
-            var off = elm.offset();
-            var l = off.left;
-            var w = elm.width();
-            var docW = $(window).width();
-            var isEntirelyVisible = l + w <= docW;
-            if (!isEntirelyVisible) {
-              $(elm).addClass("dropdown-menu-right");
-            } else {
-              $(elm).removeClass("dropdown-menu-right");
-            }
-          } else {
-          }
-        }
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = window.location.origin + "/js/theme.js";
-    document.body.appendChild(script);
-  }, []);
-
+  
   const onToChange = (event) => {
     event.preventDefault();
-
     var query = event.target.value;
     setTo(query);
-    if (query.length <= 2) {
-    } else {
-      const getData = async () => {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Query: query }),
-        };
-        fetch("https://api.travelvogues.com/api/GetAirportList", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            setToData(data);
-          });
-      };
-      getData();
-    }
   };
-
+  
   const setFlight = () => {
     setAdultCount(document.getElementById("flightAdult-travellers").value);
     setChildrenCount(
       document.getElementById("flightChildren-travellers").value
-    );
-    setInfantCount(document.getElementById("flightInfants-travellers").value);
-  };
-
+      );
+      setInfantCount(document.getElementById("flightInfants-travellers").value);
+    };
+      
+    
   const addFromData = (event) => {
-    event.preventDefault();
-    if (flightWay == 1) {
-      localStorage.setItem("from", from);
-      localStorage.setItem("to", to);
-      localStorage.setItem("departDate", departDate);
-      localStorage.setItem("returnDate", departDate);
-      localStorage.setItem("flightClass", flightClass);
-      localStorage.setItem("way", flightWay);
-      localStorage.setItem("adultCount", adultCount);
-      localStorage.setItem("childrenCount", childrenCount);
-      localStorage.setItem("infantCount", infantCount);
-
-      setFlight();
-      dispatch({
-        type: "ADD_TO_FLIGHT",
+      event.preventDefault();
+      if (flightWay == 1) {
+        localStorage.setItem("from", from);
+        localStorage.setItem("to", to);
+        localStorage.setItem("departDate", departDate);
+        localStorage.setItem("returnDate", departDate);
+        localStorage.setItem("flightClass", flightClass);
+        localStorage.setItem("way", flightWay);
+        localStorage.setItem("adultCount", adultCount);
+        localStorage.setItem("childrenCount", childrenCount);
+        localStorage.setItem("infantCount", infantCount);
+        
+        setFlight();
+        dispatch({
+          type: "ADD_TO_FLIGHT",
         item: {
           way: flightWay,
           from: from,
@@ -298,6 +258,41 @@ function FilghtSearch() {
     setShowRadio(!showRadio);
     setFlightWay(e.target.value);
   };
+
+  useEffect(() => {
+    $(function () {
+      $(".dropdown li").on("mouseenter mouseleave", function (e) {
+        if ($(window).width() > 991) {
+          var elm = $(".dropdown-menu", this);
+          if (elm.length > 0) {
+            var off = elm.offset();
+            var l = off.left;
+            var w = elm.width();
+            var docW = $(window).width();
+            var isEntirelyVisible = l + w <= docW;
+            if (!isEntirelyVisible) {
+              $(elm).addClass("dropdown-menu-right");
+            } else {
+              $(elm).removeClass("dropdown-menu-right");
+            }
+          } else {
+          }
+        }
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = window.location.origin + "/js/theme.js";
+    document.body.appendChild(script);
+  }, []);
+
+  useEffect(()=>{
+    getData();
+    console.log("here");
+  },[])
 
   return (
     <>
@@ -1533,17 +1528,19 @@ function FilghtSearch() {
                                     id="combo-box-demo"
                                     options={fromData}
                                     getOptionLabel={(airport) =>
-                                      airport.AIRPORTNAME
+                                      airport.airportname
                                     }
                                     onChange={(event, value) =>
-                                      setFrom(value.AirPortCode)
+                                      setFrom(value.airportcode)
                                     }
                                     renderInput={(params) => (
                                       <>
                                         <CssTextField
                                           className={[classes.root]}
                                           value={from}
-                                          onChange={onFromChange}
+                                          onChange={(event, value)=>{
+                                            onFromChange(event);
+                                          }}
                                           {...params}
                                           label="From"
                                           variant="standard"
@@ -1551,13 +1548,40 @@ function FilghtSearch() {
                                       </>
                                     )}
                                   />
+
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
                                   </span>
                                 </div>
 
                                 <div class="col-lg-6 form-group">
-                                  <Autocomplete
+                                <Autocomplete
+                                    loading={true}
+                                    freeSolo
+                                    id="combo-box-demo"
+                                    options={toData}
+                                    getOptionLabel={(airport) =>
+                                      airport.airportname
+                                    }
+                                    onChange={(event, value) =>
+                                      setTo(value.airportcode)
+                                    }
+                                    renderInput={(params) => (
+                                      <>
+                                        <CssTextField
+                                          className={[classes.root]}
+                                          value={to}
+                                          onChange={(event, value)=>{
+                                            onToChange(event);
+                                          }}
+                                          {...params}
+                                          label="To"
+                                          variant="standard"
+                                        />
+                                      </>
+                                    )}
+                                  />
+                                  {/* <Autocomplete
                                     loading={true}
                                     freeSolo
                                     id="combo-box-demo"
@@ -1580,7 +1604,7 @@ function FilghtSearch() {
                                         />
                                       </ThemeProvider>
                                     )}
-                                  />
+                                  /> */}
                                   <span class="icon-inside">
                                     <i class="fas fa-map-marker-alt"></i>
                                   </span>{" "}
