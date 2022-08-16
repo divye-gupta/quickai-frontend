@@ -48,6 +48,14 @@ const reducer = (state, action) => {
       };
     }
 
+    case "CLEAR_HOTEL_LIST": {
+      console.log("clear from hotel list");
+      return {
+        ...state,
+        hotelList: null,
+      };
+    }
+
     default:
       return {
         ...state,

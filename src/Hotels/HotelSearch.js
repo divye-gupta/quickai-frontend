@@ -98,6 +98,11 @@ const HotelSearch = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    dispatch({
+      type: "CLEAR_HOTEL_LIST",
+    });
+
     const date1 = new Date(checkinDate.split("/").reverse().join("/"));
     const date2 = new Date(checkoutDate);
     if (date1 > date2)
@@ -131,20 +136,10 @@ const HotelSearch = () => {
       EndUserIp: "192.168.10.26",
       TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
     };
-
     dispatch({
       type: "ADD_TO_HOTEL",
       item: item,
     });
-
-    delete item.CountryName;
-    delete item.StateProvince;
-    delete item.CityName;
-    delete item.Type;
-    delete item.DestinationId;
-
-    // console.log(destination[0]);
-    // console.log(item);
 
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
 

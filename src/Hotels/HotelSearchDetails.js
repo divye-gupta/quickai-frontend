@@ -6,11 +6,12 @@ import { useStateValue } from "../ContextApi/StateProvider";
 const HotelSearchDetails = () => {
   const [hotelData, setHotelData] = useState([]);
   const [APIdata, setAPIdata] = useState("");
-  const [{ hotelList }, dispatch] = useStateValue();
+  const [cityName, setCityName] = useState("");
+  const [{ hotel, hotelList }, dispatch] = useStateValue();
   const history = useHistory();
 
   const viewHotel = (ResultIndex, HotelId, Hotel) => {
-    console.log(hotelData);
+    console.log(Hotel);
     dispatch({
       type: "ADD_TO_HOTEL_DATA",
       hotelDataSelected: Hotel,
@@ -32,7 +33,23 @@ const HotelSearchDetails = () => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      body: data,
+      body: JSON.stringify({
+        CheckInDate: data?.CheckInDate,
+        CityId: data?.CityId,
+        CountryCode: data?.CountryCode,
+        EndUserIp: data?.EndUserIp,
+        GuestNationality: data?.GuestNationality,
+        IsNearBySearchAllowed: data?.IsNearBySearchAllowed,
+        NoOfNights: data?.NoOfNights,
+        NoOfRooms: data?.NoOfRooms,
+        MaxRating: data?.MaxRating,
+        MinRating: data?.MinRating,
+        PreferredCurrency: data?.PreferredCurrency,
+        ResultCount: data?.ResultCount,
+        ReviewScore: data?.ReviewScore,
+        RoomGuests: data?.RoomGuests,
+        TokenId: data?.TokenId,
+      }),
     };
     fetch(
       "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
@@ -58,12 +75,13 @@ const HotelSearchDetails = () => {
 
     if (data !== undefined) {
       console.log(data);
-      delete data.CheckOutDate;
+      // delete data.CheckOutDate;
 
       const stringData = JSON.stringify(data);
       setAPIdata(stringData);
+      setCityName(data?.CityName);
       if (hotelList === null) {
-        getHotelList(stringData);
+        getHotelList(data);
       } else {
         setHotelData([hotelList]);
       }
@@ -71,7 +89,7 @@ const HotelSearchDetails = () => {
   }, []);
 
   useEffect(() => {
-    console.log(hotelList);
+    console.log(hotelList, hotel);
   }, [hotelData]);
 
   return (
@@ -2035,7 +2053,9 @@ const HotelSearchDetails = () => {
                     <div class="col-6 col-md-8">
                       {" "}
                       <span class="me-3">
-                        <span class="text-4">Ahmedabad:</span>{" "}
+                        <span class="text-4">
+                          {cityName === "" ? "City" : cityName}:
+                        </span>{" "}
                         <span class="fw-600">
                           {hotelData[0]?.HotelResults?.length || 0} Hotels
                         </span>{" "}

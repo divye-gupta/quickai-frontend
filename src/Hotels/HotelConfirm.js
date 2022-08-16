@@ -5,7 +5,8 @@ import he from "he";
 import "./HotelConfirm.css";
 
 const HotelConfirm = () => {
-  const [{ hotelBookingDetails }, dispatch] = useStateValue();
+  const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
+    useStateValue();
   const [blockRoomData, setBlockRoomData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [localData, setLocalData] = useState([]);
@@ -63,17 +64,10 @@ const HotelConfirm = () => {
         console.log(data?.BlockRoomResult?.HotelPolicyDetail);
         const str = he.decode(data?.BlockRoomResult?.HotelPolicyDetail);
         console.log(str);
-        // handle data here
-        // console.log(data?.BlockRoomResult?.HotelPolicyDetail);
         document
           .getElementById("hotel-policy-details")
           .insertAdjacentHTML("beforeend", str);
 
-        // console.log(
-        //   data.BlockRoomResult.HotelPolicyDetail.split(
-        //     'india - land of mystries "//" "  /// "  |'
-        //   )
-        // );
         setBlockRoomData([data.BlockRoomResult]);
         setTotalPrice(
           data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
@@ -84,7 +78,7 @@ const HotelConfirm = () => {
   };
 
   useEffect(() => {
-    console.log(hotelBookingDetails);
+    console.log(hotelBookingDetails, hotelDataSelected);
     if (hotelBookingDetails !== null) {
       blockRoomConfirmation();
     }

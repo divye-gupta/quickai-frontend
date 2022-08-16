@@ -241,10 +241,6 @@ const HotelDetails = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   console.log(localData[0]);
-  // }, [localData]);
-
   useEffect(() => {
     // console.log(traceid, hotelindex, hotelid);
     hotelInfo();
