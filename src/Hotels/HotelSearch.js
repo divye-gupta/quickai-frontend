@@ -134,7 +134,7 @@ const HotelSearch = () => {
       ReviewScore: null,
       IsNearBySearchAllowed: false,
       EndUserIp: "192.168.10.26",
-      TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
+      TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
     };
     dispatch({
       type: "ADD_TO_HOTEL",
@@ -195,7 +195,7 @@ const HotelSearch = () => {
       body: JSON.stringify({
         ClientId: "ApiIntegrationNew",
         EndUserIp: "192.168.10.26",
-        TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
+        TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
         CountryCode: "IN",
         SearchType: "1",
       }),

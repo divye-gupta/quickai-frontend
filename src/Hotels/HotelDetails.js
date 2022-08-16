@@ -11,7 +11,8 @@ import { Carousel } from "react-responsive-carousel";
 
 const HotelDetails = () => {
   const history = useHistory();
-  const [{ hotelBookingDetails }, dispatch] = useStateValue();
+  const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
+    useStateValue();
   const { traceid, hotelindex, hotelid } = useParams();
   const [hotelInfoResult, setHotelInfoResult] = useState([]);
 
@@ -51,6 +52,51 @@ const HotelDetails = () => {
       default:
         setSmokingPreference(3);
     }
+  };
+
+  const selectRoom = (hotelRoom) => {
+    // const booknowObj = {
+    //   ResultIndex: hotelindex,
+    //   HotelCode: hotelid,
+    //   HotelName: hotelInfoResult?.HotelDetails?.HotelName,
+    //   GuestNationality: "IN",
+    //   NoOfRooms: localData[0]?.NoOfRooms,
+    //   ClientReferenceNo: 0,
+    //   IsVoucherBooking: true,
+    //   HotelRoomsDetails: [
+    //     {
+    //       RoomIndex: selectedRoom[0]?.RoomIndex,
+    //       RoomTypeCode: selectedRoom[0]?.RoomTypeCode,
+    //       RoomTypeName: selectedRoom[0]?.RoomTypeName,
+    //       RatePlanCode: selectedRoom[0]?.RatePlanCode,
+    //       BedTypeCode: null,
+    //       SmokingPreference: smokingPreference,
+    //       Supplements: null,
+    //       Price: {
+    //         CurrencyCode: selectedRoom[0]?.Price?.CurrencyCode,
+    //         RoomPrice: selectedRoom[0]?.Price?.RoomPrice,
+    //         Tax: selectedRoom[0]?.Price?.Tax,
+    //         ExtraGuestCharge: selectedRoom[0]?.Price?.ExtraGuestCharge,
+    //         ChildCharge: selectedRoom[0]?.Price?.ChildCharge,
+    //         OtherCharges: selectedRoom[0]?.Price?.OtherCharges,
+    //         Discount: selectedRoom[0]?.Price?.Discount,
+    //         PublishedPrice: selectedRoom[0]?.Price?.PublishedPrice,
+    //         PublishedPriceRoundedOff:
+    //           selectedRoom[0]?.Price?.PublishedPriceRoundedOff,
+    //         OfferedPrice: selectedRoom[0]?.Price?.OfferedPrice,
+    //         OfferedPriceRoundedOff:
+    //           selectedRoom[0]?.Price?.OfferedPriceRoundedOff,
+    //         AgentCommission: selectedRoom[0]?.Price?.AgentCommission,
+    //         AgentMarkUp: selectedRoom[0]?.Price?.AgentMarkUp,
+    //         TDS: selectedRoom[0]?.Price?.TDS,
+    //         ServiceTax: selectedRoom[0]?.Price?.ServiceTax,
+    //       },
+    //     },
+    //   ],
+    //   EndUserIp: "192.168.10.26",
+    //   TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
+    //   TraceId: traceid,
+    // };
   };
 
   const bookNow = (e) => {
@@ -94,7 +140,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
+      TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
       TraceId: traceid,
     };
 
@@ -147,7 +193,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
+        TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
         TraceId: traceid,
       }),
     };
@@ -189,7 +235,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "d57de935-28de-44b9-96d4-7c16d2fb4e9b",
+        TokenId: "70442d30-f1ba-46bb-a139-a113178f4a07",
         TraceId: traceid,
       }),
     };
@@ -246,6 +292,10 @@ const HotelDetails = () => {
     hotelInfo();
     roomInfo();
   }, []);
+
+  useEffect(() => {
+    console.log(hotelDataSelected);
+  });
 
   useEffect(() => {
     $(function () {
@@ -1767,6 +1817,9 @@ const HotelDetails = () => {
                                   <a
                                     href=""
                                     class="btn btn-sm btn-outline-primary shadow-none ms-auto"
+                                    onClick={() => {
+                                      selectRoom(hotelRoom);
+                                    }}
                                   >
                                     Select Room
                                   </a>{" "}

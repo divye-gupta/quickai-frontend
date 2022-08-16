@@ -1354,7 +1354,7 @@ const HotelConfirm = () => {
                       {" "}
                       <img
                         class="img-fluid rounded align-top"
-                        src="images/brands/hotels/hotel-1.jpg"
+                        src={hotelDataSelected?.HotelPicture}
                         title="Standard Room"
                         alt="Standard Room"
                       />{" "}

@@ -14,7 +14,7 @@ const HotelSearchDetails = () => {
     console.log(Hotel);
     dispatch({
       type: "ADD_TO_HOTEL_DATA",
-      hotelDataSelected: Hotel,
+      item: Hotel,
     });
     history.push(
       `/hoteldetails/${hotelData[0]?.TraceId}/${ResultIndex}/${HotelId}`
