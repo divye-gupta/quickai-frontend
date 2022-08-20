@@ -94,7 +94,7 @@ const HotelDetails = () => {
     //     },
     //   ],
     //   EndUserIp: "192.168.10.26",
-    //   TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+    //   TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
     //   TraceId: traceid,
     // };
   };
@@ -140,7 +140,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+      TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
       TraceId: traceid,
     };
 
@@ -193,7 +193,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+        TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
         TraceId: traceid,
       }),
     };
@@ -235,7 +235,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+        TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
         TraceId: traceid,
       }),
     };
