@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory, useParams } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import Header from "../Components/Header";
 
 const HotelDetails = () => {
   const history = useHistory();
@@ -330,6 +331,7 @@ const HotelDetails = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <section class="page-header page-header-dark bg-secondary">
           <div class="container">
             <div class="row align-items-center">

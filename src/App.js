@@ -37,7 +37,6 @@ import Header from "./Components/Header";
 function App() {
   return (
     <Router>
-      <Header />
       <Switch>
         {/* login signup */}
         <Route path="/login" component={Login}></Route>

@@ -3,6 +3,7 @@ import { useStateValue } from "../ContextApi/StateProvider";
 import firebase from "firebase";
 import Background from "../images/bg/image-2.jpg";
 import Modal from "@material-ui/core/Modal";
+import Header from "../Components/Header";
 import {
   Button,
   createMuiTheme,
@@ -249,6 +250,7 @@ const HotelSearch = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <div id="content">
           <div class="hero-wrap">
             <div class="hero-mask opacity-7 bg-primary"></div>

@@ -3,6 +3,7 @@ import { useStateValue } from "../ContextApi/StateProvider";
 import * as ReactDOM from "react-dom";
 import he from "he";
 import "./HotelConfirm.css";
+import Header from "../Components/Header";
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
@@ -113,6 +114,7 @@ const HotelConfirm = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <section class="page-header page-header-dark bg-secondary">
           <div class="container">
             <div class="row align-items-center">
