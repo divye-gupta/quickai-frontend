@@ -3,6 +3,7 @@ import { useStateValue } from "../ContextApi/StateProvider";
 import firebase from "firebase";
 import Background from "../images/bg/image-2.jpg";
 import Modal from "@material-ui/core/Modal";
+import Header from "../Components/Header";
 import {
   Button,
   createMuiTheme,
@@ -134,7 +135,7 @@ const HotelSearch = () => {
       ReviewScore: null,
       IsNearBySearchAllowed: false,
       EndUserIp: "192.168.10.26",
-      TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+      TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
     };
     dispatch({
       type: "ADD_TO_HOTEL",
@@ -195,7 +196,7 @@ const HotelSearch = () => {
       body: JSON.stringify({
         ClientId: "ApiIntegrationNew",
         EndUserIp: "192.168.10.26",
-        TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
         CountryCode: "IN",
         SearchType: "1",
       }),
@@ -249,6 +250,7 @@ const HotelSearch = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <div id="content">
           <div class="hero-wrap">
             <div class="hero-mask opacity-7 bg-primary"></div>

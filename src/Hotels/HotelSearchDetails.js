@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useStateValue } from "../ContextApi/StateProvider";
+import Header from "../Components/Header";
 
 const HotelSearchDetails = () => {
   const [hotelData, setHotelData] = useState([]);
@@ -95,6 +96,7 @@ const HotelSearchDetails = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <section class="page-header page-header-dark bg-secondary">
           <div class="container">
             <div class="row align-items-center">

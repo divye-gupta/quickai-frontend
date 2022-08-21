@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory, useParams } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import Header from "../Components/Header";
 
 const HotelDetails = () => {
   const history = useHistory();
@@ -94,7 +95,7 @@ const HotelDetails = () => {
     //     },
     //   ],
     //   EndUserIp: "192.168.10.26",
-    //   TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+    //   TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
     //   TraceId: traceid,
     // };
   };
@@ -140,7 +141,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+      TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
       TraceId: traceid,
     };
 
@@ -193,7 +194,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
         TraceId: traceid,
       }),
     };
@@ -235,7 +236,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "173c2468-93ce-40af-b04c-6efd10a33e36",
+        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
         TraceId: traceid,
       }),
     };
@@ -330,6 +331,7 @@ const HotelDetails = () => {
   return (
     <>
       <div id="main-wrapper">
+        <Header />
         <section class="page-header page-header-dark bg-secondary">
           <div class="container">
             <div class="row align-items-center">
