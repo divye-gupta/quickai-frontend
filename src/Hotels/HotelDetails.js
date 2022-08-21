@@ -3,7 +3,7 @@ import { useStateValue } from "../ContextApi/StateProvider";
 import $ from "jquery";
 import Pagination from "react-js-pagination";
 import useLocalStorage from "react-use-localstorage";
-import { CircularProgress, Modal } from "@material-ui/core";
+import { Button, CircularProgress, Modal } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useHistory, useParams } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -56,48 +56,55 @@ const HotelDetails = () => {
   };
 
   const selectRoom = (hotelRoom) => {
-    // const booknowObj = {
-    //   ResultIndex: hotelindex,
-    //   HotelCode: hotelid,
-    //   HotelName: hotelInfoResult?.HotelDetails?.HotelName,
-    //   GuestNationality: "IN",
-    //   NoOfRooms: localData[0]?.NoOfRooms,
-    //   ClientReferenceNo: 0,
-    //   IsVoucherBooking: true,
-    //   HotelRoomsDetails: [
-    //     {
-    //       RoomIndex: selectedRoom[0]?.RoomIndex,
-    //       RoomTypeCode: selectedRoom[0]?.RoomTypeCode,
-    //       RoomTypeName: selectedRoom[0]?.RoomTypeName,
-    //       RatePlanCode: selectedRoom[0]?.RatePlanCode,
-    //       BedTypeCode: null,
-    //       SmokingPreference: smokingPreference,
-    //       Supplements: null,
-    //       Price: {
-    //         CurrencyCode: selectedRoom[0]?.Price?.CurrencyCode,
-    //         RoomPrice: selectedRoom[0]?.Price?.RoomPrice,
-    //         Tax: selectedRoom[0]?.Price?.Tax,
-    //         ExtraGuestCharge: selectedRoom[0]?.Price?.ExtraGuestCharge,
-    //         ChildCharge: selectedRoom[0]?.Price?.ChildCharge,
-    //         OtherCharges: selectedRoom[0]?.Price?.OtherCharges,
-    //         Discount: selectedRoom[0]?.Price?.Discount,
-    //         PublishedPrice: selectedRoom[0]?.Price?.PublishedPrice,
-    //         PublishedPriceRoundedOff:
-    //           selectedRoom[0]?.Price?.PublishedPriceRoundedOff,
-    //         OfferedPrice: selectedRoom[0]?.Price?.OfferedPrice,
-    //         OfferedPriceRoundedOff:
-    //           selectedRoom[0]?.Price?.OfferedPriceRoundedOff,
-    //         AgentCommission: selectedRoom[0]?.Price?.AgentCommission,
-    //         AgentMarkUp: selectedRoom[0]?.Price?.AgentMarkUp,
-    //         TDS: selectedRoom[0]?.Price?.TDS,
-    //         ServiceTax: selectedRoom[0]?.Price?.ServiceTax,
-    //       },
-    //     },
-    //   ],
-    //   EndUserIp: "192.168.10.26",
-    //   TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
-    //   TraceId: traceid,
-    // };
+    console.log(hotelRoom);
+    const booknowObj = {
+      ResultIndex: hotelindex,
+      HotelCode: hotelid,
+      HotelName: hotelInfoResult?.HotelDetails?.HotelName,
+      GuestNationality: "IN",
+      NoOfRooms: localData[0]?.NoOfRooms,
+      ClientReferenceNo: 0,
+      IsVoucherBooking: true,
+      HotelRoomsDetails: [
+        {
+          RoomIndex: hotelRoom?.RoomIndex,
+          RoomTypeCode: hotelRoom?.RoomTypeCode,
+          RoomTypeName: hotelRoom?.RoomTypeName,
+          RatePlanCode: hotelRoom?.RatePlanCode,
+          BedTypeCode: null,
+          SmokingPreference: smokingPreference,
+          Supplements: null,
+          Price: {
+            CurrencyCode: hotelRoom?.Price?.CurrencyCode,
+            RoomPrice: hotelRoom?.Price?.RoomPrice,
+            Tax: hotelRoom?.Price?.Tax,
+            ExtraGuestCharge: hotelRoom?.Price?.ExtraGuestCharge,
+            ChildCharge: hotelRoom?.Price?.ChildCharge,
+            OtherCharges: hotelRoom?.Price?.OtherCharges,
+            Discount: hotelRoom?.Price?.Discount,
+            PublishedPrice: hotelRoom?.Price?.PublishedPrice,
+            PublishedPriceRoundedOff:
+              hotelRoom?.Price?.PublishedPriceRoundedOff,
+            OfferedPrice: hotelRoom?.Price?.OfferedPrice,
+            OfferedPriceRoundedOff: hotelRoom?.Price?.OfferedPriceRoundedOff,
+            AgentCommission: hotelRoom?.Price?.AgentCommission,
+            AgentMarkUp: hotelRoom?.Price?.AgentMarkUp,
+            TDS: hotelRoom?.Price?.TDS,
+            ServiceTax: hotelRoom?.Price?.ServiceTax,
+          },
+        },
+      ],
+      EndUserIp: "192.168.10.26",
+      TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
+      TraceId: traceid,
+    };
+
+    dispatch({
+      type: "ADD_HOTEL_BOOKING_DETAILS",
+      item: booknowObj,
+    });
+    console.log(booknowObj);
+    history.push("/hotelconfirm");
   };
 
   const bookNow = (e) => {
@@ -141,7 +148,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+      TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
       TraceId: traceid,
     };
 
@@ -194,7 +201,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+        TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
         TraceId: traceid,
       }),
     };
@@ -236,7 +243,7 @@ const HotelDetails = () => {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "9da2333a-cd9d-404f-b2f7-d33deb25191a",
+        TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
         TraceId: traceid,
       }),
     };
@@ -603,7 +610,7 @@ const HotelDetails = () => {
                                 </div>
                                 <div class="d-flex align-items-center mt-3">
                                   {" "}
-                                  <a
+                                  {/* <a
                                     href="#"
                                     data-bs-toggle="modal"
                                     data-bs-target="#cancellation-policy"
@@ -618,7 +625,14 @@ const HotelDetails = () => {
                                     }}
                                   >
                                     Select Room
-                                  </a>{" "}
+                                  </a>{" "} */}
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => selectRoom(hotelRoom)}
+                                  >
+                                    Select Room
+                                  </Button>
                                 </div>
                               </div>
                             </div>
