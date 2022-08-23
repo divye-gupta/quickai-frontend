@@ -33,6 +33,7 @@ import HotelSearchDetails from "./Hotels/HotelSearchDetails";
 import HotelDetails from "./Hotels/HotelDetails";
 import HotelConfirm from "./Hotels/HotelConfirm";
 import Header from "./Components/Header";
+import HotelPayment from "./Hotels/payment/HotelPayment";
 
 function App() {
   return (
@@ -62,7 +63,7 @@ function App() {
         <Route path="/hotelsearch" component={HotelSearch}></Route>
 
         <Route path="/hotelslist" component={HotelSearchDetails}></Route>
-
+        <Route path="/hotelpayment" component={HotelPayment}></Route>
         <Route
           path="/hoteldetails/:traceid/:hotelindex/:hotelid"
           component={HotelDetails}

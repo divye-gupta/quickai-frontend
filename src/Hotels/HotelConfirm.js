@@ -17,6 +17,50 @@ const HotelConfirm = () => {
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
 
+  // const paymentGateway = () => {
+  //   const fareQuote = async () => {
+  //     const Proxy_URL = "https://cors-anywhere.herokuapp.com/";
+  //     const URL = "https://travelvogues.com/api/FareQuote";
+
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         EndUserIp: "27.62.226.143",
+  //         TokenId: localStorage.getItem("tokenId"),
+  //         TraceId: localStorage.getItem("traceId"),
+  //         ResultIndex: localStorage.getItem("resultIndex"),
+  //       }),
+  //     };
+
+  //     await fetch(URL, requestOptions)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log(data, "data");
+  //         var am;
+  //         if (data.Response.IsPriceChanged) {
+  //           am = data.Response.Results.Fare.PublishedFare;
+  //           alert("Priced Changed");
+  //           console.log("price Changed");
+  //         } else {
+  //           am =
+  //             insurance == "yes"
+  //               ? flightDetails[0].publishedFare + 199
+  //               : flightDetails[0].publishedFare;
+  //         }
+
+  //         history.push({
+  //           pathname: "/hotelpayment",
+  //           state: { email: email, number: number, amount: am },
+  //         });
+  //       });
+  //   };
+
+  //   fareQuote();
+  // };
+
+  const paymentGateway = () => {};
+
   const increase = (type) => {
     switch (type) {
       case "Rooms": {
@@ -593,7 +637,10 @@ const HotelConfirm = () => {
                   <div class="d-grid paymentdiv">
                     <button
                       class="btn btn-primary paymentbtn"
-                      onclick="location.href='payment.html';"
+                      // onclick="location.href='payment.html';"
+                      onClick={() => {
+                        paymentGateway();
+                      }}
                       type="submit"
                     >
                       Proceed To Payment

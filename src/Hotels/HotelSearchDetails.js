@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useStateValue } from "../ContextApi/StateProvider";
 import Header from "../Components/Header";
+import axios from "axios";
 
 const HotelSearchDetails = () => {
   const [hotelData, setHotelData] = useState([]);
@@ -28,46 +29,78 @@ const HotelSearchDetails = () => {
   };
 
   const getHotelList = (data) => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        CheckInDate: data?.CheckInDate,
-        CityId: data?.CityId,
-        CountryCode: data?.CountryCode,
-        EndUserIp: data?.EndUserIp,
-        GuestNationality: data?.GuestNationality,
-        IsNearBySearchAllowed: data?.IsNearBySearchAllowed,
-        NoOfNights: data?.NoOfNights,
-        NoOfRooms: data?.NoOfRooms,
-        MaxRating: data?.MaxRating,
-        MinRating: data?.MinRating,
-        PreferredCurrency: data?.PreferredCurrency,
-        ResultCount: data?.ResultCount,
-        ReviewScore: data?.ReviewScore,
-        RoomGuests: data?.RoomGuests,
-        TokenId: data?.TokenId,
-      }),
-    };
-    fetch(
-      "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
-      requestOptions
-    )
-      .then((resp) => resp.json())
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify({
+    //     CheckInDate: data?.CheckInDate,
+    //     CityId: data?.CityId,
+    //     CountryCode: data?.CountryCode,
+    //     EndUserIp: data?.EndUserIp,
+    //     GuestNationality: data?.GuestNationality,
+    //     IsNearBySearchAllowed: data?.IsNearBySearchAllowed,
+    //     NoOfNights: data?.NoOfNights,
+    //     NoOfRooms: data?.NoOfRooms,
+    //     MaxRating: data?.MaxRating,
+    //     MinRating: data?.MinRating,
+    //     PreferredCurrency: data?.PreferredCurrency,
+    //     ResultCount: data?.ResultCount,
+    //     ReviewScore: data?.ReviewScore,
+    //     RoomGuests: data?.RoomGuests,
+    //     TokenId: data?.TokenId,
+    //   }),
+    // };
+    // fetch(
+    //   "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
+    //   requestOptions
+    // )
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     console.log(data);
+
+    //     dispatch({
+    //       type: "ADD_TO_HOTEL_LIST",
+    //       item: data.HotelSearchResult,
+    //     });
+
+    //     setHotelData([data.HotelSearchResult]);
+    //   })
+    //   .catch((err) => console.log(err));
+
+    axios
+      .post(
+        "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/",
+        {
+          CheckInDate: data?.CheckInDate,
+          CityId: data?.CityId,
+          CountryCode: data?.CountryCode,
+          EndUserIp: data?.EndUserIp,
+          GuestNationality: data?.GuestNationality,
+          IsNearBySearchAllowed: data?.IsNearBySearchAllowed,
+          NoOfNights: data?.NoOfNights,
+          NoOfRooms: data?.NoOfRooms,
+          MaxRating: data?.MaxRating,
+          MinRating: data?.MinRating,
+          PreferredCurrency: data?.PreferredCurrency,
+          ResultCount: data?.ResultCount,
+          ReviewScore: data?.ReviewScore,
+          RoomGuests: data?.RoomGuests,
+          TokenId: data?.TokenId,
+        }
+      )
       .then((data) => {
         console.log(data);
-
         dispatch({
           type: "ADD_TO_HOTEL_LIST",
-          item: data.HotelSearchResult,
+          item: data.data.HotelSearchResult,
         });
 
-        setHotelData([data.HotelSearchResult]);
+        setHotelData([data.data.HotelSearchResult]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {

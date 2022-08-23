@@ -91,6 +91,7 @@ const HotelSearch = () => {
 
   const [userId, setUserId] = useState();
   const history = useHistory();
+  const [TokenId, setTokenId] = useState("");
 
   useEffect(() => {
     let id = uuidv4();
@@ -135,7 +136,7 @@ const HotelSearch = () => {
       ReviewScore: null,
       IsNearBySearchAllowed: false,
       EndUserIp: "192.168.10.26",
-      TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
+      TokenId,
     };
     dispatch({
       type: "ADD_TO_HOTEL",
@@ -186,31 +187,46 @@ const HotelSearch = () => {
     e.currentTarget.placeholder = "Enter a Date";
   };
 
-  const getCountryList = () => {
-    const requestOptions = {
+  const getCountryList = (Token) => {
+    // TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
+
+    axios
+      .post(
+        "/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+        {
+          ClientId: "ApiIntegrationNew",
+          EndUserIp: "192.168.10.26",
+          TokenId: Token,
+          CountryCode: "IN",
+          SearchType: "1",
+        }
+      )
+      .then((data) => {
+        setDestinationData(data.data.Destinations);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const Authentication = () => {
+    fetch("/SharedServices/SharedData.svc/rest/Authenticate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
+        UserName: "Vogues",
+        Password: "Voguesapi@123",
+        EndUserIp: "192.168.11.120",
         ClientId: "ApiIntegrationNew",
-        EndUserIp: "192.168.10.26",
-        TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
-        CountryCode: "IN",
-        SearchType: "1",
       }),
-    };
-
-    fetch(
-      "/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
-      requestOptions
-    )
-      .then((resp) => resp.json())
+    })
+      .then((res) => res.json())
       .then((data) => {
-        setDestinationData(data.Destinations);
+        console.log(data);
+        localStorage.setItem("TokenId", data.TokenId);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -244,7 +260,13 @@ const HotelSearch = () => {
   }, []);
 
   useEffect(() => {
-    getCountryList();
+    const Token = localStorage.getItem("TokenId");
+    if (Token === null || Token === undefined) {
+      Authentication();
+    } else {
+      setTokenId(Token);
+    }
+    getCountryList(Token);
   }, []);
 
   return (
