@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import logo from "../../images/logo.png";
 
-const HotelPayment = ({ amount, name, email, phone_number, currency }) => {
+const HotelPayment = (props) => {
+
   function loadScript(urlsrc) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = urlsrc;
+      // iframe = document.getElementById('id_of_frame');
+      // iframe.setAttribute('allow', "autoplay; fullscreen *;");
+      // iframe.src = iframe.src;
       script.onload = () => {
         resolve(true);
       };
@@ -18,6 +22,7 @@ const HotelPayment = ({ amount, name, email, phone_number, currency }) => {
   }
 
   async function displayRazorpay() {
+    console.log("here");
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -28,9 +33,9 @@ const HotelPayment = ({ amount, name, email, phone_number, currency }) => {
     }
 
     const options = {
-      key: " key here",
-      currency: currency,
-      amount: amount.toString() * 100,
+      key: "rzp_test_8TErOyyWpFNHN6",
+      currency: props.location.state.currency,
+      amount: props.location.state.amount.toString() * 100,
       order_id: uuidv4(),
       name: "Pay the required amount to book Hotel",
       description: "Some description here will be absolutely good.",
@@ -41,9 +46,9 @@ const HotelPayment = ({ amount, name, email, phone_number, currency }) => {
         alert(response.razorpay_signature);
       },
       prefill: {
-        name: name,
-        email: email,
-        phone_number: phone_number,
+        name: props.location.state.name,
+        email: props.location.state.email,
+        phone_number: props.location.state.phone_number,
       },
     };
     const paymentObject = new window.Razorpay(options);
@@ -61,6 +66,7 @@ const HotelPayment = ({ amount, name, email, phone_number, currency }) => {
 
   useEffect(() => {
     displayRazorpay();
+    console.log(props.location.state)
   }, []);
 
   return <div>HotelPayment</div>;
