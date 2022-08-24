@@ -225,6 +225,8 @@ const HotelSearch = () => {
       .then((data) => {
         console.log(data);
         localStorage.setItem("TokenId", data.TokenId);
+        setTokenId(data.TokenId);
+        getCountryList(data.TokenId);
       })
       .catch((err) => console.error(err));
   };
@@ -265,8 +267,8 @@ const HotelSearch = () => {
       Authentication();
     } else {
       setTokenId(Token);
+      getCountryList(Token);
     }
-    getCountryList(Token);
   }, []);
 
   return (

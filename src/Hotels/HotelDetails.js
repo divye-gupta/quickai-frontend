@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Header from "../Components/Header";
+import axios from "axios";
 
 const HotelDetails = () => {
   const history = useHistory();
@@ -28,6 +29,7 @@ const HotelDetails = () => {
   const [localData, setLocalData] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [smokingPreference, setSmokingPreference] = useState(0);
+  const [TokenId, setTokenId] = useState("");
 
   const selectHotelRoom = (e) => {
     const idx = e.target.value;
@@ -95,7 +97,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "60d1e9d7-06cb-4840-b73c-e428c6d3c193",
+      TokenId,
       TraceId: traceid,
     };
 
@@ -148,7 +150,7 @@ const HotelDetails = () => {
         },
       ],
       EndUserIp: "192.168.10.26",
-      TokenId: "60d1e9d7-06cb-4840-b73c-e428c6d3c193",
+      TokenId,
       TraceId: traceid,
     };
 
@@ -190,35 +192,63 @@ const HotelDetails = () => {
     }
   };
 
-  const hotelInfo = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
+  const hotelInfo = (TokenId) => {
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify({
+    //     ResultIndex: +hotelindex,
+    //     HotelCode: hotelid,
+    //     EndUserIp: "192.168.10.26",
+    //     TokenId,
+    //     TraceId: traceid,
+    //   }),
+    // };
+    // fetch(
+    //   "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo/",
+    //   requestOptions
+    // )
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     // console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
+    //     // console.log(data);
+    //     setHotelInfoResult(data.HotelInfoResult);
+    //     document
+    //       .getElementById("known-for")
+    //       .insertAdjacentHTML(
+    //         "beforeend",
+    //         data?.HotelInfoResult?.HotelDetails?.Description
+    //       );
+
+    //     if (data?.HotelInfoResult?.HotelDetails?.Attractions)
+    //       document
+    //         .getElementById("tourist-attractions")
+    //         .insertAdjacentHTML(
+    //           "beforeend",
+    //           data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
+    //         );
+    //   })
+    //   .catch((err) => console.log(err));
+
+    axios
+      .post("/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo/", {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "60d1e9d7-06cb-4840-b73c-e428c6d3c193",
+        TokenId,
         TraceId: traceid,
-      }),
-    };
-    fetch(
-      "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo/",
-      requestOptions
-    )
-      .then((resp) => resp.json())
+      })
       .then((data) => {
-        // console.log(data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value);
         console.log(data);
-        setHotelInfoResult(data.HotelInfoResult);
+        setHotelInfoResult(data.data.HotelInfoResult);
         document
           .getElementById("known-for")
           .insertAdjacentHTML(
             "beforeend",
-            data?.HotelInfoResult?.HotelDetails?.Description
+            data?.data?.HotelInfoResult?.HotelDetails?.Description
           );
 
         if (data?.HotelInfoResult?.HotelDetails?.Attractions)
@@ -226,41 +256,63 @@ const HotelDetails = () => {
             .getElementById("tourist-attractions")
             .insertAdjacentHTML(
               "beforeend",
-              data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
+              data?.data?.HotelInfoResult?.HotelDetails?.Attractions[0]?.Value
             );
       })
       .catch((err) => console.log(err));
   };
 
-  const roomInfo = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
+  const roomInfo = (TokenId) => {
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify({
+    //     ResultIndex: +hotelindex,
+    //     HotelCode: hotelid,
+    //     EndUserIp: "192.168.10.26",
+    //     TokenId,
+    //     TraceId: traceid,
+    //   }),
+    // };
+    // fetch(
+    //   "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelRoom/",
+    //   requestOptions
+    // )
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (!data) return alert("Room details not available");
+
+    //     setRoomInfoResult([data?.GetHotelRoomResult]);
+    //     setRoomSelection([data?.GetHotelRoomResult?.HotelRoomsDetails]);
+    //     setSelectedRoom([data?.GetHotelRoomResult?.HotelRoomsDetails[0]]);
+    //     setRoomPrice(
+    //       data?.GetHotelRoomResult?.HotelRoomsDetails[0]?.Price
+    //         ?.PublishedPriceRoundedOff
+    //     );
+    //   })
+    //   .catch((err) => console.log(err));
+
+    axios
+      .post("/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelRoom/", {
         ResultIndex: +hotelindex,
         HotelCode: hotelid,
         EndUserIp: "192.168.10.26",
-        TokenId: "60d1e9d7-06cb-4840-b73c-e428c6d3c193",
+        TokenId,
         TraceId: traceid,
-      }),
-    };
-    fetch(
-      "/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelRoom/",
-      requestOptions
-    )
-      .then((resp) => resp.json())
+      })
       .then((data) => {
         console.log(data);
-        if (!data) return alert("Room details not available");
+        if (!data || !data.data) return alert("Room details not available");
 
-        setRoomInfoResult([data?.GetHotelRoomResult]);
-        setRoomSelection([data?.GetHotelRoomResult?.HotelRoomsDetails]);
-        setSelectedRoom([data?.GetHotelRoomResult?.HotelRoomsDetails[0]]);
+        setRoomInfoResult([data?.data?.GetHotelRoomResult]);
+        setRoomSelection([data?.data?.GetHotelRoomResult?.HotelRoomsDetails]);
+        setSelectedRoom([data?.data?.GetHotelRoomResult?.HotelRoomsDetails[0]]);
         setRoomPrice(
-          data?.GetHotelRoomResult?.HotelRoomsDetails[0]?.Price
+          data?.data?.GetHotelRoomResult?.HotelRoomsDetails[0]?.Price
             ?.PublishedPriceRoundedOff
         );
       })
@@ -297,8 +349,14 @@ const HotelDetails = () => {
 
   useEffect(() => {
     // console.log(traceid, hotelindex, hotelid);
-    hotelInfo();
-    roomInfo();
+    const Token = localStorage.getItem("TokenId");
+    if (Token === null || Token === undefined) {
+      history.push("/flightsearch", { replace: true });
+    } else {
+      setTokenId(Token);
+      hotelInfo(Token);
+      roomInfo(Token);
+    }
   }, []);
 
   useEffect(() => {
