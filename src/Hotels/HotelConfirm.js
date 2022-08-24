@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import he from "he";
 import "./HotelConfirm.css";
 import Header from "../Components/Header";
+import axios from "axios";
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
@@ -92,34 +93,56 @@ const HotelConfirm = () => {
   };
 
   const blockRoomConfirmation = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(hotelBookingDetails),
-    };
-    fetch(
-      "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/",
-      requestOptions
-    )
-      .then((resp) => resp.json())
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    //   body: JSON.stringify(hotelBookingDetails),
+    // };
+    // fetch(
+    //   "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/",
+    //   requestOptions
+    // )
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     console.log(data?.BlockRoomResult?.HotelPolicyDetail);
+    //     const str = he.decode(data?.BlockRoomResult?.HotelPolicyDetail);
+    //     console.log(str);
+    //     document
+    //       .getElementById("hotel-policy-details")
+    //       .insertAdjacentHTML("beforeend", str);
+
+    //     setBlockRoomData([data.BlockRoomResult]);
+    //     setTotalPrice(
+    //       data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
+    //         data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
+    //     );
+    //   })
+    //   .catch((err) => console.log(err));
+
+    axios
+      .post("/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/", {
+        ...hotelBookingDetails,
+      })
       .then((data) => {
-        console.log(data?.BlockRoomResult?.HotelPolicyDetail);
-        const str = he.decode(data?.BlockRoomResult?.HotelPolicyDetail);
+        console.log(data);
+        console.log(data?.data?.BlockRoomResult?.HotelPolicyDetail);
+        const str = he.decode(data?.data?.BlockRoomResult?.HotelPolicyDetail);
         console.log(str);
         document
           .getElementById("hotel-policy-details")
           .insertAdjacentHTML("beforeend", str);
 
-        setBlockRoomData([data.BlockRoomResult]);
+        setBlockRoomData([data.data.BlockRoomResult]);
         setTotalPrice(
-          data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
-            data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
+          data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price
+            ?.OtherCharges +
+            data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
