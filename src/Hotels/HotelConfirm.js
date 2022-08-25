@@ -5,6 +5,7 @@ import he from "he";
 import "./HotelConfirm.css";
 import Header from "../Components/Header";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
@@ -17,7 +18,7 @@ const HotelConfirm = () => {
   const [rooms, setRooms] = useState(0);
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
-
+  const history = useHistory();
   // const paymentGateway = () => {
   //   const fareQuote = async () => {
   //     const Proxy_URL = "https://cors-anywhere.herokuapp.com/";
@@ -60,7 +61,13 @@ const HotelConfirm = () => {
   //   fareQuote();
   // };
 
-  const paymentGateway = () => {};
+  const paymentGateway = () => {
+    
+    history.push({
+                pathname: "/hotelpayment",
+                state: { amount:totalPrice, name:"Ramlal" , email: "ramlal@gmail.com", phone_number: "9999999999", currency: "INR" },
+              })
+  };
 
   const increase = (type) => {
     switch (type) {
