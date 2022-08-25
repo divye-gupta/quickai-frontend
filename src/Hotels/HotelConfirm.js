@@ -62,11 +62,19 @@ const HotelConfirm = () => {
   // };
 
   const paymentGateway = () => {
-    
     history.push({
-                pathname: "/hotelpayment",
-                state: { amount:totalPrice, name:"Ramlal" , email: "ramlal@gmail.com", phone_number: "9999999999", currency: "INR" },
-              })
+      pathname: "/hotelpayment",
+      state: {
+        amount:
+          blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
+            2
+          ),
+        name: "Ramlal",
+        email: "ramlal@gmail.com",
+        phone_number: "919999999999",
+        currency: "INR",
+      },
+    });
   };
 
   const increase = (type) => {
