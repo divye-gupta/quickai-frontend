@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import logo from "../../images/logo.png";
+import Axios from "axios";
 
 const HotelPayment = (props) => {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -95,25 +96,42 @@ const HotelPayment = (props) => {
       alert("You are offline... Failed to load Razorpay SDK");
       return;
     }
-
+    console.log("hey hotel payment");
+    const API_URL = `http://localhost:8000/razorpay/`;
+    const orderUrl = `${API_URL}order/${props.location.state.amount}`;
+    const response = await Axios.get(orderUrl);
+    const { data } = response;
+    console.log("App -> razorPayPaymentHandler -> data", data);
     // const response = await razorpay.orders.create(options);
 
     const options = {
       key: "rzp_test_8TEr0yyWpFNHN6",
       currency: props.location.state.currency,
       amount: props.location.state.amount * 100,
-      // order_id: uuidv4(),
-      name: "Pay the required amount to book Hotel",
-      description: "Some description here will be absolutely good.",
+      order_id: data.id, 
+      name: "Travel Vougues",
+      description: "Hey,make Secure Payment",
       image: logo,
-      handler: function (response) {
+      handler: async function (response) {
+        try {
+          const paymentId = response.razorpay_payment_id;
+          const url = `${API_URL}capture/${paymentId}`;
+          const captureResponse = await Axios.post(url, {});
+          const successObj = JSON.parse(captureResponse.data);
+          const captured = successObj.captured;
+          console.log("App -> razorPayPaymentHandler -> captured", successObj);
+          if (captured) {
+            console.log("success");
+          }
+        } catch (err) {
+          console.log(err);
+        }
         console.log(response);
         // alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         // alert(response.razorpay_signature);
       },
       prefill: {
-        name: props.location.state.name,
         email: props.location.state.email,
         contact: props.location.state.phone_number,
       },
