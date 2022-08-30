@@ -88,14 +88,14 @@ const HotelPayment = (props) => {
   };
 
   const displayRazorpay = async () => {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
+    // const res = await loadScript(
+    //   "https://checkout.razorpay.com/v1/checkout.js"
+    // );
 
-    if (!res) {
-      alert("You are offline... Failed to load Razorpay SDK");
-      return;
-    }
+    // if (!res) {
+    //   alert("You are offline... Failed to load Razorpay SDK");
+    //   return;
+    // }
     console.log("hey hotel payment");
     const API_URL = `http://localhost:8000/razorpay/`;
     const orderUrl = `${API_URL}order/${props.location.state.amount}`;
