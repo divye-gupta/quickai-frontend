@@ -70,72 +70,120 @@ const HotelPayment = (props) => {
   // paymentObject.open();
   // };
 
-  const loadScript = (src) => {
-    return new Promise((resovle) => {
-      const script = document.createElement("script");
-      script.src = src;
+  // const loadScript = (src) => {
+  //   return new Promise((resovle) => {
+  //     const script = document.createElement("script");
+  //     script.src = src;
 
-      script.onload = () => {
-        resovle(true);
-      };
+  //     script.onload = () => {
+  //       resovle(true);
+  //     };
 
-      script.onerror = () => {
-        resovle(false);
-      };
+  //     script.onerror = () => {
+  //       resovle(false);
+  //     };
 
-      document.body.appendChild(script);
-    });
-  };
+  //     document.body.appendChild(script);
+  //   });
+  // };
+
+  // const displayRazorpay = async () => {
+  //   // const res = await loadScript(
+  //   //   "https://checkout.razorpay.com/v1/checkout.js"
+  //   // );
+
+  //   // if (!res) {
+  //   //   alert("You are offline... Failed to load Razorpay SDK");
+  //   //   return;
+  //   // }
+  //   console.log("hey hotel payment");
+  //   const API_URL = `http://localhost:8000/razorpay/`;
+  //   const orderUrl = `${API_URL}order/${props.location.state.amount}`;
+  //   const response = await Axios.get(orderUrl);
+  //   const { data } = response;
+  //   console.log("App -> razorPayPaymentHandler -> data", data);
+  //   // const response = await razorpay.orders.create(options);
+
+  //   const options = {
+  //     key: "rzp_test_8TEr0yyWpFNHN6",
+  //     currency: props.location.state.currency,
+  //     amount: +(props.location.state.amount * 100),
+  //     order_id: data.id,
+  //     name: "Travel Vougues",
+  //     description: "Hey,make Secure Payment",
+  //     image: logo,
+  //     handler: async function (response) {
+  //       try {
+  //         const paymentId = response.razorpay_payment_id;
+  //         const url = `${API_URL}capture/${paymentId}/${
+  //           +props.location.state.amount * 100
+  //         }`;
+  //         const captureResponse = await Axios.post(url, {});
+  //         const successObj = JSON.parse(captureResponse.data);
+  //         const captured = successObj.captured;
+  //         console.log("App -> razorPayPaymentHandler -> captured", successObj);
+  //         if (captured) {
+  //           console.log("success");
+  //         }
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //       console.log(response);
+  //       // alert(response.razorpay_payment_id);
+  //       alert(response.razorpay_order_id);
+  //       // alert(response.razorpay_signature);
+  //     },
+  //     prefill: {
+  //       email: props.location.state.email,
+  //       contact: props.location.state.phone_number,
+  //     },
+  //   };
+
+  //   const paymentObject = new window.Razorpay(options);
+  //   paymentObject.on("payment.failed", function (response) {
+  //     alert(response.error.code);
+  //     alert(response.error.description);
+  //     alert(response.error.source);
+  //     alert(response.error.step);
+  //     alert(response.error.reason);
+  //     alert(response.error.metadata.order_id);
+  //     alert(response.error.metadata.payment_id);
+  //   });
+  //   paymentObject.open();
+  // };
 
   const displayRazorpay = async () => {
-    // const res = await loadScript(
-    //   "https://checkout.razorpay.com/v1/checkout.js"
-    // );
-
-    // if (!res) {
-    //   alert("You are offline... Failed to load Razorpay SDK");
-    //   return;
-    // }
-    console.log("hey hotel payment");
-    const API_URL = `http://localhost:8000/razorpay/`;
-    const orderUrl = `${API_URL}order/${props.location.state.amount}`;
-    const response = await Axios.get(orderUrl);
-    const { data } = response;
-    console.log("App -> razorPayPaymentHandler -> data", data);
-    // const response = await razorpay.orders.create(options);
+    const response = await fetch(
+      "http://localhost:8000/razorpay/paymentgateway",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: props.location.state.amount }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
 
     const options = {
       key: "rzp_test_8TEr0yyWpFNHN6",
-      currency: props.location.state.currency,
-      amount: +(props.location.state.amount * 100),
+      currency: data.currency,
+      amount: data.amount,
+      name: "QuickAI",
+      description: "Wallet Transaction",
+      // image: "http://localhost:1337/logo.png",
       order_id: data.id,
-      name: "Travel Vougues",
-      description: "Hey,make Secure Payment",
-      image: logo,
-      handler: async function (response) {
-        try {
-          const paymentId = response.razorpay_payment_id;
-          const url = `${API_URL}capture/${paymentId}/${
-            +props.location.state.amount * 100
-          }`;
-          const captureResponse = await Axios.post(url, {});
-          const successObj = JSON.parse(captureResponse.data);
-          const captured = successObj.captured;
-          console.log("App -> razorPayPaymentHandler -> captured", successObj);
-          if (captured) {
-            console.log("success");
-          }
-        } catch (err) {
-          console.log(err);
-        }
-        console.log(response);
-        // alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
+      handler: function (response) {
+        alert("PAYMENT ID ::" + response.razorpay_payment_id);
+        alert("ORDER ID :: " + response.razorpay_order_id);
+        alert(JSON.stringify(response));
+        console.log("hello" + response);
       },
       prefill: {
-        email: props.location.state.email,
-        contact: props.location.state.phone_number,
+        name: "Anirudh Jwala",
+        email: "anirudh@gmail.com",
+        contact: "9999999999",
       },
     };
 

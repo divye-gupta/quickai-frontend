@@ -5,10 +5,11 @@ const Razorpay = require("razorpay");
 const request = require("request");
 
 const keys = require("../keys");
+const shortid = require("shortid");
 
-const razorInstance = new Razorpay({
-  key_id: keys.razorIdkey,
-  key_secret: keys.razorIdSecret,
+const razorpay = new Razorpay({
+  key_id: "rzp_test_8TEr0yyWpFNHN6",
+  key_secret: "jAUhJwHtlmQ85iQKJyhADjeG",
 });
 router.get("/order/:amount", (req, res) => {
   try {
@@ -59,6 +60,32 @@ router.post("/capture/:paymentId/:amount", (req, res) => {
     return res.status(500).json({
       message: err.message,
     });
+  }
+});
+
+router.post("/paymentgateway", async (req, res) => {
+  const payment_capture = 1;
+  const amount = +req.body.amount;
+  const currency = "INR";
+
+  const options = {
+    amount: amount * 100,
+    currency,
+    receipt: shortid.generate(),
+    payment_capture,
+  };
+
+  try {
+    const response = await razorpay.orders.create(options);
+    console.log(response);
+    return res.status(200).json({
+      id: response.id,
+      currency: response.currency,
+      amount: response.amount,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({ error });
   }
 });
 
