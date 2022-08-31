@@ -107,15 +107,17 @@ const HotelPayment = (props) => {
     const options = {
       key: "rzp_test_8TEr0yyWpFNHN6",
       currency: props.location.state.currency,
-      amount: props.location.state.amount * 100,
-      order_id: data.id, 
+      amount: +(props.location.state.amount * 100),
+      order_id: data.id,
       name: "Travel Vougues",
       description: "Hey,make Secure Payment",
       image: logo,
       handler: async function (response) {
         try {
           const paymentId = response.razorpay_payment_id;
-          const url = `${API_URL}capture/${paymentId}`;
+          const url = `${API_URL}capture/${paymentId}/${
+            +props.location.state.amount * 100
+          }`;
           const captureResponse = await Axios.post(url, {});
           const successObj = JSON.parse(captureResponse.data);
           const captured = successObj.captured;
