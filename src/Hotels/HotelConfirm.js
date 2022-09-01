@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 import * as ReactDOM from "react-dom";
 import he from "he";
 import "./HotelConfirm.css";
 import Header from "../Components/Header";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
 const HotelConfirm = () => {
   const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
@@ -18,6 +29,9 @@ const HotelConfirm = () => {
   const [rooms, setRooms] = useState(0);
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
+  const [username, setUsername] = useState("");
+  const [useremail, setUseremail] = useState("");
+  const [userphone, setUserphone] = useState("");
   const history = useHistory();
   // const paymentGateway = () => {
   //   const fareQuote = async () => {
@@ -62,6 +76,11 @@ const HotelConfirm = () => {
   // };
 
   const paymentGateway = () => {
+    // if (condition) {
+    //   return (
+    //   )
+    // }
+
     history.push({
       pathname: "/hotelpayment",
       state: {
@@ -69,9 +88,9 @@ const HotelConfirm = () => {
           blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
             2
           ),
-        name: "Ramlal",
-        email: "ramlal@gmail.com",
-        phone_number: "919999999999",
+        name: username,
+        email: useremail,
+        phone_number: userphone,
         currency: "INR",
       },
     });
@@ -154,7 +173,7 @@ const HotelConfirm = () => {
         setTotalPrice(
           data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price
             ?.OtherCharges +
-            data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
+          data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
         );
       })
       .catch((err) => console.error(err));
@@ -342,7 +361,7 @@ const HotelConfirm = () => {
                                   placeholder="-"
                                   value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
                                   required
-                                  // onkeypress="return false;"
+                                // onkeypress="return false;"
                                 />
                                 <span class="icon-inside">
                                   <i class="fas fa-caret-down"></i>
@@ -538,6 +557,63 @@ const HotelConfirm = () => {
                       CheckOut Time 12:00 AM
                     </div> */}
                   </div>
+
+                  <div className="mainform">
+                    <h2>Enter User Details</h2>
+                    <div className="form">
+                      <div  className="elements">
+                        <label for="username">
+                          Username:
+                        </label>
+                        <TextField
+                          id="standard-uncontrolled"
+                          value={username}
+                          onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
+                          variant="outlined"
+                        />
+                        {/* <input id="username" value={username} onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }} type="text" name="username" /> */}
+                      </div>
+
+                      <div className="elements">
+                        <label for="email">
+                          Email Id:
+                        </label>
+                        <TextField
+                          id="standard-uncontrolled"
+                          value={useremail}
+                          onChange={(e) => { setUseremail(e.target.value); console.log(e.target.value) }}
+                          variant="outlined"
+                        />
+                      </div>
+
+                      <div className="elements">
+                        <label for="confirmemail">
+                          Confirm Email Id:
+                        </label>
+                        <TextField
+                          id="standard-uncontrolled"
+                          // value={username}
+                          // onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
+                          variant="outlined"
+                        />
+                      </div>
+
+                      <div className="elements">
+                        <label for="phone">
+                          Phone Number:
+                        </label>
+                        <TextField
+                          id="standard-uncontrolled"
+                          value={userphone}
+                          onChange={(e) => { setUserphone(e.target.value); console.log(e.target.value) }}
+                          variant="outlined"
+                        />
+                      </div>
+
+                      <button type="">Submit</button>
+                    </div>
+                  </div>
+
                   <div class="alert alert-info mt-4 mb-0">
                     <div class="row g-0">
                       <div class="col-auto">
@@ -574,12 +650,10 @@ const HotelConfirm = () => {
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
-                        {`For ${localData[0]?.NoOfNights} Night(s), ${
-                          localData[0]?.NoOfRooms
-                        } Room(s), ${
-                          localData[0]?.RoomGuests[0]?.NoOfAdults +
+                        {`For ${localData[0]?.NoOfNights} Night(s), ${localData[0]?.NoOfRooms
+                          } Room(s), ${localData[0]?.RoomGuests[0]?.NoOfAdults +
                           localData[0]?.RoomGuests[0]?.NoOfChild
-                        } Guest(s)`}
+                          } Guest(s)`}
                       </span>
                     </li>
                     <li class="mb-2 fw-500">
