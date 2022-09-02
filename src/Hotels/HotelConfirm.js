@@ -8,6 +8,7 @@ import "./HotelConfirm.css";
 import Header from "../Components/Header";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useTabContext } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +33,7 @@ const HotelConfirm = () => {
   const [username, setUsername] = useState("");
   const [useremail, setUseremail] = useState("");
   const [userphone, setUserphone] = useState("");
+  const [confirmmail, setConfirmmail] = useState("");
   const history = useHistory();
   // const paymentGateway = () => {
   //   const fareQuote = async () => {
@@ -565,12 +567,14 @@ const HotelConfirm = () => {
                         <label for="username">
                           Username:
                         </label>
+                        <div>
                         <TextField
-                          id="standard-uncontrolled"
+                          id="standard-full-width username"
                           value={username}
                           onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
                           variant="outlined"
                         />
+                        </div>
                         {/* <input id="username" value={username} onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }} type="text" name="username" /> */}
                       </div>
 
@@ -578,39 +582,52 @@ const HotelConfirm = () => {
                         <label for="email">
                           Email Id:
                         </label>
+                        <div>
                         <TextField
-                          id="standard-uncontrolled"
+                          id="standard-full-width useremail"
                           value={useremail}
                           onChange={(e) => { setUseremail(e.target.value); console.log(e.target.value) }}
                           variant="outlined"
                         />
+                        </div>
                       </div>
 
                       <div className="elements">
                         <label for="confirmemail">
                           Confirm Email Id:
                         </label>
+                        <div>
                         <TextField
-                          id="standard-uncontrolled"
-                          // value={username}
-                          // onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
+                          id="standard-full-width outlined-error-helper-text confirmmail"
+                          value={confirmmail}
+                          onChange={(e) => { 
+                            setConfirmmail(e.target.value);
+                            if(e.target.value===useremail){
+                            console.log("emails match");
+                          }}}
+                          error = {useremail===confirmmail?false:true}
+                          helperText={useremail===confirmmail?" ":"Emails Don't Match"}
+                          label={useremail===confirmmail?"Emails Match":"Error"}
                           variant="outlined"
                         />
+                        </div>
                       </div>
 
                       <div className="elements">
                         <label for="phone">
                           Phone Number:
                         </label>
+                        <div>
                         <TextField
-                          id="standard-uncontrolled"
+                          id="standard-full-width userphone"
                           value={userphone}
                           onChange={(e) => { setUserphone(e.target.value); console.log(e.target.value) }}
                           variant="outlined"
                         />
+                        </div>
                       </div>
 
-                      <button type="">Submit</button>
+                      {/* <button type="">Submit</button> */}
                     </div>
                   </div>
 
