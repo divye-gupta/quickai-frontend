@@ -10,6 +10,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Header from "../Components/Header";
 import axios from "axios";
+import { diff_hours } from "../utils/TimeDifference";
 
 const HotelDetails = () => {
   const history = useHistory();
@@ -347,16 +348,41 @@ const HotelDetails = () => {
     }
   }, []);
 
+  const checkAuthentication = async () => {
+    const Token = localStorage.getItem("AuthenticationToken");
+    if (Token === null || Token === undefined) {
+      alert("Session expired");
+      history.push("/hotelsearch", { replace: true });
+    } else {
+      const TokenObj = JSON.parse(Token);
+
+      const difference = diff_hours(new Date(TokenObj.endDate), new Date());
+
+      console.log(difference);
+
+      if (difference === -1) {
+        alert("Session expired");
+        history.push("/hotelsearch", { replace: true });
+      } else {
+        console.log("in Else");
+        setTokenId(TokenObj.TokenId);
+        hotelInfo(TokenObj.TokenId);
+        roomInfo(TokenObj.TokenId);
+      }
+    }
+  };
+
   useEffect(() => {
     // console.log(traceid, hotelindex, hotelid);
-    const Token = localStorage.getItem("TokenId");
-    if (Token === null || Token === undefined) {
-      history.push("/flightsearch", { replace: true });
-    } else {
-      setTokenId(Token);
-      hotelInfo(Token);
-      roomInfo(Token);
-    }
+    // const Token = localStorage.getItem("TokenId");
+    // if (Token === null || Token === undefined) {
+    //   history.push("/flightsearch", { replace: true });
+    // } else {
+    //   setTokenId(Token);
+    //   hotelInfo(Token);
+    //   roomInfo(Token);
+    // }
+    checkAuthentication();
   }, []);
 
   useEffect(() => {
