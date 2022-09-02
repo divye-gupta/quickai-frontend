@@ -138,13 +138,15 @@ const HotelSearch = () => {
       ReviewScore: null,
       IsNearBySearchAllowed: false,
       EndUserIp: "192.168.10.26",
-      TokenId,
+      TokenId: TokenId,
     };
     dispatch({
       type: "ADD_TO_HOTEL",
       item: item,
     });
 
+    console.log(item);
+    // localStorage.removeItem("hotel-search-options");
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
 
     history.push("/hotelslist");

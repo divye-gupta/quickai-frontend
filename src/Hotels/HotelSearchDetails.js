@@ -29,6 +29,7 @@ const HotelSearchDetails = () => {
   };
 
   const getHotelList = (data) => {
+    console.log(data);
     // const requestOptions = {
     //   method: "POST",
     //   headers: {
