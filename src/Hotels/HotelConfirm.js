@@ -35,6 +35,7 @@ const HotelConfirm = () => {
   const [userphone, setUserphone] = useState("");
   const [confirmmail, setConfirmmail] = useState("");
   const history = useHistory();
+
   // const paymentGateway = () => {
   //   const fareQuote = async () => {
   //     const Proxy_URL = "https://cors-anywhere.herokuapp.com/";
@@ -78,10 +79,17 @@ const HotelConfirm = () => {
   // };
 
   const paymentGateway = () => {
-    // if (condition) {
-    //   return (
-    //   )
-    // }
+    if(username===""||username===null){
+      return alert("Please enter Username")
+    }
+    if(useremail===""||useremail===null){
+      return alert("Please enter User Email Address")
+    }
+    if(userphone===""||userphone===null){
+      return alert("Please enter User Phone Number")
+    }
+
+    
 
     history.push({
       pathname: "/hotelpayment",
@@ -569,6 +577,7 @@ const HotelConfirm = () => {
                         </label>
                         <div>
                         <TextField
+                          required
                           id="standard-full-width username"
                           value={username}
                           onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
@@ -584,6 +593,7 @@ const HotelConfirm = () => {
                         </label>
                         <div>
                         <TextField
+                          required
                           id="standard-full-width useremail"
                           value={useremail}
                           onChange={(e) => { setUseremail(e.target.value); console.log(e.target.value) }}
@@ -598,6 +608,7 @@ const HotelConfirm = () => {
                         </label>
                         <div>
                         <TextField
+                          required
                           id="standard-full-width outlined-error-helper-text confirmmail"
                           value={confirmmail}
                           onChange={(e) => { 
@@ -619,6 +630,7 @@ const HotelConfirm = () => {
                         </label>
                         <div>
                         <TextField
+                          required
                           id="standard-full-width userphone"
                           value={userphone}
                           onChange={(e) => { setUserphone(e.target.value); console.log(e.target.value) }}

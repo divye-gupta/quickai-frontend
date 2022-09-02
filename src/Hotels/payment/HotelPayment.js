@@ -181,9 +181,9 @@ const HotelPayment = (props) => {
         console.log("hello" + response);
       },
       prefill: {
-        name: "Anirudh Jwala",
-        email: "anirudh@gmail.com",
-        contact: "9999999999",
+        name: props.location.state.name,
+        email: props.location.state.email,
+        contact: props.location.state.phone_number,
       },
     };
 
