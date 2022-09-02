@@ -20,6 +20,8 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { KeyboardDatePicker } from "@material-ui/pickers";
+import { ApiAuthentication } from "../utils/Authentication";
+import { diff_hours } from "../utils/TimeDifference";
 const CssTextField = withStyles({
   root: {
     "& .MuiFormLabel-root": {
@@ -261,14 +263,35 @@ const HotelSearch = () => {
     document.body.appendChild(script);
   }, []);
 
-  useEffect(() => {
-    const Token = localStorage.getItem("TokenId");
+  const checkAuthentication = async () => {
+    const Token = localStorage.getItem("AuthenticationToken");
     if (Token === null || Token === undefined) {
       Authentication();
+      const data = await ApiAuthentication();
+      setTokenId(data.TokenId);
+      getCountryList(data.TokenId);
     } else {
-      setTokenId(Token);
-      getCountryList(Token);
+      const TokenObj = JSON.parse(Token);
+
+      const difference = diff_hours(new Date(TokenObj.endDate), new Date());
+
+      console.log(difference);
+
+      if (difference === -1) {
+        console.log("In if");
+        const data = await ApiAuthentication();
+        setTokenId(data.TokenId);
+        getCountryList(data.TokenId);
+      } else {
+        console.log("in Else");
+        setTokenId(TokenObj.TokenId);
+        getCountryList(TokenObj.TokenId);
+      }
     }
+  };
+
+  useEffect(() => {
+    checkAuthentication();
   }, []);
 
   return (
