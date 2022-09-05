@@ -355,6 +355,7 @@ const HotelDetails = () => {
       history.push("/hotelsearch", { replace: true });
     } else {
       const TokenObj = JSON.parse(Token);
+      console.log(TokenObj);
 
       const difference = diff_hours(new Date(TokenObj.endDate), new Date());
 
