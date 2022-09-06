@@ -4,80 +4,88 @@
 } */
 
 .promo-code {
-    max-height: 150px;
-    padding-left: 30px;
-    overflow-y: scroll;
-  }
-  
-  .promo-code li {
-    margin-bottom: 10px;
-  }
-  
-  html[dir="rtl"] .promo-code {
-    padding-left: 0px;
-    padding-right: 30px;
-  }
+  max-height: 150px;
+  padding-left: 30px;
+  overflow-y: scroll;
+}
 
-  .updatebtn{
-    display: flex;
-    align-items: center;
-  }
-  .paymentbtn{
-    position: relative;
-    left: 12%;
-  }
-  .paymentdiv{
-    width: 100%;
-  }
-  .roomsnguests{
-    padding-top: 8px;
-  }
-  .checkoutdate{
-    display: flex;
-    align-items: center;
-    height: 75%;
-  }
-  .checkindate{
-    display: flex;
-    align-items: center;
-    height: 75%;
-  }
+.promo-code li {
+  margin-bottom: 10px;
+}
 
+html[dir="rtl"] .promo-code {
+  padding-left: 0px;
+  padding-right: 30px;
+}
 
-  .mainform{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-  }
+.updatebtn {
+  display: flex;
+  align-items: center;
+}
 
-  .elements{
-    padding: 0.8rem;
-    justify-content: space-between;
-    width: 100%;
-  }
-  .elements label{
-    /* position: absolute; */
-    right: 20%;
-    justify-content: flex-start;
-  }
-  .elements div{
-    width: 100%;
-  }
-  .form button{
-    padding: 10px;
-    width: 10vw;
-    margin:2rem;
-    background-color: rgb(90, 189, 90);
-    color: white;
-    font-size: large;
-    border-radius: 5px;
-  }
-  .form{
-    justify-content: center;
-  }
+.paymentdiv {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  /* .confirmmail{
+.paymentdiv > * {
+  width: 100%;
+}
+
+.paymentdiv > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.roomsnguests {
+  padding-top: 8px;
+}
+.checkoutdate {
+  display: flex;
+  align-items: center;
+  height: 75%;
+}
+.checkindate {
+  display: flex;
+  align-items: center;
+  height: 75%;
+}
+
+.mainform {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}
+
+.elements {
+  padding: 0.8rem;
+  justify-content: space-between;
+  width: 100%;
+}
+.elements label {
+  /* position: absolute; */
+  right: 20%;
+  justify-content: flex-start;
+}
+.elements div {
+  width: 100%;
+}
+.form button {
+  padding: 10px;
+  width: 10vw;
+  margin: 2rem;
+  background-color: rgb(90, 189, 90);
+  color: white;
+  font-size: large;
+  border-radius: 5px;
+}
+.form {
+  justify-content: center;
+}
+
+/* .confirmmail{
     position: relative;
     top:15px;
   } */

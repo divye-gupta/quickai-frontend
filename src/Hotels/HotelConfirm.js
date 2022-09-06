@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
-import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 import * as ReactDOM from "react-dom";
 import he from "he";
 import "./HotelConfirm.css";
@@ -12,16 +12,15 @@ import { useTabContext } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& .MuiTextField-root': {
+    "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: "25ch",
     },
   },
 }));
 
 const HotelConfirm = () => {
-  const [{ hotelBookingDetails, hotelDataSelected }, dispatch] =
-    useStateValue();
+  const [{ hotelDataSelected }, dispatch] = useStateValue();
   const [blockRoomData, setBlockRoomData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [localData, setLocalData] = useState([]);
@@ -34,62 +33,19 @@ const HotelConfirm = () => {
   const [useremail, setUseremail] = useState("");
   const [userphone, setUserphone] = useState("");
   const [confirmmail, setConfirmmail] = useState("");
+  const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
   const history = useHistory();
 
-  // const paymentGateway = () => {
-  //   const fareQuote = async () => {
-  //     const Proxy_URL = "https://cors-anywhere.herokuapp.com/";
-  //     const URL = "https://travelvogues.com/api/FareQuote";
-
-  //     const requestOptions = {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         EndUserIp: "27.62.226.143",
-  //         TokenId: localStorage.getItem("tokenId"),
-  //         TraceId: localStorage.getItem("traceId"),
-  //         ResultIndex: localStorage.getItem("resultIndex"),
-  //       }),
-  //     };
-
-  //     await fetch(URL, requestOptions)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log(data, "data");
-  //         var am;
-  //         if (data.Response.IsPriceChanged) {
-  //           am = data.Response.Results.Fare.PublishedFare;
-  //           alert("Priced Changed");
-  //           console.log("price Changed");
-  //         } else {
-  //           am =
-  //             insurance == "yes"
-  //               ? flightDetails[0].publishedFare + 199
-  //               : flightDetails[0].publishedFare;
-  //         }
-
-  //         history.push({
-  //           pathname: "/hotelpayment",
-  //           state: { email: email, number: number, amount: am },
-  //         });
-  //       });
-  //   };
-
-  //   fareQuote();
-  // };
-
   const paymentGateway = () => {
-    if(username===""||username===null){
-      return alert("Please enter Username")
+    if (username === "" || username === null) {
+      return alert("Please enter Username");
     }
-    if(useremail===""||useremail===null){
-      return alert("Please enter User Email Address")
+    if (useremail === "" || useremail === null) {
+      return alert("Please enter User Email Address");
     }
-    if(userphone===""||userphone===null){
-      return alert("Please enter User Phone Number")
+    if (userphone === "" || userphone === null) {
+      return alert("Please enter User Phone Number");
     }
-
-    
 
     history.push({
       pathname: "/hotelpayment",
@@ -104,6 +60,22 @@ const HotelConfirm = () => {
         currency: "INR",
       },
     });
+  };
+
+  const payLaterBookNow = (e) => {
+    e.preventDefault();
+    // if (username === "" || username === null) {
+    //   return alert("Please enter Username");
+    // }
+    // if (useremail === "" || useremail === null) {
+    //   return alert("Please enter User Email Address");
+    // }
+    // if (userphone === "" || userphone === null) {
+    //   return alert("Please enter User Phone Number");
+    // }
+
+    console.log(hotelBookingDetails);
+    const bookingObj = {};
   };
 
   const increase = (type) => {
@@ -136,39 +108,11 @@ const HotelConfirm = () => {
     }
   };
 
-  const blockRoomConfirmation = () => {
-    // const requestOptions = {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify(hotelBookingDetails),
-    // };
-    // fetch(
-    //   "/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/",
-    //   requestOptions
-    // )
-    //   .then((resp) => resp.json())
-    //   .then((data) => {
-    //     console.log(data?.BlockRoomResult?.HotelPolicyDetail);
-    //     const str = he.decode(data?.BlockRoomResult?.HotelPolicyDetail);
-    //     console.log(str);
-    //     document
-    //       .getElementById("hotel-policy-details")
-    //       .insertAdjacentHTML("beforeend", str);
-
-    //     setBlockRoomData([data.BlockRoomResult]);
-    //     setTotalPrice(
-    //       data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.OtherCharges +
-    //         data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
-    //     );
-    //   })
-    //   .catch((err) => console.log(err));
-
+  const blockRoomConfirmation = (data) => {
+    console.log(data);
     axios
       .post("/BookingEngineService_Hotel/hotelservice.svc/rest/BlockRoom/", {
-        ...hotelBookingDetails,
+        ...data,
       })
       .then((data) => {
         console.log(data);
@@ -183,18 +127,11 @@ const HotelConfirm = () => {
         setTotalPrice(
           data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price
             ?.OtherCharges +
-          data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
+            data?.data.BlockRoomResult?.HotelRoomsDetails[0]?.Price?.Tax
         );
       })
       .catch((err) => console.error(err));
   };
-
-  useEffect(() => {
-    console.log(hotelBookingDetails, hotelDataSelected);
-    if (hotelBookingDetails !== null) {
-      blockRoomConfirmation();
-    }
-  }, []);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("hotel-search-options"));
@@ -219,6 +156,17 @@ const HotelConfirm = () => {
       setRooms(data?.NoOfRooms);
       setAdults(data?.RoomGuests[0]?.NoOfAdults);
       setChildren(data?.RoomGuests[0]?.NoOfChild);
+    }
+  }, []);
+
+  useEffect(() => {
+    const hotelRoomBookingDetails = JSON.parse(
+      localStorage.getItem("Hotel_Room_Booking_Details")
+    );
+
+    if (hotelRoomBookingDetails !== undefined) {
+      setHotelBookingDetails([hotelRoomBookingDetails]);
+      blockRoomConfirmation(hotelRoomBookingDetails);
     }
   }, []);
 
@@ -371,7 +319,7 @@ const HotelConfirm = () => {
                                   placeholder="-"
                                   value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
                                   required
-                                // onkeypress="return false;"
+                                  // onkeypress="return false;"
                                 />
                                 <span class="icon-inside">
                                   <i class="fas fa-caret-down"></i>
@@ -571,71 +519,81 @@ const HotelConfirm = () => {
                   <div className="mainform">
                     <h2>Enter User Details</h2>
                     <div className="form">
-                      <div  className="elements">
-                        <label for="username">
-                          Username:
-                        </label>
+                      <div className="elements">
+                        <label for="username">Username:</label>
                         <div>
-                        <TextField
-                          required
-                          id="standard-full-width username"
-                          value={username}
-                          onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }}
-                          variant="outlined"
-                        />
+                          <TextField
+                            required
+                            id="standard-full-width username"
+                            value={username}
+                            onChange={(e) => {
+                              setUsername(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
                         </div>
                         {/* <input id="username" value={username} onChange={(e) => { setUsername(e.target.value); console.log(e.target.value) }} type="text" name="username" /> */}
                       </div>
 
                       <div className="elements">
-                        <label for="email">
-                          Email Id:
-                        </label>
+                        <label for="email">Email Id:</label>
                         <div>
-                        <TextField
-                          required
-                          id="standard-full-width useremail"
-                          value={useremail}
-                          onChange={(e) => { setUseremail(e.target.value); console.log(e.target.value) }}
-                          variant="outlined"
-                        />
+                          <TextField
+                            required
+                            id="standard-full-width useremail"
+                            value={useremail}
+                            onChange={(e) => {
+                              setUseremail(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
                         </div>
                       </div>
 
                       <div className="elements">
-                        <label for="confirmemail">
-                          Confirm Email Id:
-                        </label>
+                        <label for="confirmemail">Confirm Email Id:</label>
                         <div>
-                        <TextField
-                          required
-                          id="standard-full-width outlined-error-helper-text confirmmail"
-                          value={confirmmail}
-                          onChange={(e) => { 
-                            setConfirmmail(e.target.value);
-                            if(e.target.value===useremail){
-                            console.log("emails match");
-                          }}}
-                          error = {useremail===confirmmail?false:true}
-                          helperText={useremail===confirmmail?" ":"Emails Don't Match"}
-                          label={useremail===confirmmail?"Emails Match":"Error"}
-                          variant="outlined"
-                        />
+                          <TextField
+                            required
+                            id="standard-full-width outlined-error-helper-text confirmmail"
+                            value={confirmmail}
+                            onChange={(e) => {
+                              setConfirmmail(e.target.value);
+                              if (e.target.value === useremail) {
+                                console.log("emails match");
+                              }
+                            }}
+                            error={useremail === confirmmail ? false : true}
+                            helperText={
+                              useremail === confirmmail
+                                ? " "
+                                : "Emails Don't Match"
+                            }
+                            label={
+                              useremail === confirmmail
+                                ? "Emails Match"
+                                : "Error"
+                            }
+                            variant="outlined"
+                          />
                         </div>
                       </div>
 
                       <div className="elements">
-                        <label for="phone">
-                          Phone Number:
-                        </label>
+                        <label for="phone">Phone Number:</label>
                         <div>
-                        <TextField
-                          required
-                          id="standard-full-width userphone"
-                          value={userphone}
-                          onChange={(e) => { setUserphone(e.target.value); console.log(e.target.value) }}
-                          variant="outlined"
-                        />
+                          <TextField
+                            required
+                            id="standard-full-width userphone"
+                            value={userphone}
+                            onChange={(e) => {
+                              setUserphone(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
                         </div>
                       </div>
 
@@ -679,10 +637,12 @@ const HotelConfirm = () => {
                       </span>
                       <br />
                       <span class="text-muted text-1 fw-400">
-                        {`For ${localData[0]?.NoOfNights} Night(s), ${localData[0]?.NoOfRooms
-                          } Room(s), ${localData[0]?.RoomGuests[0]?.NoOfAdults +
+                        {`For ${localData[0]?.NoOfNights} Night(s), ${
+                          localData[0]?.NoOfRooms
+                        } Room(s), ${
+                          localData[0]?.RoomGuests[0]?.NoOfAdults +
                           localData[0]?.RoomGuests[0]?.NoOfChild
-                          } Guest(s)`}
+                        } Guest(s)`}
                       </span>
                     </li>
                     <li class="mb-2 fw-500">
@@ -785,6 +745,15 @@ const HotelConfirm = () => {
                       type="submit"
                     >
                       Proceed To Payment
+                    </button>
+                    <button
+                      class="btn btn-primary paymentbtn"
+                      // onclick="location.href='payment.html';"
+                      onClick={(e) => {
+                        payLaterBookNow(e);
+                      }}
+                    >
+                      Pay Later & Book Now
                     </button>
                   </div>
                   <p class="text-muted d-flex align-items-center justify-content-center mt-3 mb-1">

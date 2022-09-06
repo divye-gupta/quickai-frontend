@@ -107,6 +107,10 @@ const HotelDetails = () => {
       item: booknowObj,
     });
     console.log(booknowObj);
+    localStorage.setItem(
+      "Hotel_Room_Booking_Details",
+      JSON.stringify(booknowObj)
+    );
     history.push("/hotelconfirm");
   };
 
@@ -160,6 +164,10 @@ const HotelDetails = () => {
       item: booknowObj,
     });
     console.log(booknowObj);
+    localStorage.setItem(
+      "Hotel_Room_Booking_Details",
+      JSON.stringify(booknowObj)
+    );
     history.push("/hotelconfirm");
   };
 

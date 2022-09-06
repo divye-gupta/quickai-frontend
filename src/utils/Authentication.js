@@ -28,7 +28,7 @@ export const ApiAuthentication = async () => {
     localStorage.setItem("AuthenticationToken", JSON.stringify(tokenObject));
 
     // return data.TokenId;
-    return { tokenId: data.TokenId };
+    return { TokenId: data.TokenId };
   } catch (error) {
     console.log(error);
     return { error: error };
