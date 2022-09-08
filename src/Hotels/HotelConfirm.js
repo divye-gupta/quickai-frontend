@@ -56,14 +56,14 @@ const HotelConfirm = () => {
         FirstName: "GTA",
         Middlename: null,
         LastName: "Service",
-        Phoneno: null,
-        Email: null,
+        Phoneno: "9871628409",
+        Email: "divye@gmail.com",
         PaxType: 1,
         LeadPassenger: true,
-        Age: 0,
-        PassportNo: null,
-        PassportIssueDate: "0001-01-01T00: 00: 00",
-        PassportExpDate: "0001-01-01T00: 00: 00",
+        Age: 35,
+        // PassportNo: null,
+        // PassportIssueDate: "0001-01-01T00: 00: 00",
+        // PassportExpDate: "0001-01-01T00: 00: 00",
         PAN: "EBQPS3333T",
       },
     ];
@@ -74,20 +74,20 @@ const HotelConfirm = () => {
       JSON.stringify(bookingObj)
     );
 
-    history.push({
-      pathname: "/hotelpayment",
-      state: {
-        amount:
-          blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
-            2
-          ),
-        name: username,
-        email: useremail,
-        phone_number: userphone,
-        currency: "INR",
-        bookingObj,
-      },
-    });
+    // history.push({
+    //   pathname: "/hotelpayment",
+    //   state: {
+    //     amount:
+    //       blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
+    //         2
+    //       ),
+    //     name: username,
+    //     email: useremail,
+    //     phone_number: userphone,
+    //     currency: "INR",
+    //     bookingObj,
+    //   },
+    // });
   };
 
   const payLaterBookNow = (e) => {
