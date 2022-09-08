@@ -36,16 +36,43 @@ const HotelConfirm = () => {
   const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
   const history = useHistory();
 
-  const paymentGateway = () => {
-    if (username === "" || username === null) {
-      return alert("Please enter Username");
-    }
-    if (useremail === "" || useremail === null) {
-      return alert("Please enter User Email Address");
-    }
-    if (userphone === "" || userphone === null) {
-      return alert("Please enter User Phone Number");
-    }
+  const paymentGateway = (e) => {
+    e.preventDefault();
+    // if (username === "" || username === null) {
+    //   return alert("Please enter Username");
+    // }
+    // if (useremail === "" || useremail === null) {
+    //   return alert("Please enter User Email Address");
+    // }
+    // if (userphone === "" || userphone === null) {
+    //   return alert("Please enter User Phone Number");
+    // }
+
+    const bookingObj = { ...hotelBookingDetails[0] };
+
+    bookingObj.HotelRoomsDetails[0].HotelPassenger = [
+      {
+        Title: "mr",
+        FirstName: "GTA",
+        Middlename: null,
+        LastName: "Service",
+        Phoneno: null,
+        Email: null,
+        PaxType: 1,
+        LeadPassenger: true,
+        Age: 0,
+        PassportNo: null,
+        PassportIssueDate: "0001-01-01T00: 00: 00",
+        PassportExpDate: "0001-01-01T00: 00: 00",
+        PAN: "EBQPS3333T",
+      },
+    ];
+
+    console.log(bookingObj);
+    localStorage.setItem(
+      "hotel-booking-confirm-details",
+      JSON.stringify(bookingObj)
+    );
 
     history.push({
       pathname: "/hotelpayment",
@@ -58,6 +85,7 @@ const HotelConfirm = () => {
         email: useremail,
         phone_number: userphone,
         currency: "INR",
+        bookingObj,
       },
     });
   };
@@ -739,10 +767,9 @@ const HotelConfirm = () => {
                     <button
                       class="btn btn-primary paymentbtn"
                       // onclick="location.href='payment.html';"
-                      onClick={() => {
-                        paymentGateway();
+                      onClick={(e) => {
+                        paymentGateway(e);
                       }}
-                      type="submit"
                     >
                       Proceed To Payment
                     </button>

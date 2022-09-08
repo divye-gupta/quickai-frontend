@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import logo from "../../images/logo.png";
 import Axios from "axios";
+import axios from "axios";
 
 const HotelPayment = (props) => {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -174,11 +175,12 @@ const HotelPayment = (props) => {
       description: "Wallet Transaction",
       // image: "http://localhost:1337/logo.png",
       order_id: data.id,
-      handler: function (response) {
+      handler: async function (response) {
         alert("PAYMENT ID ::" + response.razorpay_payment_id);
         alert("ORDER ID :: " + response.razorpay_order_id);
         alert(JSON.stringify(response));
         console.log("hello" + response);
+        await bookingConfirmation();
       },
       prefill: {
         name: props.location.state.name,
@@ -198,6 +200,19 @@ const HotelPayment = (props) => {
       alert(response.error.metadata.payment_id);
     });
     paymentObject.open();
+  };
+
+  const bookingConfirmation = async () => {
+    console.log(props.location.state.bookingObj);
+
+    const data = await axios.post(
+      "/BookingEngineService_Hotel/hotelservice.svc/rest/Book/",
+      {
+        ...props.location.state.bookingObj,
+      }
+    );
+
+    console.log(data);
   };
 
   useEffect(() => {
