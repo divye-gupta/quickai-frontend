@@ -33,6 +33,8 @@ const HotelConfirm = () => {
   const [useremail, setUseremail] = useState("");
   const [userphone, setUserphone] = useState("");
   const [confirmmail, setConfirmmail] = useState("");
+  const [UserPAN,setUserPAN] = useState("");
+  const [UserAge,setUserAge] = useState("");
   const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
   const history = useHistory();
 
@@ -46,6 +48,12 @@ const HotelConfirm = () => {
     // }
     // if (userphone === "" || userphone === null) {
     //   return alert("Please enter User Phone Number");
+    // }
+    // if( UserPAN==="" || UserPAN===null){
+    //   return alert("Please enter User PAN Number");
+    // }
+    // if ( UserAge === "" || UserAge===null) {
+    //   return alert("Please enter User Age");
     // }
 
     const bookingObj = { ...hotelBookingDetails[0] };
@@ -73,6 +81,16 @@ const HotelConfirm = () => {
       "hotel-booking-confirm-details",
       JSON.stringify(bookingObj)
     );
+    // const localstorageobj = localStorage.getItem("hotel-booking-confirm-details");
+// console.log(localstorageobj);
+    axios 
+      .post(
+        "/BookingEngineService_Hotel/hotelservice.svc/rest/Book/", {...bookingObj})
+      .then((data) => {
+        console.log(data.data);
+      })
+      .catch((err) => console.error(err));
+
 
     // history.push({
     //   pathname: "/hotelpayment",
@@ -618,6 +636,38 @@ const HotelConfirm = () => {
                             value={userphone}
                             onChange={(e) => {
                               setUserphone(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="elements">
+                        <label for="phone">PAN Number:</label>
+                        <div>
+                          <TextField
+                            required
+                            id="standard-full-width userphone"
+                            value={userphone}
+                            onChange={(e) => {
+                              setUserPAN(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="elements">
+                        <label for="phone">Age:</label>
+                        <div>
+                          <TextField
+                            required
+                            id="standard-full-width userphone"
+                            value={userphone}
+                            onChange={(e) => {
+                              setUserAge(e.target.value);
                               console.log(e.target.value);
                             }}
                             variant="outlined"
