@@ -3,8 +3,11 @@ import { v4 as uuidv4 } from "uuid";
 import logo from "../../images/logo.png";
 import Axios from "axios";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const HotelPayment = (props) => {
+  const history = useHistory();
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "INR",
@@ -212,7 +215,12 @@ const HotelPayment = (props) => {
       }
     );
 
-    console.log(data);
+    history.push({
+      pathname: "/hotelbill",
+      state: {
+        bookingReceipt: data.data,
+      },
+    });
   };
 
   useEffect(() => {
