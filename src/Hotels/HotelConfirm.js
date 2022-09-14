@@ -649,7 +649,7 @@ const HotelConfirm = () => {
                           <TextField
                             required
                             id="standard-full-width userphone"
-                            value={userphone}
+                            value={UserPAN}
                             onChange={(e) => {
                               setUserPAN(e.target.value);
                               console.log(e.target.value);
@@ -665,7 +665,7 @@ const HotelConfirm = () => {
                           <TextField
                             required
                             id="standard-full-width userphone"
-                            value={userphone}
+                            value={UserAge}
                             onChange={(e) => {
                               setUserAge(e.target.value);
                               console.log(e.target.value);
