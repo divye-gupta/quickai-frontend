@@ -33,6 +33,8 @@ const HotelConfirm = () => {
   const [useremail, setUseremail] = useState("");
   const [userphone, setUserphone] = useState("");
   const [confirmmail, setConfirmmail] = useState("");
+  const [UserPAN,setUserPAN] = useState("");
+  const [UserAge,setUserAge] = useState("");
   const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
   const history = useHistory();
 
@@ -47,6 +49,12 @@ const HotelConfirm = () => {
     // if (userphone === "" || userphone === null) {
     //   return alert("Please enter User Phone Number");
     // }
+    // if( UserPAN==="" || UserPAN===null){
+    //   return alert("Please enter User PAN Number");
+    // }
+    // if ( UserAge === "" || UserAge===null) {
+    //   return alert("Please enter User Age");
+    // }
 
     const bookingObj = { ...hotelBookingDetails[0] };
 
@@ -56,14 +64,14 @@ const HotelConfirm = () => {
         FirstName: "GTA",
         Middlename: null,
         LastName: "Service",
-        Phoneno: null,
-        Email: null,
+        Phoneno: "9871628409",
+        Email: "divye@gmail.com",
         PaxType: 1,
         LeadPassenger: true,
-        Age: 0,
-        PassportNo: null,
-        PassportIssueDate: "0001-01-01T00: 00: 00",
-        PassportExpDate: "0001-01-01T00: 00: 00",
+        Age: 35,
+        // PassportNo: null,
+        // PassportIssueDate: "0001-01-01T00: 00: 00",
+        // PassportExpDate: "0001-01-01T00: 00: 00",
         PAN: "EBQPS3333T",
       },
     ];
@@ -73,21 +81,31 @@ const HotelConfirm = () => {
       "hotel-booking-confirm-details",
       JSON.stringify(bookingObj)
     );
+    // const localstorageobj = localStorage.getItem("hotel-booking-confirm-details");
+// console.log(localstorageobj);
+    axios 
+      .post(
+        "/BookingEngineService_Hotel/hotelservice.svc/rest/Book/", {...bookingObj})
+      .then((data) => {
+        console.log(data.data);
+      })
+      .catch((err) => console.error(err));
 
-    history.push({
-      pathname: "/hotelpayment",
-      state: {
-        amount:
-          blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
-            2
-          ),
-        name: username,
-        email: useremail,
-        phone_number: userphone,
-        currency: "INR",
-        bookingObj,
-      },
-    });
+
+    // history.push({
+    //   pathname: "/hotelpayment",
+    //   state: {
+    //     amount:
+    //       blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
+    //         2
+    //       ),
+    //     name: username,
+    //     email: useremail,
+    //     phone_number: userphone,
+    //     currency: "INR",
+    //     bookingObj,
+    //   },
+    // });
   };
 
   const payLaterBookNow = (e) => {
@@ -618,6 +636,38 @@ const HotelConfirm = () => {
                             value={userphone}
                             onChange={(e) => {
                               setUserphone(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="elements">
+                        <label for="phone">PAN Number:</label>
+                        <div>
+                          <TextField
+                            required
+                            id="standard-full-width userphone"
+                            value={userphone}
+                            onChange={(e) => {
+                              setUserPAN(e.target.value);
+                              console.log(e.target.value);
+                            }}
+                            variant="outlined"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="elements">
+                        <label for="phone">Age:</label>
+                        <div>
+                          <TextField
+                            required
+                            id="standard-full-width userphone"
+                            value={userphone}
+                            onChange={(e) => {
+                              setUserAge(e.target.value);
                               console.log(e.target.value);
                             }}
                             variant="outlined"

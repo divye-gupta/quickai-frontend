@@ -1,0 +1,29 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+  .maindiv{
+    padding: 5vw;
+  }
+  .downloadButton{
+    padding: 15px 25px;
+    margin:1rem;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    background-color: rgb(62, 43, 156);
+    color :white;
+    font-size: x-large;
+  }
