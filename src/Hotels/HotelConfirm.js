@@ -644,11 +644,11 @@ const HotelConfirm = () => {
                       </div>
 
                       <div className="elements">
-                        <label for="phone">PAN Number:</label>
+                        <label for="PAN">PAN Number:</label>
                         <div>
                           <TextField
                             required
-                            id="standard-full-width userphone"
+                            id="standard-full-width UserPAN"
                             value={UserPAN}
                             onChange={(e) => {
                               setUserPAN(e.target.value);
@@ -660,11 +660,11 @@ const HotelConfirm = () => {
                       </div>
 
                       <div className="elements">
-                        <label for="phone">Age:</label>
+                        <label for="Age">Age:</label>
                         <div>
                           <TextField
                             required
-                            id="standard-full-width userphone"
+                            id="standard-full-width UserAge"
                             value={UserAge}
                             onChange={(e) => {
                               setUserAge(e.target.value);
