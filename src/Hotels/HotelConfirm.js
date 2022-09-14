@@ -33,42 +33,43 @@ const HotelConfirm = () => {
   const [useremail, setUseremail] = useState("");
   const [userphone, setUserphone] = useState("");
   const [confirmmail, setConfirmmail] = useState("");
-  const [UserPAN,setUserPAN] = useState("");
-  const [UserAge,setUserAge] = useState("");
+  const [UserPAN, setUserPAN] = useState("");
+  const [UserAge, setUserAge] = useState("");
   const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
   const history = useHistory();
 
   const paymentGateway = (e) => {
     e.preventDefault();
-    // if (username === "" || username === null) {
-    //   return alert("Please enter Username");
-    // }
-    // if (useremail === "" || useremail === null) {
-    //   return alert("Please enter User Email Address");
-    // }
-    // if (userphone === "" || userphone === null) {
-    //   return alert("Please enter User Phone Number");
-    // }
-    // if( UserPAN==="" || UserPAN===null){
-    //   return alert("Please enter User PAN Number");
-    // }
-    // if ( UserAge === "" || UserAge===null) {
-    //   return alert("Please enter User Age");
-    // }
+    if (username === "" || username === null) {
+      return alert("Please enter Username");
+    }
+    if (useremail === "" || useremail === null) {
+      return alert("Please enter User Email Address");
+    }
+    if (userphone === "" || userphone === null) {
+      return alert("Please enter User Phone Number");
+    }
+    if (UserPAN === "" || UserPAN === null) {
+      return alert("Please enter User PAN Number");
+    }
+    if (UserAge === "" || UserAge === null) {
+      return alert("Please enter User Age");
+    }
 
     const bookingObj = { ...hotelBookingDetails[0] };
+    const nameArray = username.split("");
 
     bookingObj.HotelRoomsDetails[0].HotelPassenger = [
       {
         Title: "mr",
-        FirstName: "GTA",
+        FirstName: nameArray[0],
         Middlename: null,
-        LastName: "Service",
-        Phoneno: "9871628409",
-        Email: "divye@gmail.com",
+        LastName: nameArray[nameArray.length - 1],
+        Phoneno: userphone,
+        Email: useremail,
         PaxType: 1,
         LeadPassenger: true,
-        Age: 35,
+        Age: UserAge,
         // PassportNo: null,
         // PassportIssueDate: "0001-01-01T00: 00: 00",
         // PassportExpDate: "0001-01-01T00: 00: 00",
@@ -82,30 +83,29 @@ const HotelConfirm = () => {
       JSON.stringify(bookingObj)
     );
     // const localstorageobj = localStorage.getItem("hotel-booking-confirm-details");
-// console.log(localstorageobj);
-    axios 
-      .post(
-        "/BookingEngineService_Hotel/hotelservice.svc/rest/Book/", {...bookingObj})
-      .then((data) => {
-        console.log(data.data);
-      })
-      .catch((err) => console.error(err));
+    // console.log(localstorageobj);
+    // axios
+    //   .post(
+    //     "/BookingEngineService_Hotel/hotelservice.svc/rest/Book/", {...bookingObj})
+    //   .then((data) => {
+    //     console.log(data.data);
+    //   })
+    //   .catch((err) => console.error(err));
 
-
-    // history.push({
-    //   pathname: "/hotelpayment",
-    //   state: {
-    //     amount:
-    //       blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
-    //         2
-    //       ),
-    //     name: username,
-    //     email: useremail,
-    //     phone_number: userphone,
-    //     currency: "INR",
-    //     bookingObj,
-    //   },
-    // });
+    history.push({
+      pathname: "/hotelpayment",
+      state: {
+        amount:
+          blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
+            2
+          ),
+        name: username,
+        email: useremail,
+        phone_number: userphone,
+        currency: "INR",
+        bookingObj,
+      },
+    });
   };
 
   const payLaterBookNow = (e) => {
