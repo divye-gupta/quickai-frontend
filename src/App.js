@@ -36,6 +36,7 @@ import Header from "./Components/Header";
 import HotelPayment from "./Hotels/payment/HotelPayment";
 import HotelConfirmationReceipt from "./Hotels/HotelConfirmationReceipt";
 
+// function starts here
 function App() {
   const loadScript = (src) => {
     return new Promise((resolve) => {
@@ -89,7 +90,6 @@ function App() {
         ></Route>
         <Route path="/hotelconfirm" component={HotelConfirm}></Route>
         <Route path="/hotelbill" component={HotelConfirmationReceipt}></Route>
-
 
         {/* dashboard */}
         <Route path="/dashboard">
