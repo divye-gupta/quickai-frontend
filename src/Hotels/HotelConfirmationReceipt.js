@@ -1,5 +1,5 @@
 import { Divider } from "antd";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './HotelConfirmationReceipt.css'
 import jsPDF from 'jspdf';
 import pdfMake from 'pdfmake';
@@ -7,7 +7,12 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
 
 
-const HotelConfirmationReceipt = () => {
+const HotelConfirmationReceipt = (props) => {
+
+
+const [propsData, setPropsData] = useState();
+const [hotelBookingDetails, setHotelBookingDetails] = useState();
+const [hotelSearchOptions, setHotelSearchOptions] = useState();
 
 function printDocument(){
 
@@ -24,6 +29,27 @@ function printDocument(){
 
 }
 
+function gettingData() {
+  const hotelBookingDetailsFun = JSON.parse(localStorage.getItem("hotel-booking-confirm-details"));
+  const hotelSearchOptionsFun = JSON.parse(localStorage.getItem("hotel-search-options"));
+
+  console.log(hotelBookingDetailsFun);
+  console.log(hotelSearchOptionsFun);
+
+  setHotelBookingDetails(hotelBookingDetailsFun);
+  setHotelSearchOptions(hotelSearchOptionsFun);
+  console.log(hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title);
+  setPropsData(props.location.state);
+
+  
+
+}
+
+useEffect(() => {
+  gettingData()
+}, [])
+
+
   return (
     <>
     <button className="downloadButton" onClick = {()=>{
@@ -35,37 +61,49 @@ function printDocument(){
       <br />
       <br />
       <table>
+      <tr>
+          <td>Invoice Number</td>
+          <td>{propsData?.bookingReceipt?.BookResult?.InvoiceNumber}</td>
+        </tr>
         <tr>
           <td>Name</td>
-          <td>Ramlal</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title + " "+ hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.FirstName + " "+hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.LastName}</td>
         </tr>
         <tr>
           <td>E-mail</td>
-          <td>ramlal@gmail.com</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Email}</td>
         </tr>
         <tr>
           <td>Phone Number</td>
-          <td>8328843840</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Phoneno}</td>
         </tr>
-        <tr>
+        {/* <tr>
           <td>Payment ID</td>
           <td>pay_KCA3ig15VGwxfg</td>
-        </tr>
+        </tr> */}
         <tr>
           <td>Order ID</td>
           <td>order_KCA3ayM6EHYPuG</td>
         </tr>
         <tr>
-          <td>Booking Number</td>
-          <td>6339206c1d335e9f3532dc2635780c83abe5db3a19169d73a5c48ad30ed04653</td>
+          <td>Booking ID</td>
+          <td>{propsData?.bookingReceipt?.BookResult?.BookingId}</td>
+        </tr>
+        <tr>
+          <td>Booking Refrence Number</td>
+          <td>{propsData?.bookingReceipt?.BookResult?.BookingRefNo}</td>
+        </tr>
+        <tr>
+          <td>Confirmation Number</td>
+          <td>{propsData?.bookingReceipt?.BookResult?.ConfirmationNo}</td>
         </tr>
         <tr>
           <td>Booking Duration</td>
-          <td>2 Nights</td>
+          <td>xyz Nights</td>
         </tr>
         <tr>
           <td>Booking from-to</td>
-          <td>9/9/2022 -  10/9/2022</td>
+          <td>{hotelSearchOptions?.CheckInDate+" - "+hotelSearchOptions?.CheckOutDate}</td>
         </tr>
       </table>
 
@@ -76,15 +114,15 @@ function printDocument(){
       <table>
         <tr>
           <td>Hotel</td>
-          <td>Some hotel name</td>
+          <td>{hotelBookingDetails?.HotelName}</td>
         </tr>
         <tr>
           <td>Address</td>
-          <td>hotel's address</td>
+          <td>{hotelSearchOptions?.CityName+", "+ hotelSearchOptions?.StateProvince}</td>
         </tr>
         <tr>
           <td>Room Type</td>
-          <td>Deluxe 2 bed</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.RoomTypeName}</td>
         </tr>
       </table>
       
@@ -95,15 +133,15 @@ function printDocument(){
       <table>
         <tr>
           <td>Base Price</td>
-          <td>1600</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price.RoomPrice}</td>
         </tr>
         <tr>
           <td>Taxes and Charges</td>
-          <td>400</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.Tax + " + " + hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.OtherCharges}</td>
         </tr>
         <tr>
           <td>Total</td>
-          <td>2000</td>
+          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.PublishedPriceRoundedOff}</td>
         </tr>
       </table>
 
