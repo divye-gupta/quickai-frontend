@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { ApiAuthentication } from "../utils/Authentication";
 import { diff_hours } from "../utils/TimeDifference";
+import { CreateDate } from "../utils/CreateDate";
 const CssTextField = withStyles({
   root: {
     "& .MuiFormLabel-root": {
@@ -100,36 +101,43 @@ const HotelSearch = () => {
     setUserId(id);
   }, []);
 
-  const handleCity = (e) => {
+  const handleCity = (e, cityname = "New Delhi") => {
     e.preventDefault();
 
+    const filterData = destinationData.filter(
+      (city) => city.CityName === e.target.innerHTML
+    );
+
+    const dateObject = CreateDate()
+    const Today = dateObject.today.reduce((acc, date)=> acc+date.value, '');
+    const Tomorrow = dateObject.tomorrow.reduce((acc, date)=> acc+date.value, '');
     dispatch({
       type: "CLEAR_HOTEL_LIST",
     });
 
-    const date1 = new Date(checkinDate.split("/").reverse().join("/"));
-    const date2 = new Date(checkoutDate);
-    if (date1 > date2)
-      return alert(
-        `Please enter a checkout date after the given check-in date ${checkinDate}`
-      );
+    // const date1 = new Date(checkinDate.split("/").reverse().join("/"));
+    // const date2 = new Date(checkoutDate);
+    // if (date1 > date2)
+    //   return alert(
+    //     `Please enter a checkout date after the given check-in date ${checkinDate}`
+    //   );
 
-    const diffTime = Math.abs(date2 - date1);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // const diffTime = Math.abs(date2 - date1);
+    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const item = {
-      ...destination[0],
-      CheckInDate: checkinDate,
-      CheckOutDate: checkoutDate.split("/").reverse().join("/"),
-      CityId: destination[0].DestinationId,
+      ...filterData[0],
+      CheckInDate: Today,
+      CheckOutDate: Tomorrow,
+      CityId: filterData[0].DestinationId,
       PreferredCurrency: "INR",
-      NoOfNights: diffDays,
+      NoOfNights: 1,
       ResultCount: null,
       GuestNationality: "IN",
-      NoOfRooms: rooms,
+      NoOfRooms: 1,
       RoomGuests: [
         {
-          NoOfAdults: adults,
-          NoOfChild: children,
+          NoOfAdults: 1,
+          NoOfChild: 0,
           ChildAge: null,
         },
       ],
@@ -150,7 +158,7 @@ const HotelSearch = () => {
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
 
     history.push("/hotelslist");
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1030,7 +1038,8 @@ const HotelSearch = () => {
                                 <div class="col-12 d-grid mt-4">
                                   <button
                                     class="btn btn-primary"
-                                    onClick={handleSubmit}
+                                    // onClick={handleSubmit}
+                                    onClick={handleCity}
                                   >
                                     Search Hotels
                                   </button>
@@ -2254,6 +2263,7 @@ const HotelSearch = () => {
                           data-bs-target="#collapseFive"
                           aria-expanded="false"
                           aria-controls="collapseFive"
+                          onClick={handleCity}
                         >
                           Hyderabad
                         </button>
