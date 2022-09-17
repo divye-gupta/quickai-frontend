@@ -100,7 +100,7 @@ const HotelSearch = () => {
     setUserId(id);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleCity = (e) => {
     e.preventDefault();
 
     dispatch({
@@ -150,6 +150,58 @@ const HotelSearch = () => {
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
 
     history.push("/hotelslist");
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch({
+      type: "CLEAR_HOTEL_LIST",
+    });
+
+    const date1 = new Date(checkinDate.split("/").reverse().join("/"));
+    const date2 = new Date(checkoutDate);
+    if (date1 > date2)
+      return alert(
+        `Please enter a checkout date after the given check-in date ${checkinDate}`
+      );
+
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const item = {
+      ...destination[0],
+      CheckInDate: checkinDate,
+      CheckOutDate: checkoutDate.split("/").reverse().join("/"),
+      CityId: destination[0].DestinationId,
+      PreferredCurrency: "INR",
+      NoOfNights: diffDays,
+      ResultCount: null,
+      GuestNationality: "IN",
+      NoOfRooms: rooms,
+      RoomGuests: [
+        {
+          NoOfAdults: adults,
+          NoOfChild: children,
+          ChildAge: null,
+        },
+      ],
+      MaxRating: 5,
+      MinRating: 0,
+      ReviewScore: null,
+      IsNearBySearchAllowed: false,
+      EndUserIp: "192.168.10.26",
+      TokenId: TokenId,
+    };
+    dispatch({
+      type: "ADD_TO_HOTEL",
+      item: item,
+    });
+
+    console.log(item);
+    // localStorage.removeItem("hotel-search-options");
+    localStorage.setItem("hotel-search-options", JSON.stringify(item));
+    console.log(destination[0]);
+    // history.push("/hotelslist");
   };
 
   const increase = (type) => {
