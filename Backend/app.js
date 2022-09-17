@@ -7,6 +7,9 @@ const cors = require("cors");
 var mongo = require("mongoose");
 var bodyParser = require("body-parser");
 var db = require("./config/config.js");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 //api for get data from database
 
