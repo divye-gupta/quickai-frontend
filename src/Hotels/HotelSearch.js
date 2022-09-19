@@ -108,9 +108,12 @@ const HotelSearch = () => {
       (city) => city.CityName === e.target.innerHTML
     );
 
-    const dateObject = CreateDate()
-    const Today = dateObject.today.reduce((acc, date)=> acc+date.value, '');
-    const Tomorrow = dateObject.tomorrow.reduce((acc, date)=> acc+date.value, '');
+    const dateObject = CreateDate();
+    const Today = dateObject.today.reduce((acc, date) => acc + date.value, "");
+    const Tomorrow = dateObject.tomorrow.reduce(
+      (acc, date) => acc + date.value,
+      ""
+    );
     dispatch({
       type: "CLEAR_HOTEL_LIST",
     });
@@ -3728,6 +3731,205 @@ const HotelSearch = () => {
                       View All <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                   </p>
+                </div>
+              </div>
+
+              <div class="container mt-5 py-2">
+                <h2 class="text-6 fw-500 mb-0">
+                  Popular Destinations in India
+                </h2>
+                <p class="text-3">
+                  Explore these places and some other thing here
+                </p>
+                <div
+                  class="owl-carousel owl-theme"
+                  data-autoplay="true"
+                  data-loop="true"
+                  data-margin="10"
+                  data-items-xs="2"
+                  data-items-sm="3"
+                  data-items-md="4"
+                  data-items-lg="6"
+                >
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/bangalore.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">
+                            Bangalore
+                          </p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            1069 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/hyderabad.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">
+                            Hyderabad
+                          </p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            2150 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/chennai.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">
+                            Chennai
+                          </p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            805 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/jaipur.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">Jaipur</p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            655 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/mumbai.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">Mumbai</p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            767 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/singapore.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">
+                            Singapore
+                          </p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            422 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/dubai.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">Dubai</p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            1069 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/india.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">India</p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            2150 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
+                  <div class="item">
+                    {" "}
+                    <a href="#">
+                      <div class="card border-0">
+                        {" "}
+                        <img
+                          class="card-img-top rounded"
+                          src="images/brands/hotels/lodon.jpg"
+                          alt="banner"
+                        />
+                        <div class="card-body px-0 py-1">
+                          <p class="card-title fw-500 text-dark mb-0">Lodon</p>
+                          <p class="card-text text-1 text-muted mb-0">
+                            805 properties
+                          </p>
+                        </div>
+                      </div>
+                    </a>{" "}
+                  </div>
                 </div>
               </div>
             </div>
