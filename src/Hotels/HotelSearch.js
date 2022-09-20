@@ -23,6 +23,21 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { ApiAuthentication } from "../utils/Authentication";
 import { diff_hours } from "../utils/TimeDifference";
 import { CreateDate } from "../utils/CreateDate";
+// IMPORTING IMAGES
+import agra from "images/brands/hotels/agra.jpg";
+import ahmedabad from "images/brands/hotels/ahmedabad.jpg";
+import bangalore from "images/brands/hotels/bangalore.jpg";
+import chennai from "images/brands/hotels/chennai.jpg";
+import hyderabad from "images/brands/hotels/hyderbad.jpg";
+import jaipur from "images/brands/hotels/jaipur.jpg";
+import kochi from "images/brands/hotels/kochi.jpg";
+import kolkata  from "images/brands/hotels/kolkata.jpg";
+import mumbai from "images/brands/hotels/mumbai.jpg";
+import newdelhi from "images/brands/hotels/newdelhi.jpg";
+
+
+
+
 const CssTextField = withStyles({
   root: {
     "& .MuiFormLabel-root": {
@@ -3758,7 +3773,7 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/bangalore.jpg"
+                          src={bangalore}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
@@ -3779,7 +3794,7 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/hyderabad.jpg"
+                          src={hyderabad}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
@@ -3800,7 +3815,7 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/chennai.jpg"
+                          src={chennai}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
@@ -3821,7 +3836,7 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/jaipur.jpg"
+                          src={jaipur}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
@@ -3840,7 +3855,7 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/mumbai.jpg"
+                          src={mumbai}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
@@ -3859,12 +3874,12 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/singapore.jpg"
+                          src={kochi}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
                           <p class="card-title fw-500 text-dark mb-0">
-                            Singapore
+                            Kochi
                           </p>
                           <p class="card-text text-1 text-muted mb-0">
                             422 properties
@@ -3880,11 +3895,11 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/dubai.jpg"
+                          src={newdelhi}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Dubai</p>
+                          <p class="card-title fw-500 text-dark mb-0">New Delhi</p>
                           <p class="card-text text-1 text-muted mb-0">
                             1069 properties
                           </p>
@@ -3899,11 +3914,11 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/india.jpg"
+                          src={ahmedabad}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">India</p>
+                          <p class="card-title fw-500 text-dark mb-0">Ahmedabad</p>
                           <p class="card-text text-1 text-muted mb-0">
                             2150 properties
                           </p>
@@ -3918,11 +3933,11 @@ const HotelSearch = () => {
                         {" "}
                         <img
                           class="card-img-top rounded"
-                          src="images/brands/hotels/lodon.jpg"
+                          src={agra}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Lodon</p>
+                          <p class="card-title fw-500 text-dark mb-0">Agra</p>
                           <p class="card-text text-1 text-muted mb-0">
                             805 properties
                           </p>

@@ -15,8 +15,10 @@ dotenv.config();
 
 const keys = require("./keys");
 
-var indexRouter = require("./routes/index");
-var razorpayRouter = require("./routes/razorpayRouter");
+const indexRouter = require("./routes/index");
+const razorpayRouter = require("./routes/razorpayRouter");
+const authRouter = require("./routes/AuthenticationRouter");
+const userRouter = require("./routes/UserRouter");
 
 var app = express();
 
@@ -34,6 +36,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(`/`, indexRouter);
 app.use(`/razorpay`, razorpayRouter);
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,9 +1,10 @@
 const express = require("express");
-const client = require("../db/connect");
+// const client = require("../db/connect");
 const bcrypt = require("bcrypt");
 
 const router = new express.Router();
 const auth = require("../middleware/authorization");
+const User = require("../Model/User");
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -16,39 +17,24 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/me", auth, async (req, res) => {
-  const { user } = req;
   try {
-    const response = await client.query(`select * from users where email=$1`, [
-      user.email,
-    ]);
-
-    const userObject = response.rows[0];
-    delete userObject.password;
-    delete userObject.id;
-
-    res.json({ user: userObject });
+    return res.status(201).send({ user: req.user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 router.post("/", async (req, res) => {
+  const user = new User(req.body);
+
   try {
-    console.log("inside signup");
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const newUser = await client.query(
-      `INSERT INTO users (firstname,lastname,organization,email,password) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-      [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.organization,
-        req.body.email,
-        hashedPassword,
-      ]
-    );
-    res.json({ user: newUser.rows[0] });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    res.status(201).send({ user, token });
+  } catch (e) {
+    res.status(400).send(e);
   }
 });
 
