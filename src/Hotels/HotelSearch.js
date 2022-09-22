@@ -24,19 +24,16 @@ import { ApiAuthentication } from "../utils/Authentication";
 import { diff_hours } from "../utils/TimeDifference";
 import { CreateDate } from "../utils/CreateDate";
 // IMPORTING IMAGES
-import agra from "images/brands/hotels/agra.jpg";
-import ahmedabad from "images/brands/hotels/ahmedabad.jpg";
-import bangalore from "images/brands/hotels/bangalore.jpg";
-import chennai from "images/brands/hotels/chennai.jpg";
-import hyderabad from "images/brands/hotels/hyderbad.jpg";
-import jaipur from "images/brands/hotels/jaipur.jpg";
-import kochi from "images/brands/hotels/kochi.jpg";
-import kolkata  from "images/brands/hotels/kolkata.jpg";
-import mumbai from "images/brands/hotels/mumbai.jpg";
-import newdelhi from "images/brands/hotels/newdelhi.jpg";
-
-
-
+import agra from "../images/brands/hotels/agra.jpg";
+import ahmedabad from "../images/brands/hotels/ahmedabad.jpg";
+import bangalore from "../images/brands/hotels/bangalore.jpg";
+import chennai from "../images/brands/hotels/chennai.jpg";
+import hyderabad from "../images/brands/hotels/hyderabad.jpg";
+import jaipur from "../images/brands/hotels/jaipur.jpg";
+import kochi from "../images/brands/hotels/kochi.jpg";
+import kolkata from "../images/brands/hotels/kolkata.jpg";
+import mumbai from "../images/brands/hotels/mumbai.jpg";
+import newdelhi from "../images/brands/hotels/newdelhi.jpg";
 
 const CssTextField = withStyles({
   root: {
@@ -3878,9 +3875,7 @@ const HotelSearch = () => {
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
-                            Kochi
-                          </p>
+                          <p class="card-title fw-500 text-dark mb-0">Kochi</p>
                           <p class="card-text text-1 text-muted mb-0">
                             422 properties
                           </p>
@@ -3899,7 +3894,9 @@ const HotelSearch = () => {
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">New Delhi</p>
+                          <p class="card-title fw-500 text-dark mb-0">
+                            New Delhi
+                          </p>
                           <p class="card-text text-1 text-muted mb-0">
                             1069 properties
                           </p>
@@ -3918,7 +3915,9 @@ const HotelSearch = () => {
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Ahmedabad</p>
+                          <p class="card-title fw-500 text-dark mb-0">
+                            Ahmedabad
+                          </p>
                           <p class="card-text text-1 text-muted mb-0">
                             2150 properties
                           </p>
