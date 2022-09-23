@@ -11,8 +11,8 @@ const HotelConfirmationReceipt = (props) => {
 
 
 const [propsData, setPropsData] = useState();
-const [hotelBookingDetails, setHotelBookingDetails] = useState();
-const [hotelSearchOptions, setHotelSearchOptions] = useState();
+const [hotelBookingDetails, setHotelBookingDetails] = useState({});
+const [hotelSearchOptions, setHotelSearchOptions] = useState({});
 
 function printDocument(){
 
@@ -32,7 +32,7 @@ function printDocument(){
 function gettingData() {
   const hotelBookingDetailsFun = JSON.parse(localStorage.getItem("hotel-booking-confirm-details"));
   const hotelSearchOptionsFun = JSON.parse(localStorage.getItem("hotel-search-options"));
-
+  
   console.log(hotelBookingDetailsFun);
   console.log(hotelSearchOptionsFun);
 
@@ -83,7 +83,7 @@ useEffect(() => {
         </tr> */}
         <tr>
           <td>Order ID</td>
-          <td>order_KCA3ayM6EHYPuG</td>
+          <td>{props.location.state.orderId}</td>
         </tr>
         <tr>
           <td>Booking ID</td>
@@ -99,7 +99,7 @@ useEffect(() => {
         </tr>
         <tr>
           <td>Booking Duration</td>
-          <td>xyz Nights</td>
+          <td>{hotelSearchOptions?.NoOfNights} + "Nights"</td>
         </tr>
         <tr>
           <td>Booking from-to</td>

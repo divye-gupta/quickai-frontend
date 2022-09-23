@@ -34,6 +34,8 @@ import kochi from "../images/brands/hotels/kochi.jpg";
 import kolkata from "../images/brands/hotels/kolkata.jpg";
 import mumbai from "../images/brands/hotels/mumbai.jpg";
 import newdelhi from "../images/brands/hotels/newdelhi.jpg";
+import XMLParser from "react-xml-parser";
+import convert from "xml-js";
 
 const CssTextField = withStyles({
   root: {
@@ -268,19 +270,27 @@ const HotelSearch = () => {
 
   const getCountryList = (Token) => {
     // TokenId: "e80c5cea-b634-422b-82fa-434ebb13ac87",
-
+    // get country list
+    // get citites and states in india
     axios
       .post(
-        "/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+        "https://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
         {
           ClientId: "ApiIntegrationNew",
           EndUserIp: "192.168.10.26",
           TokenId: Token,
           CountryCode: "IN",
           SearchType: "1",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
         }
       )
       .then((data) => {
+        console.log(data.data);
         setDestinationData(data.data.Destinations);
       })
       .catch((err) => console.error(err));
@@ -803,8 +813,8 @@ const HotelSearch = () => {
                             <form
                               id="bookingHotels"
                               class="search-input-line"
-                            // method="post"
-                            // onSubmit={(e) => handleSubmit(e)}
+                              // method="post"
+                              // onSubmit={(e) => handleSubmit(e)}
                             >
                               <div class="row gy-3 gx-4">
                                 <div class="col-12 position-relative">
@@ -883,7 +893,7 @@ const HotelSearch = () => {
                                       placeholder="-"
                                       value={`${rooms} Rooms / ${adults} Adults / ${children} Children`}
                                       required
-                                    // onkeypress="return false;"
+                                      // onkeypress="return false;"
                                     />
                                     <span class="icon-inside">
                                       <i class="fas fa-caret-down"></i>
@@ -3747,38 +3757,67 @@ const HotelSearch = () => {
               </div>
 
               <section class="section">
-                <div class="container">
-                  <h2 class="text-9 fw-500 text-center">Popular Destinations</h2>
-                  <p class="lead text-center mb-4">World's leading Hotel Booking website, Over 40,000 Hotel rooms worldwide.</p>
+                <div class="mainpopcont">
+                  <h2 class="text-9 fw-500 text-center">
+                    Popular Destinations
+                  </h2>
+                  <p class="lead text-center mb-4">
+                    World's leading Hotel Booking website, Over 40,000 Hotel
+                    rooms worldwide.
+                  </p>
                   <div class="row g-4 banner">
-                    <div class="col-md-8">
-                      <div class="item rounded h-100"> <a href="#">
-                        <div class="caption text-center">
-                          <h2 class="text-7">Dubai</h2>
-                          <p>Starting Hotels from $550</p>
-                        </div>
-                        <div class="banner-mask"></div>
-                        <img class="img-fluid h-100" src="images/brands/hotels/dubai.jpg" alt="hotels"/> </a> </div>
+                    <div class="col-md-8 box1">
+                      <div class="item rounded h-100">
+                        {" "}
+                        <a href="#">
+                          <div class="caption text-center">
+                            <h2 class="text-7">Dubai</h2>
+                            <p>Starting Hotels from $550</p>
+                          </div>
+                          <div class="banner-mask"></div>
+                          <img
+                            class="img-fluid h-100"
+                            src="images/brands/hotels/dubai.jpg"
+                            alt="hotels"
+                          />{" "}
+                        </a>{" "}
+                      </div>
                     </div>
                     <div class="col-md-4">
                       <div class="row g-4">
-                        <div class="col-12">
-                          <div class="item rounded"> <a href="#">
-                            <div class="caption text-center">
-                              <h2>India</h2>
-                              <p>Starting Hotels from $350</p>
-                            </div>
-                            <div class="banner-mask"></div>
-                            <img class="img-fluid" src="images/brands/hotels/india.jpg" alt="hotels"/> </a> </div>
+                        <div class="box1 col-12">
+                          <div class="item rounded">
+                            {" "}
+                            <a href="#">
+                              <div class="caption text-center">
+                                <h2>India</h2>
+                                <p>Starting Hotels from $350</p>
+                              </div>
+                              <div class="banner-mask"></div>
+                              <img
+                                class="img-fluid"
+                                src="images/brands/hotels/india.jpg"
+                                alt="hotels"
+                              />{" "}
+                            </a>{" "}
+                          </div>
                         </div>
-                        <div class="col-12">
-                          <div class="item rounded"> <a href="#">
-                            <div class="caption text-center">
-                              <h2>Lodon</h2>
-                              <p>Starting Hotels from $400</p>
-                            </div>
-                            <div class="banner-mask"></div>
-                            <img class="img-fluid" src="images/brands/hotels/lodon.jpg" alt="hotels"/> </a> </div>
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a href="#">
+                              <div class="caption text-center">
+                                <h2>Lodon</h2>
+                                <p>Starting Hotels from $400</p>
+                              </div>
+                              <div class="banner-mask"></div>
+                              <img
+                                class="img-fluid"
+                                src="images/brands/hotels/lodon.jpg"
+                                alt="hotels"
+                              />{" "}
+                            </a>{" "}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -3786,37 +3825,66 @@ const HotelSearch = () => {
                   <div class="row banner g-4 mt-0 mb-2">
                     <div class="col-md-4">
                       <div class="row g-4">
-                        <div class="col-12">
-                          <div class="item rounded"> <a href="#">
-                            <div class="caption text-center">
-                              <h2>Bangkok</h2>
-                              <p>Starting Hotels from $330</p>
-                            </div>
-                            <div class="banner-mask"></div>
-                            <img class="img-fluid" src="images/brands/hotels/bangkok.jpg" alt="bangkok"/> </a> </div>
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a href="#">
+                              <div class="caption text-center">
+                                <h2>Bangkok</h2>
+                                <p>Starting Hotels from $330</p>
+                              </div>
+                              <div class="banner-mask"></div>
+                              <img
+                                class="img-fluid"
+                                src="images/brands/hotels/bangkok.jpg"
+                                alt="bangkok"
+                              />{" "}
+                            </a>{" "}
+                          </div>
                         </div>
-                        <div class="col-12">
-                          <div class="item rounded"> <a href="#">
-                            <div class="caption text-center">
-                              <h2>Newyork</h2>
-                              <p>Starting Hotels from $480</p>
-                            </div>
-                            <div class="banner-mask"></div>
-                            <img class="img-fluid" src="images/brands/hotels/newyork.jpg" alt="newyork"/> </a> </div>
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a href="#">
+                              <div class="caption text-center">
+                                <h2>Newyork</h2>
+                                <p>Starting Hotels from $480</p>
+                              </div>
+                              <div class="banner-mask"></div>
+                              <img
+                                class="img-fluid"
+                                src="images/brands/hotels/newyork.jpg"
+                                alt="newyork"
+                              />{" "}
+                            </a>{" "}
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-8">
-                      <div class="item rounded h-100"> <a href="#">
-                        <div class="caption text-center">
-                          <h2 class="text-7">Singapore</h2>
-                          <p>Starting Hotels from $620</p>
-                        </div>
-                        <div class="banner-mask"></div>
-                        <img class="img-fluid h-100" src="images/brands/hotels/singapore.jpg" alt="singapore"/> </a> </div>
+                    <div class="col-md-8 box1">
+                      <div class="item rounded h-100">
+                        {" "}
+                        <a href="#">
+                          <div class="caption text-center">
+                            <h2 class="text-7">Singapore</h2>
+                            <p>Starting Hotels from $620</p>
+                          </div>
+                          <div class="banner-mask"></div>
+                          <img
+                            class="img-fluid h-100"
+                            src="images/brands/hotels/singapore.jpg"
+                            alt="singapore"
+                          />{" "}
+                        </a>{" "}
+                      </div>
                     </div>
                   </div>
-                  <div class="d-grid pt-4"> <a href="#" class="btn btn-outline-primary shadow-none">More Destinations</a> </div>
+                  <div class="d-grid pt-4">
+                    {" "}
+                    <a href="#" class="btn btn-outline-primary shadow-none">
+                      More Destinations
+                    </a>{" "}
+                  </div>
                 </div>
               </section>
 

@@ -183,7 +183,7 @@ const HotelPayment = (props) => {
         alert("ORDER ID :: " + response.razorpay_order_id);
         alert(JSON.stringify(response));
         console.log("hello" + response);
-        await bookingConfirmation();
+        await bookingConfirmation(response.razorpay_order_id);
       },
       prefill: {
         name: props.location.state.name,
@@ -205,7 +205,7 @@ const HotelPayment = (props) => {
     paymentObject.open();
   };
 
-  const bookingConfirmation = async () => {
+  const bookingConfirmation = async (orderid) => {
     console.log(props.location.state.bookingObj);
 
     const data = await axios.post(
@@ -219,6 +219,7 @@ const HotelPayment = (props) => {
       pathname: "/hotelbill",
       state: {
         bookingReceipt: data.data,
+        orderId: orderid
       },
     });
   };
