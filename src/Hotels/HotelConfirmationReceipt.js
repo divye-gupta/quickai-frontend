@@ -1,151 +1,181 @@
 import { Divider } from "antd";
-import React, {useEffect, useState} from "react";
-import './HotelConfirmationReceipt.css'
-import jsPDF from 'jspdf';
-import pdfMake from 'pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import htmlToPdfmake from 'html-to-pdfmake';
-
+import React, { useEffect, useState } from "react";
+import "./HotelConfirmationReceipt.css";
+import jsPDF from "jspdf";
+import pdfMake from "pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import htmlToPdfmake from "html-to-pdfmake";
 
 const HotelConfirmationReceipt = (props) => {
+  const [propsData, setPropsData] = useState();
+  const [hotelBookingDetails, setHotelBookingDetails] = useState({});
+  const [hotelSearchOptions, setHotelSearchOptions] = useState({});
 
-
-const [propsData, setPropsData] = useState();
-const [hotelBookingDetails, setHotelBookingDetails] = useState({});
-const [hotelSearchOptions, setHotelSearchOptions] = useState({});
-
-function printDocument(){
-
+  function printDocument() {
     const doc = new jsPDF();
 
     //get html
-    const pdfTable = document.getElementById('maindiv');
+    const pdfTable = document.getElementById("maindiv");
     //html to pdf format
     var html = htmlToPdfmake(pdfTable.innerHTML);
 
     const documentDefinition = { content: html };
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
     pdfMake.createPdf(documentDefinition).open();
+  }
 
-}
+  function gettingData() {
+    const hotelBookingDetailsFun = JSON.parse(
+      localStorage.getItem("hotel-booking-confirm-details")
+    );
+    const hotelSearchOptionsFun = JSON.parse(
+      localStorage.getItem("hotel-search-options")
+    );
 
-function gettingData() {
-  const hotelBookingDetailsFun = JSON.parse(localStorage.getItem("hotel-booking-confirm-details"));
-  const hotelSearchOptionsFun = JSON.parse(localStorage.getItem("hotel-search-options"));
-  
-  console.log(hotelBookingDetailsFun);
-  console.log(hotelSearchOptionsFun);
+    console.log(hotelBookingDetailsFun);
+    console.log(hotelSearchOptionsFun);
 
-  setHotelBookingDetails(hotelBookingDetailsFun);
-  setHotelSearchOptions(hotelSearchOptionsFun);
-  console.log(hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title);
-  setPropsData(props.location.state);
+    setHotelBookingDetails(hotelBookingDetailsFun);
+    setHotelSearchOptions(hotelSearchOptionsFun);
+    console.log(
+      hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title
+    );
+    setPropsData(props.location.state);
+  }
 
-  
-
-}
-
-useEffect(() => {
-  gettingData()
-}, [])
-
+  useEffect(() => {
+    gettingData();
+  }, []);
 
   return (
     <>
-    <button className="downloadButton" onClick = {()=>{
-      printDocument()
-    }} >Download Bill</button>
-    
-    <div id = "maindiv" className="maindiv">
-      <h1>QuickAI</h1>
-      <br />
-      <br />
-      <table>
-      <tr>
-          <td>Invoice Number</td>
-          <td>{propsData?.bookingReceipt?.BookResult?.InvoiceNumber}</td>
-        </tr>
-        <tr>
-          <td>Name</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title + " "+ hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.FirstName + " "+hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.LastName}</td>
-        </tr>
-        <tr>
-          <td>E-mail</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Email}</td>
-        </tr>
-        <tr>
-          <td>Phone Number</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Phoneno}</td>
-        </tr>
-        {/* <tr>
+      <button
+        className="downloadButton"
+        onClick={() => {
+          printDocument();
+        }}
+      >
+        Download Bill
+      </button>
+
+      <div id="maindiv" className="maindiv">
+        <h1>QuickAI</h1>
+        <br />
+        <br />
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{propsData?.bookingReceipt?.BookResult?.InvoiceNumber}</td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            {/* <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title + " "+ hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.FirstName + " "+hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.LastName}</td> */}
+          </tr>
+          <tr>
+            <td>E-mail</td>
+            {/* <td>
+              {
+                hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]
+                  ?.Email
+              }
+            </td> */}
+          </tr>
+          <tr>
+            <td>Phone Number</td>
+            <td>
+              {
+                hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]
+                  ?.Phoneno
+              }
+            </td>
+          </tr>
+          {/* <tr>
           <td>Payment ID</td>
           <td>pay_KCA3ig15VGwxfg</td>
         </tr> */}
-        <tr>
-          <td>Order ID</td>
-          <td>{props.location.state.orderId}</td>
-        </tr>
-        <tr>
-          <td>Booking ID</td>
-          <td>{propsData?.bookingReceipt?.BookResult?.BookingId}</td>
-        </tr>
-        <tr>
-          <td>Booking Refrence Number</td>
-          <td>{propsData?.bookingReceipt?.BookResult?.BookingRefNo}</td>
-        </tr>
-        <tr>
-          <td>Confirmation Number</td>
-          <td>{propsData?.bookingReceipt?.BookResult?.ConfirmationNo}</td>
-        </tr>
-        <tr>
-          <td>Booking Duration</td>
-          <td>{hotelSearchOptions?.NoOfNights} + "Nights"</td>
-        </tr>
-        <tr>
-          <td>Booking from-to</td>
-          <td>{hotelSearchOptions?.CheckInDate+" - "+hotelSearchOptions?.CheckOutDate}</td>
-        </tr>
-      </table>
+          <tr>
+            <td>Order ID</td>
+            <td>{props.location.state.orderId}</td>
+          </tr>
+          <tr>
+            <td>Booking ID</td>
+            <td>{propsData?.bookingReceipt?.BookResult?.BookingId}</td>
+          </tr>
+          <tr>
+            <td>Booking Refrence Number</td>
+            <td>{propsData?.bookingReceipt?.BookResult?.BookingRefNo}</td>
+          </tr>
+          <tr>
+            <td>Confirmation Number</td>
+            <td>{propsData?.bookingReceipt?.BookResult?.ConfirmationNo}</td>
+          </tr>
+          <tr>
+            <td>Booking Duration</td>
+            <td>{hotelSearchOptions?.NoOfNights} + "Nights"</td>
+          </tr>
+          <tr>
+            <td>Booking from-to</td>
+            <td>
+              {hotelSearchOptions?.CheckInDate +
+                " - " +
+                hotelSearchOptions?.CheckOutDate}
+            </td>
+          </tr>
+        </table>
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <h4>Room Details</h4>
-      <table>
-        <tr>
-          <td>Hotel</td>
-          <td>{hotelBookingDetails?.HotelName}</td>
-        </tr>
-        <tr>
-          <td>Address</td>
-          <td>{hotelSearchOptions?.CityName+", "+ hotelSearchOptions?.StateProvince}</td>
-        </tr>
-        <tr>
-          <td>Room Type</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.RoomTypeName}</td>
-        </tr>
-      </table>
-      
-      <br />
-      <br />
+        <h4>Room Details</h4>
+        <table>
+          <tr>
+            <td>Hotel</td>
+            <td>{hotelBookingDetails?.HotelName}</td>
+          </tr>
+          <tr>
+            <td>Address</td>
+            <td>
+              {hotelSearchOptions?.CityName +
+                ", " +
+                hotelSearchOptions?.StateProvince}
+            </td>
+          </tr>
+          <tr>
+            <td>Room Type</td>
+            <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.RoomTypeName}</td>
+          </tr>
+        </table>
 
-      <h4>Bill Details</h4>
-      <table>
-        <tr>
-          <td>Base Price</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price.RoomPrice}</td>
-        </tr>
-        <tr>
-          <td>Taxes and Charges</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.Tax + " + " + hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.OtherCharges}</td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.PublishedPriceRoundedOff}</td>
-        </tr>
-      </table>
+        <br />
+        <br />
 
-    </div>
+        <h4>Bill Details</h4>
+        <table>
+          <tr>
+            <td>Base Price</td>
+            <td>
+              {hotelBookingDetails?.HotelRoomsDetails[0]?.Price.RoomPrice}
+            </td>
+          </tr>
+          <tr>
+            <td>Taxes and Charges</td>
+            <td>
+              {hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.Tax +
+                " + " +
+                hotelBookingDetails?.HotelRoomsDetails[0]?.Price?.OtherCharges}
+            </td>
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td>
+              {
+                hotelBookingDetails?.HotelRoomsDetails[0]?.Price
+                  ?.PublishedPriceRoundedOff
+              }
+            </td>
+          </tr>
+        </table>
+      </div>
     </>
   );
 };

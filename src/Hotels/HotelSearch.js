@@ -34,8 +34,7 @@ import kochi from "../images/brands/hotels/kochi.jpg";
 import kolkata from "../images/brands/hotels/kolkata.jpg";
 import mumbai from "../images/brands/hotels/mumbai.jpg";
 import newdelhi from "../images/brands/hotels/newdelhi.jpg";
-import XMLParser from "react-xml-parser";
-import convert from "xml-js";
+import cityData from "../utils/NewCityListHotel.json";
 
 const CssTextField = withStyles({
   root: {
@@ -179,6 +178,7 @@ const HotelSearch = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(destination);
 
     dispatch({
       type: "CLEAR_HOTEL_LIST",
@@ -222,11 +222,9 @@ const HotelSearch = () => {
       item: item,
     });
 
-    console.log(item);
-    // localStorage.removeItem("hotel-search-options");
+    localStorage.removeItem("hotel-search-options");
     localStorage.setItem("hotel-search-options", JSON.stringify(item));
-    console.log(destination[0]);
-    // history.push("/hotelslist");
+    history.push("/hotelslist");
   };
 
   const increase = (type) => {
@@ -274,7 +272,7 @@ const HotelSearch = () => {
     // get citites and states in india
     axios
       .post(
-        "https://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+        "/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
         {
           ClientId: "ApiIntegrationNew",
           EndUserIp: "192.168.10.26",
@@ -315,7 +313,8 @@ const HotelSearch = () => {
         console.log(data);
         localStorage.setItem("TokenId", data.TokenId);
         setTokenId(data.TokenId);
-        getCountryList(data.TokenId);
+
+        setDestinationData(cityData);
       })
       .catch((err) => console.error(err));
   };
@@ -356,7 +355,7 @@ const HotelSearch = () => {
       Authentication();
       const data = await ApiAuthentication();
       setTokenId(data.TokenId);
-      getCountryList(data.TokenId);
+      setDestinationData(cityData);
     } else {
       const TokenObj = JSON.parse(Token);
 
@@ -368,11 +367,11 @@ const HotelSearch = () => {
         console.log("In if");
         const data = await ApiAuthentication();
         setTokenId(data.TokenId);
-        getCountryList(data.TokenId);
+        setDestinationData(cityData);
       } else {
         console.log("in Else");
         setTokenId(TokenObj.TokenId);
-        getCountryList(TokenObj.TokenId);
+        setDestinationData(cityData);
       }
     }
   };
@@ -825,6 +824,7 @@ const HotelSearch = () => {
                                     options={destinationData}
                                     getOptionLabel={(option) => option.CityName}
                                     onChange={(event, value) => {
+                                      console.log(event.target.value, value);
                                       setDestination([value]);
                                     }}
                                     renderInput={(params) => (
@@ -1063,8 +1063,8 @@ const HotelSearch = () => {
                                 <div class="col-12 d-grid mt-4">
                                   <button
                                     class="btn btn-primary"
-                                    // onClick={handleSubmit}
-                                    onClick={handleCity}
+                                    onClick={handleSubmit}
+                                    // onClick={handleCity}
                                   >
                                     Search Hotels
                                   </button>
@@ -2288,7 +2288,7 @@ const HotelSearch = () => {
                           data-bs-target="#collapseFive"
                           aria-expanded="false"
                           aria-controls="collapseFive"
-                          onClick={handleCity}
+                          // onClick={handleCity}
                         >
                           Hyderabad
                         </button>
