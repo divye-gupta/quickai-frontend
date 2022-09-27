@@ -37,10 +37,11 @@ const HotelConfirmationReceipt = (props) => {
 
     setHotelBookingDetails(hotelBookingDetailsFun);
     setHotelSearchOptions(hotelSearchOptionsFun);
-    console.log(
-      hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title
-    );
+    // console.log(
+    //   hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title
+    // );
     setPropsData(props.location.state);
+    console.log(props.location.state);
   }
 
   useEffect(() => {
@@ -69,16 +70,16 @@ const HotelConfirmationReceipt = (props) => {
           </tr>
           <tr>
             <td>Name</td>
-            {/* <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title + " "+ hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.FirstName + " "+hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.LastName}</td> */}
+            <td>{hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.Title + " "+ hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.FirstName + " "+hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]?.LastName}</td>
           </tr>
           <tr>
             <td>E-mail</td>
-            {/* <td>
+            <td>
               {
                 hotelBookingDetails?.HotelRoomsDetails[0]?.HotelPassenger[0]
                   ?.Email
               }
-            </td> */}
+            </td>
           </tr>
           <tr>
             <td>Phone Number</td>
