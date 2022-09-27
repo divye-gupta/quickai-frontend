@@ -822,7 +822,7 @@ const HotelSearch = () => {
                                     freeSolo
                                     id="combo-box-demo"
                                     options={destinationData}
-                                    getOptionLabel={(option) => option.CityName}
+                                    getOptionLabel={(option) => `${option.CityName}, ${option.CountryName}`}
                                     onChange={(event, value) => {
                                       console.log(event.target.value, value);
                                       setDestination([value]);
