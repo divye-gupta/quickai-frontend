@@ -352,7 +352,6 @@ const HotelSearch = () => {
   const checkAuthentication = async () => {
     const Token = localStorage.getItem("AuthenticationToken");
     if (Token === null || Token === undefined) {
-      Authentication();
       const data = await ApiAuthentication();
       setTokenId(data.TokenId);
       setDestinationData(cityData);
@@ -822,7 +821,9 @@ const HotelSearch = () => {
                                     freeSolo
                                     id="combo-box-demo"
                                     options={destinationData}
-                                    getOptionLabel={(option) => `${option.CityName}, ${option.CountryName}`}
+                                    getOptionLabel={(option) =>
+                                      `${option.CityName}, ${option.CountryName}`
+                                    }
                                     onChange={(event, value) => {
                                       console.log(event.target.value, value);
                                       setDestination([value]);

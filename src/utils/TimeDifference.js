@@ -2,7 +2,7 @@ export const diff_hours = (dt1, dt2) => {
   var diff = (dt1.getTime() - dt2.getTime()) / 1000;
   diff /= 60 * 60;
 
-  console.log(dt2.getDate(), dt1.getDate());
+  console.log(diff, dt2.getDate(), dt1.getDate());
 
   if (dt2.getFullYear() > dt1.getFullYear()) {
     console.log("From Here");

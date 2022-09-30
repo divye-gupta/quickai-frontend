@@ -35,9 +35,12 @@ import HotelConfirm from "./Hotels/HotelConfirm";
 import Header from "./Components/Header";
 import HotelPayment from "./Hotels/payment/HotelPayment";
 import HotelConfirmationReceipt from "./Hotels/HotelConfirmationReceipt";
+import { useStateValue } from "./ContextApi/StateProvider";
 
 // function starts here
 function App() {
+  const [{}, dispatch] = useStateValue();
+
   const loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -52,9 +55,41 @@ function App() {
     });
   };
 
+  const loadUser = async () => {
+    const response = await fetch("http://localhost:8000/user/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (data.error !== undefined) {
+      dispatch({
+        type: "LOGOUT",
+      });
+      return;
+    }
+
+    // setUserData(data.user);
+    // setUser(true);
+
+    dispatch({
+      type: "LOGIN",
+      item: data.user,
+    });
+  };
+
   useEffect(() => {
     loadScript("https://checkout.razorpay.com/v1/checkout.js");
   });
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      loadUser();
+    }
+  }, []);
 
   return (
     <Router>

@@ -891,7 +891,7 @@ const HotelSearchDetails = () => {
                   </div>
                 </div>{" "}
                 <div class="hotels-list">
-                  {HotelList.length > 0 &&
+                  {HotelList?.length > 0 &&
                     HotelList.sort((a, b) => b.StarRating - a.StarRating).map(
                       (hotel, idx) => {
                         return (

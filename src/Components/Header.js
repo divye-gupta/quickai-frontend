@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { createMuiTheme, TextField, withStyles } from "@material-ui/core";
 import $ from "jquery";
+import { useStateValue } from "../ContextApi/StateProvider";
+import { useHistory } from "react-router-dom";
 
 const CssTextField = withStyles({
   root: {
@@ -55,6 +57,21 @@ const muitheme = createMuiTheme({
 });
 
 const Header = () => {
+  const [{ user }, dispatch] = useStateValue();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    dispatch({
+      type: "LOGOUT",
+    });
+  };
+
+  const handleLogin = () => {
+    history.push("/login");
+  };
+
   useEffect(() => {
     const script = document.createElement("script");
     script.async = true;
@@ -1254,9 +1271,26 @@ const Header = () => {
                     href="#"
                     title="Login / Sign up"
                   >
-                    <span class="d-none d-sm-inline-block">
-                      Login / Sign up
-                    </span>
+                    {user ? (
+                      <>
+                        <span
+                          class="d-none d-sm-inline-block"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span
+                          class="d-none d-sm-inline-block"
+                          onClick={() => handleLogin()}
+                        >
+                          Login / Sign up
+                        </span>
+                      </>
+                    )}
+
                     <span class="user-icon ms-sm-2">
                       <i class="fas fa-user"></i>
                     </span>

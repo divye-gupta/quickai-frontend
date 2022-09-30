@@ -17,8 +17,11 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.get("/me", auth, async (req, res) => {
+  const { user } = req;
   try {
-    return res.status(201).send({ user: req.user });
+    const userData = await User.findOne({ email: user.email });
+
+    return res.status(201).send({ user: userData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

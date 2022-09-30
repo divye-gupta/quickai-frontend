@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(`/`, indexRouter);
 app.use(`/razorpay`, razorpayRouter);
-app.use("/users", userRouter);
+app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler

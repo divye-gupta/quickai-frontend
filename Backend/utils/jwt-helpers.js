@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 
-const jwtTokens = ({ id, firstname, lastname, email }) => {
-  const user = { id, firstname, lastname, email };
+const jwtTokens = ({ _id, name, email }) => {
+  const user = { _id, name, email };
   console.log(user);
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign(user, "quickaibackend@2022", {
     expiresIn: "1h",
   });
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign(user, "quickaibackend@2022", {
     expiresIn: "336h",
   });
   return { accessToken, refreshToken };

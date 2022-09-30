@@ -4,6 +4,8 @@ export const initialState = {
   hotelList: null,
   hotelDataSelected: null,
   hotelBookingDetails: null,
+  user: false,
+  userData: null,
 };
 
 const reducer = (state, action) => {
@@ -56,6 +58,24 @@ const reducer = (state, action) => {
       };
     }
 
+    case "LOGIN": {
+      console.log("Inside Login");
+      return {
+        ...state,
+        user: true,
+        userData: action.item,
+      };
+    }
+
+    case "LOGOUT": {
+      console.log("inside logout");
+      return {
+        ...state,
+        user: false,
+        userData: null,
+      };
+    }
+
     default:
       return {
         ...state,
@@ -64,6 +84,8 @@ const reducer = (state, action) => {
         hotelList: null,
         hotelDataSelected: null,
         hotelBookingDetails: null,
+        user: false,
+        userData: null,
       };
   }
 };

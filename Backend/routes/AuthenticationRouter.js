@@ -14,9 +14,9 @@ router.post("/login", async (req, res) => {
       req.body.password
     );
 
-    const token = await user.generateAuthToken();
+    let tokens = jwtTokens(user);
 
-    res.send({ user, token });
+    res.send({ user, tokens });
   } catch (e) {
     res.status(400).send("Connection error");
   }

@@ -57,14 +57,16 @@ const HotelConfirm = () => {
     }
 
     const bookingObj = { ...hotelBookingDetails[0] };
-    const nameArray = username.split("");
+    const nameArray = username.split(" ");
+    console.log(nameArray);
 
     bookingObj.HotelRoomsDetails[0].HotelPassenger = [
       {
         Title: "mr",
         FirstName: nameArray[0],
-        Middlename: null,
-        LastName: nameArray[nameArray.length - 1],
+        Middlename: nameArray.length === 3 ? nameArray[1] : null,
+        LastName:
+          nameArray.length >= 2 ? nameArray[nameArray.length - 1] : null,
         Phoneno: userphone,
         Email: useremail,
         PaxType: 1,
@@ -82,7 +84,9 @@ const HotelConfirm = () => {
       "hotel-booking-confirm-details",
       JSON.stringify(bookingObj)
     );
-    // const localstorageobj = localStorage.getItem("hotel-booking-confirm-details");
+    const localstorageobj = localStorage.getItem(
+      "hotel-booking-confirm-details"
+    );
     // console.log(localstorageobj);
     // axios
     //   .post(
