@@ -108,67 +108,64 @@ const HotelSearch = () => {
   const [userId, setUserId] = useState();
   const history = useHistory();
   const [TokenId, setTokenId] = useState("");
-  const elementRef = useRef(null);
+  const parentRef = useRef(null);
+  const elementRef = useRef([]);
 
   useEffect(() => {
     let id = uuidv4();
     setUserId(id);
   }, []);
 
-  const handleCity = (e, cityname = "New Delhi") => {
+  const handleCity = (e) => {
     e.preventDefault();
-    console.log(elementRef.current.innerHTML);
-    // e.preventDefault();
-    // const filterData = destinationData.filter(
-    //   (city) => city.CityName === e.target.innerHTML
-    // );
-    // const dateObject = CreateDate();
-    // const Today = dateObject.today.reduce((acc, date) => acc + date.value, "");
-    // const Tomorrow = dateObject.tomorrow.reduce(
-    //   (acc, date) => acc + date.value,
-    //   ""
-    // );
-    // dispatch({
-    //   type: "CLEAR_HOTEL_LIST",
-    // });
-    // const date1 = new Date(checkinDate.split("/").reverse().join("/"));
-    // const date2 = new Date(checkoutDate);
-    // if (date1 > date2)
-    //   return alert(
-    //     `Please enter a checkout date after the given check-in date ${checkinDate}`
-    //   );
-    // const diffTime = Math.abs(date2 - date1);
-    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    // const item = {
-    //   ...filterData[0],
-    //   CheckInDate: Today,
-    //   CheckOutDate: Tomorrow,
-    //   CityId: filterData[0].DestinationId,
-    //   PreferredCurrency: "INR",
-    //   NoOfNights: 1,
-    //   ResultCount: null,
-    //   GuestNationality: "IN",
-    //   NoOfRooms: 1,
-    //   RoomGuests: [
-    //     {
-    //       NoOfAdults: 1,
-    //       NoOfChild: 0,
-    //       ChildAge: null,
-    //     },
-    //   ],
-    //   MaxRating: 5,
-    //   MinRating: 0,
-    //   ReviewScore: null,
-    //   IsNearBySearchAllowed: false,
-    //   EndUserIp: "192.168.10.26",
-    //   TokenId: TokenId,
-    // };
-    // dispatch({
-    //   type: "ADD_TO_HOTEL",
-    //   item: item,
-    // });
-    // console.log(item);
-    // // localStorage.removeItem("hotel-search-options");
+    console.log(e.target.dataset.value);
+
+    const filterData = cityData.filter(
+      (city) =>
+        city.CityName === e.target.dataset.value && city.CountryName === "India"
+    );
+    console.log(filterData);
+
+    const dateObject = CreateDate();
+    const Today = dateObject.today.reduce((acc, date) => acc + date.value, "");
+    const Tomorrow = dateObject.tomorrow.reduce(
+      (acc, date) => acc + date.value,
+      ""
+    );
+    dispatch({
+      type: "CLEAR_HOTEL_LIST",
+    });
+
+    const item = {
+      ...filterData[0],
+      CheckInDate: Today,
+      CheckOutDate: Tomorrow,
+      CityId: filterData[0].DestinationId,
+      PreferredCurrency: "INR",
+      NoOfNights: 1,
+      ResultCount: null,
+      GuestNationality: "IN",
+      NoOfRooms: 1,
+      RoomGuests: [
+        {
+          NoOfAdults: 1,
+          NoOfChild: 0,
+          ChildAge: null,
+        },
+      ],
+      MaxRating: 5,
+      MinRating: 0,
+      ReviewScore: null,
+      IsNearBySearchAllowed: false,
+      EndUserIp: "192.168.10.26",
+      TokenId: TokenId,
+    };
+    dispatch({
+      type: "ADD_TO_HOTEL",
+      item: item,
+    });
+    console.log(item);
+    // localStorage.removeItem("hotel-search-options");
     // localStorage.setItem("hotel-search-options", JSON.stringify(item));
     // history.push("/hotelslist");
   };
@@ -214,6 +211,9 @@ const HotelSearch = () => {
       EndUserIp: "192.168.10.26",
       TokenId: TokenId,
     };
+
+    console.log(item);
+
     dispatch({
       type: "ADD_TO_HOTEL",
       item: item,
@@ -3902,22 +3902,30 @@ const HotelSearch = () => {
                   data-items-sm="3"
                   data-items-md="4"
                   data-items-lg="6"
+                  ref={parentRef}
                 >
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Bangalore">
+                      <div class="card border-0" data-value="Bangalore">
                         {" "}
                         <img
                           class="card-img-top rounded destination-carousel-img"
                           src={bangalore}
                           alt="banner"
+                          data-value="Bangalore"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
+                        <div class="card-body px-0 py-1" data-value="Bangalore">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="Bangalore"
+                          >
                             Bangalore
                           </p>
-                          <p class="card-text text-1 text-muted mb-0">
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Bangalore"
+                          >
                             1069 properties
                           </p>
                         </div>
@@ -3926,22 +3934,27 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Hyderabad">
+                      <div class="card border-0" data-value="Hyderabad">
                         {" "}
                         <img
+                          data-value="Hyderabad"
                           class="card-img-top rounded destination-carousel-img"
                           src={hyderabad}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
+                        <div class="card-body px-0 py-1" data-value="Hyderabad">
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            ref={elementRef}
+                            ref={(el) => elementRef.current.push(el)}
+                            data-value="Hyderabad"
                           >
                             Hyderabad
                           </p>
-                          <p class="card-text text-1 text-muted mb-0">
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Hyderabad"
+                          >
                             2150 properties
                           </p>
                         </div>
@@ -3950,19 +3963,27 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Chennai">
+                      <div class="card border-0" data-value="Chennai">
                         {" "}
                         <img
+                          data-value="Chennai"
                           class="card-img-top rounded destination-carousel-img"
                           src={chennai}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
+                        <div class="card-body px-0 py-1" data-value="Chennai">
+                          <p
+                            data-value="Chennai"
+                            class="card-title fw-500 text-dark mb-0"
+                            ref={(el) => elementRef.current.push(el)}
+                          >
                             Chennai
                           </p>
-                          <p class="card-text text-1 text-muted mb-0">
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Chennai"
+                          >
                             805 properties
                           </p>
                         </div>
@@ -3971,17 +3992,27 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Jaipur">
+                      <div class="card border-0" data-value="Jaipur">
                         {" "}
                         <img
+                          data-value="Jaipur"
                           class="card-img-top rounded destination-carousel-img"
                           src={jaipur}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Jaipur</p>
-                          <p class="card-text text-1 text-muted mb-0">
+                        <div class="card-body px-0 py-1" data-value="Jaipur">
+                          <p
+                            data-value="Jaipur"
+                            class="card-title fw-500 text-dark mb-0"
+                            ref={(el) => elementRef.current.push(el)}
+                          >
+                            Jaipur
+                          </p>
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Jaipur"
+                          >
                             655 properties
                           </p>
                         </div>
@@ -3990,17 +4021,26 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Mumbai">
+                      <div class="card border-0" data-value="Mumbai">
                         {" "}
                         <img
+                          data-value="Mumbai"
                           class="card-img-top rounded destination-carousel-img"
                           src={mumbai}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Mumbai</p>
-                          <p class="card-text text-1 text-muted mb-0">
+                        <div class="card-body px-0 py-1" data-value="Mumbai">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="Mumbai"
+                          >
+                            Mumbai
+                          </p>
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Mumbai"
+                          >
                             767 properties
                           </p>
                         </div>
@@ -4009,17 +4049,26 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Kochi">
+                      <div class="card border-0" data-value="Kochi">
                         {" "}
                         <img
                           class="card-img-top rounded destination-carousel-img"
                           src={kochi}
                           alt="banner"
+                          data-value="Kochi"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Kochi</p>
-                          <p class="card-text text-1 text-muted mb-0">
+                        <div class="card-body px-0 py-1" data-value="Kochi">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="Kochi"
+                          >
+                            Kochi
+                          </p>
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Kochi"
+                          >
                             422 properties
                           </p>
                         </div>
@@ -4028,19 +4077,26 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="New Delhi">
+                      <div class="card border-0" data-value="New Delhi">
                         {" "}
                         <img
+                          data-value="New Delhi"
                           class="card-img-top rounded destination-carousel-img"
                           src={newdelhi}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
+                        <div class="card-body px-0 py-1" data-value="New Delhi">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="New Delhi"
+                          >
                             New Delhi
                           </p>
-                          <p class="card-text text-1 text-muted mb-0">
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="New Delhi"
+                          >
                             1069 properties
                           </p>
                         </div>
@@ -4049,19 +4105,26 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Ahmedabad">
+                      <div class="card border-0" data-value="Ahmedabad">
                         {" "}
                         <img
+                          data-value="Ahmedabad"
                           class="card-img-top rounded destination-carousel-img"
                           src={ahmedabad}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
+                        <div class="card-body px-0 py-1" data-value="Ahmedabad">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="Ahmedabad"
+                          >
                             Ahmedabad
                           </p>
-                          <p class="card-text text-1 text-muted mb-0">
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Ahmedabad"
+                          >
                             2150 properties
                           </p>
                         </div>
@@ -4070,17 +4133,26 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity}>
-                      <div class="card border-0">
+                    <a href="#" onClick={handleCity} data-value="Agra">
+                      <div class="card border-0" data-value="Agra">
                         {" "}
                         <img
+                          data-value="Agra"
                           class="card-img-top rounded destination-carousel-img"
                           src={agra}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">Agra</p>
-                          <p class="card-text text-1 text-muted mb-0">
+                        <div class="card-body px-0 py-1" data-value="Agra">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            data-value="Agra"
+                          >
+                            Agra
+                          </p>
+                          <p
+                            class="card-text text-1 text-muted mb-0"
+                            data-value="Agra"
+                          >
                             805 properties
                           </p>
                         </div>
