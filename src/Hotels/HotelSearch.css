@@ -57,7 +57,12 @@
   padding: 5px !important;
 }
 
-
-.box1{
+.box1 {
   padding: 10px;
+}
+
+.destination-carousel-img {
+  height: 150px;
+  width: 200px;
+  object-fit: contain;
 }

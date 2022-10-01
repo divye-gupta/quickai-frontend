@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useStateValue } from "../ContextApi/StateProvider";
 import firebase from "firebase";
 import Background from "../images/bg/image-2.jpg";
@@ -108,6 +108,7 @@ const HotelSearch = () => {
   const [userId, setUserId] = useState();
   const history = useHistory();
   const [TokenId, setTokenId] = useState("");
+  const elementRef = useRef(null);
 
   useEffect(() => {
     let id = uuidv4();
@@ -116,64 +117,60 @@ const HotelSearch = () => {
 
   const handleCity = (e, cityname = "New Delhi") => {
     e.preventDefault();
-
-    const filterData = destinationData.filter(
-      (city) => city.CityName === e.target.innerHTML
-    );
-
-    const dateObject = CreateDate();
-    const Today = dateObject.today.reduce((acc, date) => acc + date.value, "");
-    const Tomorrow = dateObject.tomorrow.reduce(
-      (acc, date) => acc + date.value,
-      ""
-    );
-    dispatch({
-      type: "CLEAR_HOTEL_LIST",
-    });
-
+    console.log(elementRef.current.innerHTML);
+    // e.preventDefault();
+    // const filterData = destinationData.filter(
+    //   (city) => city.CityName === e.target.innerHTML
+    // );
+    // const dateObject = CreateDate();
+    // const Today = dateObject.today.reduce((acc, date) => acc + date.value, "");
+    // const Tomorrow = dateObject.tomorrow.reduce(
+    //   (acc, date) => acc + date.value,
+    //   ""
+    // );
+    // dispatch({
+    //   type: "CLEAR_HOTEL_LIST",
+    // });
     // const date1 = new Date(checkinDate.split("/").reverse().join("/"));
     // const date2 = new Date(checkoutDate);
     // if (date1 > date2)
     //   return alert(
     //     `Please enter a checkout date after the given check-in date ${checkinDate}`
     //   );
-
     // const diffTime = Math.abs(date2 - date1);
     // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const item = {
-      ...filterData[0],
-      CheckInDate: Today,
-      CheckOutDate: Tomorrow,
-      CityId: filterData[0].DestinationId,
-      PreferredCurrency: "INR",
-      NoOfNights: 1,
-      ResultCount: null,
-      GuestNationality: "IN",
-      NoOfRooms: 1,
-      RoomGuests: [
-        {
-          NoOfAdults: 1,
-          NoOfChild: 0,
-          ChildAge: null,
-        },
-      ],
-      MaxRating: 5,
-      MinRating: 0,
-      ReviewScore: null,
-      IsNearBySearchAllowed: false,
-      EndUserIp: "192.168.10.26",
-      TokenId: TokenId,
-    };
-    dispatch({
-      type: "ADD_TO_HOTEL",
-      item: item,
-    });
-
-    console.log(item);
-    // localStorage.removeItem("hotel-search-options");
-    localStorage.setItem("hotel-search-options", JSON.stringify(item));
-
-    history.push("/hotelslist");
+    // const item = {
+    //   ...filterData[0],
+    //   CheckInDate: Today,
+    //   CheckOutDate: Tomorrow,
+    //   CityId: filterData[0].DestinationId,
+    //   PreferredCurrency: "INR",
+    //   NoOfNights: 1,
+    //   ResultCount: null,
+    //   GuestNationality: "IN",
+    //   NoOfRooms: 1,
+    //   RoomGuests: [
+    //     {
+    //       NoOfAdults: 1,
+    //       NoOfChild: 0,
+    //       ChildAge: null,
+    //     },
+    //   ],
+    //   MaxRating: 5,
+    //   MinRating: 0,
+    //   ReviewScore: null,
+    //   IsNearBySearchAllowed: false,
+    //   EndUserIp: "192.168.10.26",
+    //   TokenId: TokenId,
+    // };
+    // dispatch({
+    //   type: "ADD_TO_HOTEL",
+    //   item: item,
+    // });
+    // console.log(item);
+    // // localStorage.removeItem("hotel-search-options");
+    // localStorage.setItem("hotel-search-options", JSON.stringify(item));
+    // history.push("/hotelslist");
   };
 
   const handleSubmit = (e) => {
@@ -1682,7 +1679,7 @@ const HotelSearch = () => {
           </div>
           <div class="section bg-white shadow-md">
             <div class="container">
-              <div
+              {/* <div
                 class="owl-carousel owl-theme banner"
                 data-autoplay="true"
                 data-loop="true"
@@ -1735,14 +1732,14 @@ const HotelSearch = () => {
                     />
                   </a>
                 </div>
-              </div>
-              <h2 class="text-9 fw-600 text-center mt-5">
+              </div> */}
+              {/* <h2 class="text-9 fw-600 text-center mt-5">
                 Start your travel planning here
               </h2>
               <p class="lead text-dark text-center mb-4">
                 Search Hotels, Flights, Trains & Bus
-              </p>
-              <div class="row gy-4 gx-5">
+              </p> */}
+              {/* <div class="row gy-4 gx-5">
                 <div class="col-md-6 col-lg-4">
                   <div
                     class="accordion accordion-flush arrow-end"
@@ -3755,7 +3752,7 @@ const HotelSearch = () => {
                     </a>
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <section class="section">
                 <div class="mainpopcont">
@@ -3908,11 +3905,11 @@ const HotelSearch = () => {
                 >
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={bangalore}
                           alt="banner"
                         />
@@ -3929,16 +3926,19 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={hyderabad}
                           alt="banner"
                         />
                         <div class="card-body px-0 py-1">
-                          <p class="card-title fw-500 text-dark mb-0">
+                          <p
+                            class="card-title fw-500 text-dark mb-0"
+                            ref={elementRef}
+                          >
                             Hyderabad
                           </p>
                           <p class="card-text text-1 text-muted mb-0">
@@ -3950,11 +3950,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={chennai}
                           alt="banner"
                         />
@@ -3971,11 +3971,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={jaipur}
                           alt="banner"
                         />
@@ -3990,11 +3990,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={mumbai}
                           alt="banner"
                         />
@@ -4009,11 +4009,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={kochi}
                           alt="banner"
                         />
@@ -4028,11 +4028,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={newdelhi}
                           alt="banner"
                         />
@@ -4049,11 +4049,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={ahmedabad}
                           alt="banner"
                         />
@@ -4070,11 +4070,11 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#">
+                    <a href="#" onClick={handleCity}>
                       <div class="card border-0">
                         {" "}
                         <img
-                          class="card-img-top rounded"
+                          class="card-img-top rounded destination-carousel-img"
                           src={agra}
                           alt="banner"
                         />
