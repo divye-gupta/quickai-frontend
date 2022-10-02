@@ -165,9 +165,9 @@ const HotelSearch = () => {
       item: item,
     });
     console.log(item);
-    // localStorage.removeItem("hotel-search-options");
-    // localStorage.setItem("hotel-search-options", JSON.stringify(item));
-    // history.push("/hotelslist");
+    localStorage.removeItem("hotel-search-options");
+    localStorage.setItem("hotel-search-options", JSON.stringify(item));
+    history.push("/hotelslist");
   };
 
   const handleSubmit = (e) => {
@@ -4077,25 +4077,25 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-value="New Delhi">
-                      <div class="card border-0" data-value="New Delhi">
+                    <a href="#" onClick={handleCity} data-value="Delhi">
+                      <div class="card border-0" data-value="Delhi">
                         {" "}
                         <img
-                          data-value="New Delhi"
+                          data-value="Delhi"
                           class="card-img-top rounded destination-carousel-img"
                           src={newdelhi}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-value="New Delhi">
+                        <div class="card-body px-0 py-1" data-value="Delhi">
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-value="New Delhi"
+                            data-value="Delhi"
                           >
-                            New Delhi
+                            Delhi
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-value="New Delhi"
+                            data-value="Delhi"
                           >
                             1069 properties
                           </p>

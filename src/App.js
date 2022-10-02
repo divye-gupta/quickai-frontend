@@ -36,6 +36,7 @@ import Header from "./Components/Header";
 import HotelPayment from "./Hotels/payment/HotelPayment";
 import HotelConfirmationReceipt from "./Hotels/HotelConfirmationReceipt";
 import { useStateValue } from "./ContextApi/StateProvider";
+import GetAgencyBalance from "./Dashboard/AgencyBalance/GetAgencyBalance";
 
 // function starts here
 function App() {
@@ -203,6 +204,12 @@ function App() {
         <Route path="/transactions">
           <Dashboard title="Agent Transactions">
             <Transactions />
+          </Dashboard>
+        </Route>
+
+        <Route path="/agencybalance">
+          <Dashboard title="Agency Balance">
+            <GetAgencyBalance />
           </Dashboard>
         </Route>
       </Switch>

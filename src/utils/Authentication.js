@@ -24,6 +24,8 @@ export const ApiAuthentication = async () => {
       startDate: day,
       endDate: nextDay,
       TokenId: data.TokenId,
+      MemberId: data.Member.MemberId,
+      AgencyId: data.Member.AgencyId,
     };
     localStorage.setItem("AuthenticationToken", JSON.stringify(tokenObject));
 

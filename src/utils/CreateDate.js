@@ -10,12 +10,13 @@ export const CreateDate = () => {
   var day = new Date();
   console.log(day); // Apr 30 2000
 
-  var nextDay = new Date(day);
-  nextDay.setDate(day.getDate() + 1);
-  console.log(nextDay); // May 01 2000
+  var dayPlus1 = new Date(day);
+  var dayPlus2 = new Date(day);
+  dayPlus1.setDate(day.getDate() + 1);
+  dayPlus2.setDate(day.getDate() + 2);
 
   return {
-    today: dateTimeFormat.formatToParts(day),
-    tomorrow: dateTimeFormat.formatToParts(nextDay)
+    today: dateTimeFormat.formatToParts(dayPlus1),
+    tomorrow: dateTimeFormat.formatToParts(dayPlus2),
   };
 };
