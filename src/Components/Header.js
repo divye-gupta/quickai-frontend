@@ -168,7 +168,10 @@ const Header = () => {
         </div>
         <nav class="primary-menu navbar navbar-expand-lg">
           <div id="header-nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav">
+            <ul
+              class="navbar-nav"
+              style={{ width: "100%", justifyContent: "space-between" }}
+            >
               <li class="dropdown active">
                 <a class="dropdown-toggle" href="#">
                   Home
