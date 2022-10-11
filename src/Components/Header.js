@@ -166,13 +166,32 @@ const Header = () => {
             </nav>
           </div>
         </div>
-        <nav class="primary-menu navbar navbar-expand-lg">
+        <nav style={{paddingBottom:"1rem"}} class="primary-menu navbar navbar-expand-lg">
           <div id="header-nav" class="collapse navbar-collapse">
             <ul
               class="navbar-nav"
               style={{ width: "100%", justifyContent: "space-between" }}
             >
-              <li class="dropdown active">
+              <li  class="active">
+                    Bangalore
+              </li>
+              <li  class="active">
+                    Delhi
+              </li>
+              <li  class="active">
+                    Mumbai
+              </li>
+              <li  class="active">
+                    Kolkata
+              </li>
+              <li  class="active">
+                    Varanasi
+              </li>
+              <li  class="active">
+                    Jaipur
+              </li>
+
+              {/* <li class="dropdown active">
                 <a class="dropdown-toggle" href="#">
                   Home
                 </a>
@@ -1226,7 +1245,7 @@ const Header = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         </nav>
