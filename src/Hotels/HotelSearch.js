@@ -128,7 +128,8 @@ const HotelSearch = () => {
 
     const filterData = cityData.filter(
       (city) =>
-        city.CityName === e.target.dataset.city && city.CountryName === e.target.dataset.country
+        city.CityName === e.target.dataset.city &&
+        city.CountryName === e.target.dataset.country
     );
     console.log(filterData);
 
@@ -288,7 +289,7 @@ const HotelSearch = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
           },
-        } 
+        }
       )
       .then((data) => {
         console.log(data.data);
@@ -3760,145 +3761,6 @@ const HotelSearch = () => {
                   </p>
                 </div>
               </div> */}
-
-              <section class="section">
-                <div class="mainpopcont">
-                  <h2 class="text-9 fw-500 text-center">
-                    Popular Destinations
-                  </h2>
-                  <p class="lead text-center mb-4">
-                    World's leading Hotel Booking website, Over 40,000 Hotel
-                    rooms worldwide.
-                  </p>
-                  <div class="row g-4 banner">
-                    <div class="col-md-8 box1">
-                      <div class="item rounded h-100">
-                        {" "}
-                        <a href="#" onClick={handleCity} data-city = "Dubai" data-country="United Arab Emirates">
-                          <div class="caption text-center" data-city = "Dubai" data-country="United Arab Emirates">
-                            <h2 class="text-7" data-city = "Dubai" data-country="United Arab Emirates">Dubai</h2>
-                            <p data-city = "Dubai" data-country="United Arab Emirates">Starting Hotels from $550</p>
-                          </div>
-                          <div class="banner-mask" data-city = "Dubai" data-country="United Arab Emirates"></div>
-                          <img
-                          data-city = "Dubai" data-country="United Arab Emirates"
-                            class="img-fluid h-100"
-                            src="images/brands/hotels/dubai.jpg"
-                            alt="hotels"
-                          />{" "}
-                        </a>{" "}
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="row g-4">
-                        <div class="box1 col-12">
-                          <div class="item rounded">
-                            {" "}
-                            <a href="#" onClick={handleCity} data-city = "Paris" data-country="France">
-                              <div class="caption text-center" data-city = "Paris" data-country="France">
-                                <h2 data-city = "Paris" data-country="France">Paris</h2>
-                                <p data-city = "Paris" data-country="France">Starting Hotels from $350</p>
-                              </div>
-                              <div data-city = "Paris" data-country="France" class="banner-mask"></div>
-                              <img
-                              data-city = "Paris" data-country="France"
-                                class="img-fluid"
-                                src={paris}
-                                alt="hotels"
-                              />{" "}
-                            </a>{" "}
-                          </div>
-                        </div>
-                        <div class="col-12 box1">
-                          <div class="item rounded">
-                            {" "}
-                            <a href="#" onClick={handleCity} data-city = "London" data-country="United Kingdom">
-                              <div data-city = "London" data-country="United Kingdom" class="caption text-center">
-                                <h2 data-city = "London" data-country="United Kingdom">London</h2>
-                                <p data-city = "London" data-country="United Kingdom">Starting Hotels from $400</p>
-                              </div>
-                              <div data-city = "London" data-country="United Kingdom" class="banner-mask"></div>
-                              <img
-                              data-city = "London" data-country="United Kingdom"
-                                class="img-fluid"
-                                src="images/brands/hotels/lodon.jpg"
-                                alt="hotels"
-                              />{" "}
-                            </a>{" "}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row banner g-4 mt-0 mb-2">
-                    <div class="col-md-4">
-                      <div class="row g-4">
-                        <div class="col-12 box1">
-                          <div class="item rounded">
-                            {" "}
-                            <a href="#" onClick={handleCity} data-city = "Bangkok" data-country="Thailand">
-                              <div data-city = "Bangkok" data-country="Thailand" class="caption text-center">
-                                <h2 data-city = "Bangkok" data-country="Thailand">Bangkok</h2>
-                                <p data-city = "Bangkok" data-country="Thailand">Starting Hotels from $330</p>
-                              </div>
-                              <div data-city = "Bangkok" data-country="Thailand" class="banner-mask"></div>
-                              <img
-                              data-city = "Bangkok" data-country="Thailand"
-                                class="img-fluid"
-                                src="images/brands/hotels/bangkok.jpg"
-                                alt="bangkok"
-                              />{" "}
-                            </a>{" "}
-                          </div>
-                        </div>
-                        <div class="col-12 box1">
-                          <div class="item rounded">
-                            {" "}
-                            <a href="#" onClick={handleCity} data-city = "New York" data-country="United States of America">
-                              <div class="caption text-center" data-city = "New York" data-country="United States of America">
-                                <h2 data-city = "New York" data-country="United States of America">New York</h2>
-                                <p data-city = "New York" data-country="United States of America">Starting Hotels from $480</p>
-                              </div>
-                              <div data-city = "New York" data-country="United States of America" class="banner-mask"></div>
-                              <img
-                              data-city = "New York" data-country="United States of America"
-                                class="img-fluid"
-                                src="images/brands/hotels/newyork.jpg"
-                                alt="newyork"
-                              />{" "}
-                            </a>{" "}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-8 box1">
-                      <div class="item rounded h-100">
-                        {" "}
-                        <a href="#" onClick={handleCity} data-city = "Singapore" data-country="Singapore">
-                          <div class="caption text-center" data-city = "Singapore" data-country="Singapore">
-                            <h2 class="text-7" data-city = "Singapore" data-country="Singapore">Singapore</h2>
-                            <p data-city = "Singapore" data-country="Singapore">Starting Hotels from $620</p>
-                          </div>
-                          <div class="banner-mask" data-city = "Singapore" data-country="Singapore"></div>
-                          <img
-                          data-city = "Singapore" data-country="Singapore"
-                            class="img-fluid h-100"
-                            src="images/brands/hotels/singapore.jpg"
-                            alt="singapore"
-                          />{" "}
-                        </a>{" "}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="d-grid pt-4">
-                    {" "}
-                    <a href="#" class="btn btn-outline-primary shadow-none">
-                      More Destinations
-                    </a>{" "}
-                  </div>
-                </div>
-              </section>
-
               <div class="container mt-5 py-2">
                 <h2 class="text-6 fw-500 mb-0">
                   Popular Destinations in India
@@ -3919,25 +3781,41 @@ const HotelSearch = () => {
                 >
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Bangalore">
-                      <div class="card border-0" data-country="India" data-city="Bangalore">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Bangalore"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Bangalore"
+                      >
                         {" "}
                         <img
                           class="card-img-top rounded destination-carousel-img"
                           src={bangalore}
                           alt="banner"
-                          data-country="India" data-city="Bangalore"
+                          data-country="India"
+                          data-city="Bangalore"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Bangalore">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Bangalore"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Bangalore"
+                            data-country="India"
+                            data-city="Bangalore"
                           >
                             Bangalore
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Bangalore"
+                            data-country="India"
+                            data-city="Bangalore"
                           >
                             1069 properties
                           </p>
@@ -3947,26 +3825,42 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Hyderabad">
-                      <div class="card border-0" data-country="India" data-city="Hyderabad">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Hyderabad"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Hyderabad"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Hyderabad"
+                          data-country="India"
+                          data-city="Hyderabad"
                           class="card-img-top rounded destination-carousel-img"
                           src={hyderabad}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Hyderabad">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Hyderabad"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
                             ref={(el) => elementRef.current.push(el)}
-                            data-country="India" data-city="Hyderabad"
+                            data-country="India"
+                            data-city="Hyderabad"
                           >
                             Hyderabad
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Hyderabad"
+                            data-country="India"
+                            data-city="Hyderabad"
                           >
                             2150 properties
                           </p>
@@ -3976,18 +3870,33 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Chennai">
-                      <div class="card border-0" data-country="India" data-city="Chennai">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Chennai"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Chennai"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Chennai"
+                          data-country="India"
+                          data-city="Chennai"
                           class="card-img-top rounded destination-carousel-img"
                           src={chennai}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Chennai">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Chennai"
+                        >
                           <p
-                            data-country="India" data-city="Chennai"
+                            data-country="India"
+                            data-city="Chennai"
                             class="card-title fw-500 text-dark mb-0"
                             ref={(el) => elementRef.current.push(el)}
                           >
@@ -3995,7 +3904,8 @@ const HotelSearch = () => {
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Chennai"
+                            data-country="India"
+                            data-city="Chennai"
                           >
                             805 properties
                           </p>
@@ -4005,18 +3915,33 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Jaipur">
-                      <div class="card border-0" data-country="India" data-city="Jaipur">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Jaipur"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Jaipur"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Jaipur"
+                          data-country="India"
+                          data-city="Jaipur"
                           class="card-img-top rounded destination-carousel-img"
                           src={jaipur}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Jaipur">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Jaipur"
+                        >
                           <p
-                            data-country="India" data-city="Jaipur"
+                            data-country="India"
+                            data-city="Jaipur"
                             class="card-title fw-500 text-dark mb-0"
                             ref={(el) => elementRef.current.push(el)}
                           >
@@ -4024,7 +3949,8 @@ const HotelSearch = () => {
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Jaipur"
+                            data-country="India"
+                            data-city="Jaipur"
                           >
                             655 properties
                           </p>
@@ -4034,25 +3960,41 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Mumbai">
-                      <div class="card border-0" data-country="India" data-city="Mumbai">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Mumbai"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Mumbai"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Mumbai"
+                          data-country="India"
+                          data-city="Mumbai"
                           class="card-img-top rounded destination-carousel-img"
                           src={mumbai}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Mumbai">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Mumbai"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Mumbai"
+                            data-country="India"
+                            data-city="Mumbai"
                           >
                             Mumbai
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Mumbai"
+                            data-country="India"
+                            data-city="Mumbai"
                           >
                             767 properties
                           </p>
@@ -4062,25 +4004,41 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Kochi">
-                      <div class="card border-0" data-country="India" data-city="Kochi">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Kochi"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Kochi"
+                      >
                         {" "}
                         <img
                           class="card-img-top rounded destination-carousel-img"
                           src={kochi}
                           alt="banner"
-                          data-country="India" data-city="Kochi"
+                          data-country="India"
+                          data-city="Kochi"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Kochi">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Kochi"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Kochi"
+                            data-country="India"
+                            data-city="Kochi"
                           >
                             Kochi
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Kochi"
+                            data-country="India"
+                            data-city="Kochi"
                           >
                             422 properties
                           </p>
@@ -4090,25 +4048,41 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Delhi">
-                      <div class="card border-0" data-country="India" data-city="Delhi">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Delhi"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Delhi"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Delhi"
+                          data-country="India"
+                          data-city="Delhi"
                           class="card-img-top rounded destination-carousel-img"
                           src={newdelhi}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Delhi">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Delhi"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Delhi"
+                            data-country="India"
+                            data-city="Delhi"
                           >
                             Delhi
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Delhi"
+                            data-country="India"
+                            data-city="Delhi"
                           >
                             1069 properties
                           </p>
@@ -4118,25 +4092,41 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Ahmedabad">
-                      <div class="card border-0" data-country="India" data-city="Ahmedabad">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Ahmedabad"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Ahmedabad"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Ahmedabad"
+                          data-country="India"
+                          data-city="Ahmedabad"
                           class="card-img-top rounded destination-carousel-img"
                           src={ahmedabad}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Ahmedabad">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Ahmedabad"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Ahmedabad"
+                            data-country="India"
+                            data-city="Ahmedabad"
                           >
                             Ahmedabad
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Ahmedabad"
+                            data-country="India"
+                            data-city="Ahmedabad"
                           >
                             2150 properties
                           </p>
@@ -4146,25 +4136,41 @@ const HotelSearch = () => {
                   </div>
                   <div class="item">
                     {" "}
-                    <a href="#" onClick={handleCity} data-country="India" data-city="Agra">
-                      <div class="card border-0" data-country="India" data-city="Agra">
+                    <a
+                      href="#"
+                      onClick={handleCity}
+                      data-country="India"
+                      data-city="Agra"
+                    >
+                      <div
+                        class="card border-0"
+                        data-country="India"
+                        data-city="Agra"
+                      >
                         {" "}
                         <img
-                          data-country="India" data-city="Agra"
+                          data-country="India"
+                          data-city="Agra"
                           class="card-img-top rounded destination-carousel-img"
                           src={agra}
                           alt="banner"
                         />
-                        <div class="card-body px-0 py-1" data-country="India" data-city="Agra">
+                        <div
+                          class="card-body px-0 py-1"
+                          data-country="India"
+                          data-city="Agra"
+                        >
                           <p
                             class="card-title fw-500 text-dark mb-0"
-                            data-country="India" data-city="Agra"
+                            data-country="India"
+                            data-city="Agra"
                           >
                             Agra
                           </p>
                           <p
                             class="card-text text-1 text-muted mb-0"
-                            data-country="India" data-city="Agra"
+                            data-country="India"
+                            data-city="Agra"
                           >
                             805 properties
                           </p>
@@ -4174,6 +4180,275 @@ const HotelSearch = () => {
                   </div>
                 </div>
               </div>
+
+              <section class="section">
+                <div class="mainpopcont">
+                  <h2 class="text-9 fw-500 text-center">
+                    Popular Destinations
+                  </h2>
+                  <p class="lead text-center mb-4">
+                    World's leading Hotel Booking website, Over 40,000 Hotel
+                    rooms worldwide.
+                  </p>
+                  <div class="row g-4 banner">
+                    <div class="col-md-8 box1">
+                      <div class="item rounded h-100">
+                        {" "}
+                        <a
+                          href="#"
+                          onClick={handleCity}
+                          data-city="Dubai"
+                          data-country="United Arab Emirates"
+                        >
+                          <div
+                            class="caption text-center"
+                            data-city="Dubai"
+                            data-country="United Arab Emirates"
+                          >
+                            <h2
+                              class="text-7"
+                              data-city="Dubai"
+                              data-country="United Arab Emirates"
+                            >
+                              Dubai
+                            </h2>
+                            <p
+                              data-city="Dubai"
+                              data-country="United Arab Emirates"
+                            >
+                              Starting Hotels from $550
+                            </p>
+                          </div>
+                          <div
+                            class="banner-mask"
+                            data-city="Dubai"
+                            data-country="United Arab Emirates"
+                          ></div>
+                          <img
+                            data-city="Dubai"
+                            data-country="United Arab Emirates"
+                            class="img-fluid h-100"
+                            src="images/brands/hotels/dubai.jpg"
+                            alt="hotels"
+                          />{" "}
+                        </a>{" "}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="row g-4">
+                        <div class="box1 col-12">
+                          <div class="item rounded">
+                            {" "}
+                            <a
+                              href="#"
+                              onClick={handleCity}
+                              data-city="Paris"
+                              data-country="France"
+                            >
+                              <div
+                                class="caption text-center"
+                                data-city="Paris"
+                                data-country="France"
+                              >
+                                <h2 data-city="Paris" data-country="France">
+                                  Paris
+                                </h2>
+                                <p data-city="Paris" data-country="France">
+                                  Starting Hotels from $350
+                                </p>
+                              </div>
+                              <div
+                                data-city="Paris"
+                                data-country="France"
+                                class="banner-mask"
+                              ></div>
+                              <img
+                                data-city="Paris"
+                                data-country="France"
+                                class="img-fluid"
+                                src={paris}
+                                alt="hotels"
+                              />{" "}
+                            </a>{" "}
+                          </div>
+                        </div>
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a
+                              href="#"
+                              onClick={handleCity}
+                              data-city="London"
+                              data-country="United Kingdom"
+                            >
+                              <div
+                                data-city="London"
+                                data-country="United Kingdom"
+                                class="caption text-center"
+                              >
+                                <h2
+                                  data-city="London"
+                                  data-country="United Kingdom"
+                                >
+                                  London
+                                </h2>
+                                <p
+                                  data-city="London"
+                                  data-country="United Kingdom"
+                                >
+                                  Starting Hotels from $400
+                                </p>
+                              </div>
+                              <div
+                                data-city="London"
+                                data-country="United Kingdom"
+                                class="banner-mask"
+                              ></div>
+                              <img
+                                data-city="London"
+                                data-country="United Kingdom"
+                                class="img-fluid"
+                                src="images/brands/hotels/lodon.jpg"
+                                alt="hotels"
+                              />{" "}
+                            </a>{" "}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row banner g-4 mt-0 mb-2">
+                    <div class="col-md-4">
+                      <div class="row g-4">
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a
+                              href="#"
+                              onClick={handleCity}
+                              data-city="Bangkok"
+                              data-country="Thailand"
+                            >
+                              <div
+                                data-city="Bangkok"
+                                data-country="Thailand"
+                                class="caption text-center"
+                              >
+                                <h2 data-city="Bangkok" data-country="Thailand">
+                                  Bangkok
+                                </h2>
+                                <p data-city="Bangkok" data-country="Thailand">
+                                  Starting Hotels from $330
+                                </p>
+                              </div>
+                              <div
+                                data-city="Bangkok"
+                                data-country="Thailand"
+                                class="banner-mask"
+                              ></div>
+                              <img
+                                data-city="Bangkok"
+                                data-country="Thailand"
+                                class="img-fluid"
+                                src="images/brands/hotels/bangkok.jpg"
+                                alt="bangkok"
+                              />{" "}
+                            </a>{" "}
+                          </div>
+                        </div>
+                        <div class="col-12 box1">
+                          <div class="item rounded">
+                            {" "}
+                            <a
+                              href="#"
+                              onClick={handleCity}
+                              data-city="New York"
+                              data-country="United States of America"
+                            >
+                              <div
+                                class="caption text-center"
+                                data-city="New York"
+                                data-country="United States of America"
+                              >
+                                <h2
+                                  data-city="New York"
+                                  data-country="United States of America"
+                                >
+                                  New York
+                                </h2>
+                                <p
+                                  data-city="New York"
+                                  data-country="United States of America"
+                                >
+                                  Starting Hotels from $480
+                                </p>
+                              </div>
+                              <div
+                                data-city="New York"
+                                data-country="United States of America"
+                                class="banner-mask"
+                              ></div>
+                              <img
+                                data-city="New York"
+                                data-country="United States of America"
+                                class="img-fluid"
+                                src="images/brands/hotels/newyork.jpg"
+                                alt="newyork"
+                              />{" "}
+                            </a>{" "}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8 box1">
+                      <div class="item rounded h-100">
+                        {" "}
+                        <a
+                          href="#"
+                          onClick={handleCity}
+                          data-city="Singapore"
+                          data-country="Singapore"
+                        >
+                          <div
+                            class="caption text-center"
+                            data-city="Singapore"
+                            data-country="Singapore"
+                          >
+                            <h2
+                              class="text-7"
+                              data-city="Singapore"
+                              data-country="Singapore"
+                            >
+                              Singapore
+                            </h2>
+                            <p data-city="Singapore" data-country="Singapore">
+                              Starting Hotels from $620
+                            </p>
+                          </div>
+                          <div
+                            class="banner-mask"
+                            data-city="Singapore"
+                            data-country="Singapore"
+                          ></div>
+                          <img
+                            data-city="Singapore"
+                            data-country="Singapore"
+                            class="img-fluid h-100"
+                            src="images/brands/hotels/singapore.jpg"
+                            alt="singapore"
+                          />{" "}
+                        </a>{" "}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-grid pt-4">
+                    {" "}
+                    <a href="#" class="btn btn-outline-primary shadow-none">
+                      More Destinations
+                    </a>{" "}
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
 
