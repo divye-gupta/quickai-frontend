@@ -44,6 +44,7 @@ const CssTextField = withStyles({
     },
     "& label.Mui-focused": {
       color: "#889099",
+      color: "#fff",
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
@@ -72,6 +73,10 @@ const CssTextField = withStyles({
     },
     "& .MuiInput-focused": {
       color: "#889099",
+      color: "#fff",
+    },
+    "& .MuiInput-input": {
+      color: "#fff",
     },
   },
   textField: {
@@ -833,6 +838,7 @@ const HotelSearch = () => {
                                           {...params}
                                           label="From"
                                           variant="standard"
+                                          style={{ color: "#fff" }}
                                         />
                                       </>
                                     )}
