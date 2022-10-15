@@ -36,6 +36,7 @@ const HotelConfirm = () => {
   const [UserPAN, setUserPAN] = useState("");
   const [UserAge, setUserAge] = useState("");
   const [hotelBookingDetails, setHotelBookingDetails] = useState([]);
+  const [markup, setMarkup] = useState();
   const history = useHistory();
 
   const paymentGateway = (e) => {
@@ -99,16 +100,28 @@ const HotelConfirm = () => {
     history.push({
       pathname: "/hotelpayment",
       state: {
-        amount:
-          blockRoomData[0]?.HotelRoomsDetails[0]?.Price.PublishedPriceRoundedOff.toFixed(
-            2
-          ),
+        amount: (
+          blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+            .PublishedPriceRoundedOff +
+          blockRoomData[0]?.HotelRoomsDetails[0]?.Price?.RoomPrice * +markup
+        ).toFixed(2),
         name: username,
         email: useremail,
         phone_number: userphone,
         currency: "INR",
         bookingObj,
       },
+    });
+  };
+
+  const getMarkup = async () => {
+    axios.get("http://localhost:8000/getmarkup").then((response) => {
+      console.log("markup", response);
+      if (response.data.length == 0) {
+        setMarkup(0);
+      } else {
+        setMarkup(response.data[0].Amount);
+      }
     });
   };
 
@@ -215,10 +228,18 @@ const HotelConfirm = () => {
     );
 
     if (hotelRoomBookingDetails !== undefined) {
+      getMarkup();
       setHotelBookingDetails([hotelRoomBookingDetails]);
       blockRoomConfirmation(hotelRoomBookingDetails);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(
+      blockRoomData[0]?.HotelRoomsDetails[0]?.Price?.RoomPrice,
+      blockRoomData[0]?.HotelRoomsDetails[0]?.Price?.RoomPrice * +markup
+    );
+  }, [markup, blockRoomData]);
 
   return (
     <>
@@ -743,7 +764,12 @@ const HotelConfirm = () => {
                     <li class="mb-2 fw-500">
                       Taxes & Fees{" "}
                       <span class="float-end text-4 fw-500 text-dark">
-                        {totalPrice.toFixed(2)}
+                        {(
+                          totalPrice +
+                          blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                            ?.RoomPrice *
+                            +markup
+                        ).toFixed(2)}
                       </span>
                     </li>
                   </ul>
@@ -752,10 +778,13 @@ const HotelConfirm = () => {
                     Total Amount{" "}
                     <span class="float-end text-6">
                       ₹
-                      {
+                      {(
                         blockRoomData[0]?.HotelRoomsDetails[0]?.Price
-                          .PublishedPriceRoundedOff
-                      }
+                          .PublishedPriceRoundedOff +
+                        blockRoomData[0]?.HotelRoomsDetails[0]?.Price
+                          ?.RoomPrice *
+                          +markup
+                      ).toFixed(2)}
                     </span>{" "}
                   </div>
                   <h3 class="text-4 mb-3 mt-4">Promo Code</h3>
