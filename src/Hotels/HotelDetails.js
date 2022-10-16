@@ -31,6 +31,18 @@ const HotelDetails = () => {
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [smokingPreference, setSmokingPreference] = useState(0);
   const [TokenId, setTokenId] = useState("");
+  const [markup, setMarkup] = useState(0);
+
+  const getMarkup = async () => {
+    axios.get("http://localhost:8000/getmarkup").then((response) => {
+      console.log("markup", response);
+      if (response.data.length == 0) {
+        setMarkup(0);
+      } else {
+        setMarkup(response.data[0].Amount);
+      }
+    });
+  };
 
   const selectHotelRoom = (e) => {
     const idx = e.target.value;
@@ -1731,7 +1743,9 @@ const HotelDetails = () => {
                     </div>
                     <div class="d-flex align-items-center my-4">
                       <div class="text-dark text-8 lh-1 fw-500 me-2 me-lg-3">
-                        {roomPrice === 0 ? "-" : ` ₹${roomPrice}`}
+                        {roomPrice === 0
+                          ? "-"
+                          : ` ₹${roomPrice + roomPrice * +markup}`}
                       </div>
                       {/* <div class="d-block text-4 text-black-50 me-2 me-lg-3">
                         <del class="d-block">$250</del>

@@ -234,13 +234,6 @@ const HotelConfirm = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(
-      blockRoomData[0]?.HotelRoomsDetails[0]?.Price?.RoomPrice,
-      blockRoomData[0]?.HotelRoomsDetails[0]?.Price?.RoomPrice * +markup
-    );
-  }, [markup, blockRoomData]);
-
   return (
     <>
       <div id="main-wrapper">

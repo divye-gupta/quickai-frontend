@@ -166,29 +166,135 @@ const Header = () => {
             </nav>
           </div>
         </div>
-        <nav style={{paddingBottom:"1rem"}} class="primary-menu navbar navbar-expand-lg">
+        </div>
+        <div class="nav-bg">
+        <nav style={{paddingBottom:"0rem"}} class="primary-menu navbar navbar-expand-lg">
+          <div class="container">
           <div id="header-nav" class="collapse navbar-collapse">
             <ul
               class="navbar-nav"
               style={{ width: "100%", justifyContent: "space-between" }}
             >
-              <li  class="active">
-                    Bangalore
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+              UTTARAKHAND</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Haridwar</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Rishikesh</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Dehradun</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Mussoorie</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Nainital</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Ranikhet</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Almora</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Rudraprayag</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Uttarkashi</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Kathgodam</a></li>
+                  </ul>
               </li>
-              <li  class="active">
-                    Delhi
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+              DELHI</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Paharganj</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Karol Bagh</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Janakpuri</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Dwarka</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Mahipalpur</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">IGI Airport</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Saket</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Lajpat Nagar</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">New Delhi Railway Station
+</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Rohini</a></li>
+                  </ul>
               </li>
-              <li  class="active">
-                    Mumbai
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+              HIMACHAL</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Manali</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Shimla</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Dharamsala</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Chamba</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Kalka</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Palampur</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Paonta Sahib</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Kullu</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Dalhousie</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Kasauli</a></li>
+                  </ul>
               </li>
-              <li  class="active">
-                    Kolkata
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+                    UTTTAR PRADESH</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-11.html">Noida</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Ghaziabad</a></li>
+                    <li><a class="dropdown-item" href="index-3.html">Varanasi</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Lucknow</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Agra</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Prayagraj</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Ayodhya</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Kanpur</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Mathura-Vrindavan</a></li>
+                    
+                    
+                  </ul>
               </li>
-              <li  class="active">
-                    Varanasi
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+              MAHARASHTRA</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-11.html">Mumbai</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Pune</a></li>
+                    <li><a class="dropdown-item" href="index-3.html">Nagpur</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Shirdi</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Lonavla</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Thane</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Ratnagiri</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Panchgani</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Mahabaleshwar</a></li>
+                    
+                    
+                  </ul>
               </li>
-              <li  class="active">
-                    Jaipur
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+                    SOUTH INDIA</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Bangalore</a></li>
+                    <li><a class="dropdown-item" href="index-3.html">Hyderabad</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Chennai</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Visakhapatnam</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Coimbatore</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Vijayawada</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Madurai</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Thiruvananthapuram</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Kochi</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Guntur</a></li>
+                  </ul>
+              </li>
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+                    RELIGIOUS CITY</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Puri</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Tirupati</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Rameshwaram</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Madurai</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Bodhgaya</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Ladakh</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Amritsar</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Pushkar</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Ajmer</a></li>
+                  </ul>
+              </li>
+              <li class="dropdown active"> <a class="dropdown-toggle" href="#">
+                    HOT LOCATION</a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="index-3.html">Goa</a></li>
+                    <li><a class="dropdown-item" href="index-4.html">Andaman</a></li>
+                    <li><a class="dropdown-item" href="index-5.html">Daman</a></li>
+                    <li><a class="dropdown-item" href="index-6.html">Kerala</a></li>
+                    <li><a class="dropdown-item" href="index-7.html">Cochin</a></li>
+                    <li><a class="dropdown-item" href="index-8.html">Sikkim</a></li>
+                    <li><a class="dropdown-item" href="index-9.html">Guwahati</a></li>
+                    <li><a class="dropdown-item" href="index-10.html">Kochi</a></li>
+                    <li><a class="dropdown-item" href="index-11.html">Guntur</a></li>
+                  </ul>
               </li>
 
               {/* <li class="dropdown active">
@@ -1247,6 +1353,7 @@ const Header = () => {
                 </ul>
               </li> */}
             </ul>
+          </div>
           </div>
         </nav>
       </div>
