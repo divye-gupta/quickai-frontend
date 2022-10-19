@@ -19,6 +19,7 @@ const indexRouter = require("./routes/index");
 const razorpayRouter = require("./routes/razorpayRouter");
 const authRouter = require("./routes/AuthenticationRouter");
 const userRouter = require("./routes/UserRouter");
+const bookingRouter = require("./routes/BookingRouter");
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(`/`, indexRouter);
 app.use(`/razorpay`, razorpayRouter);
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
+app.use("/booking", bookingRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

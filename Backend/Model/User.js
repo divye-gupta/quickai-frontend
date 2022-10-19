@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const HotelBooking = require("./HotelBooking");
 
 const userSchema = new mongoose.Schema(
   {
@@ -52,6 +53,12 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// userSchema.virtual("hotelbookings", {
+//   ref: "Hotelbooking",
+//   localField: "_id",
+//   foreignField: "Owner",
+// });
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;

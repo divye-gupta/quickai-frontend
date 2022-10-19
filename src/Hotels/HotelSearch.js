@@ -108,6 +108,7 @@ const HotelSearch = () => {
   const [rooms, setRooms] = useState(0);
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
+  const [childrenAge, setChildrenAge] = useState("");
 
   const [{ hotelDetails }, dispatch] = useStateValue();
 
@@ -181,9 +182,11 @@ const HotelSearch = () => {
     e.preventDefault();
     console.log(destination);
 
-    dispatch({
-      type: "CLEAR_HOTEL_LIST",
-    });
+    if (children > 0 && childrenAge === "") {
+      return alert("Please enter children age in the children age input");
+    }
+
+    const childrenAgeArray = childrenAge.split(" ").map((age) => +age);
 
     const date1 = new Date(checkinDate.split("/").reverse().join("/"));
     const date2 = new Date(checkoutDate);
@@ -194,6 +197,11 @@ const HotelSearch = () => {
 
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    dispatch({
+      type: "CLEAR_HOTEL_LIST",
+    });
+
     const item = {
       ...destination[0],
       CheckInDate: checkinDate,
@@ -208,7 +216,7 @@ const HotelSearch = () => {
         {
           NoOfAdults: adults,
           NoOfChild: children,
-          ChildAge: null,
+          ChildAge: childrenAgeArray,
         },
       ],
       MaxRating: 5,
@@ -1055,6 +1063,38 @@ const HotelSearch = () => {
                                           </div>
                                         </div>
                                       </div>
+                                      {children > 0 && (
+                                        <>
+                                          <hr class="my-2" />
+                                          <div class="row align-items-center">
+                                            <div class="col-sm-5 col-lg-5">
+                                              <p
+                                                class="mb-sm-0"
+                                                style={{
+                                                  display: "flex",
+                                                  flexDirection: "column",
+                                                }}
+                                              >
+                                                Children Age
+                                                <small class="text-muted">
+                                                  (Enter Space separated ages)
+                                                </small>
+                                              </p>
+                                            </div>
+                                            <div class="col-sm-7 col-lg-7">
+                                              <TextField
+                                                style={{ width: "100%" }}
+                                                id="outlined-full-width"
+                                                label="Children Age"
+                                                onChange={(e) =>
+                                                  setChildrenAge(e.target.value)
+                                                }
+                                                value={childrenAge}
+                                              />
+                                            </div>
+                                          </div>
+                                        </>
+                                      )}
                                       <div class="d-grid mt-4">
                                         <button
                                           class="btn btn-primary submit-done"
