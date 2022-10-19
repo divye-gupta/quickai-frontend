@@ -895,166 +895,161 @@ const HotelSearchDetails = () => {
                     HotelList.sort((a, b) => b.StarRating - a.StarRating).map(
                       (hotel, idx) => {
                         return (
-                          <>
-                            <div
-                              class="hotels-item bg-white shadow-md rounded p-3"
-                              key={hotel.HotelCode}
-                            >
-                              <div class="row">
-                                <div class="col-md-4">
-                                  {" "}
-                                  <a href="#">
-                                    <img
-                                      class="img-fluid rounded align-top hotel-list-img"
-                                      src={hotel.HotelPicture}
-                                      alt="Hotel Image not available"
-                                    />
-                                  </a>{" "}
-                                </div>
-                                <div class="col-md-8 ps-3 ps-md-0 mt-3 mt-md-0">
-                                  <div class="row g-0">
-                                    <div class="col-sm-9">
-                                      <h4>
-                                        <a href="#" class="text-dark text-5">
-                                          {hotel.HotelName}
-                                        </a>
-                                      </h4>
-                                      <p class="mb-2">
-                                        {" "}
-                                        <span class="me-2">
-                                          {[...Array(hotel.StarRating)].map(
-                                            (e, i) => (
-                                              <>
-                                                {" "}
-                                                <i
-                                                  class="fas fa-star text-warning"
-                                                  key={i}
-                                                ></i>
-                                              </>
-                                            )
-                                          )}
-                                          {/* <i class="fas fa-star text-warning"></i>{" "}
+                          <div
+                            class="hotels-item bg-white shadow-md rounded p-3"
+                            key={hotel.HotelCode}
+                          >
+                            <div class="row">
+                              <div class="col-md-4">
+                                {" "}
+                                <a href="#">
+                                  <img
+                                    class="img-fluid rounded align-top hotel-list-img"
+                                    src={hotel.HotelPicture}
+                                    alt="Hotel Image not available"
+                                  />
+                                </a>{" "}
+                              </div>
+                              <div class="col-md-8 ps-3 ps-md-0 mt-3 mt-md-0">
+                                <div class="row g-0">
+                                  <div class="col-sm-9">
+                                    <h4>
+                                      <a href="#" class="text-dark text-5">
+                                        {hotel.HotelName}
+                                      </a>
+                                    </h4>
+                                    <p class="mb-2">
+                                      {" "}
+                                      <span class="me-2">
+                                        {[...Array(hotel.StarRating)].map(
+                                          (e, i) => (
+                                            <i
+                                              class="fas fa-star text-warning"
+                                              key={i}
+                                            ></i>
+                                          )
+                                        )}
+                                        {/* <i class="fas fa-star text-warning"></i>{" "}
                                         <i class="fas fa-star text-warning"></i>{" "}
                                         <i class="fas fa-star text-warning"></i>{" "}
                                         <i class="fas fa-star text-warning"></i>{" "} */}
-                                        </span>{" "}
-                                        <span class="text-black-50">
-                                          <i class="fas fa-map-marker-alt"></i>{" "}
-                                          {hotel.HotelAddress}
-                                        </span>{" "}
-                                      </p>
-                                      <p class="hotels-amenities d-flex align-items-center mb-2 text-4">
-                                        {" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Internet/Wi-Fi"
-                                        >
-                                          <i class="fas fa-wifi"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Restaurant"
-                                        >
-                                          <i class="fas fa-utensils"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Bar"
-                                        >
-                                          <i class="fas fa-glass-martini"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Swimming Pool"
-                                        >
-                                          <i class="fas fa-swimmer"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Business Facilities"
-                                        >
-                                          <i class="fas fa-chalkboard-teacher"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Spa"
-                                        >
-                                          <i class="fas fa-spa"></i>
-                                        </span>{" "}
-                                        <span
-                                          data-bs-toggle="tooltip"
-                                          title="Gym"
-                                        >
-                                          <i class="fas fa-dumbbell"></i>
-                                        </span>{" "}
-                                        <span class="cf border rounded-pill text-1 text-nowrap px-2">
-                                          Couple Friendly
-                                        </span>{" "}
-                                      </p>
-                                      <p class="reviews mb-2">
-                                        {" "}
-                                        <span class="reviews-score px-2 py-1 rounded fw-600 text-light">
-                                          8.2
-                                        </span>{" "}
-                                        <span class="fw-600">
-                                          {hotel.HotelPromotion}
-                                        </span>{" "}
-                                        <a class="text-black-50" href="#">
-                                          (245 reviews)
-                                        </a>{" "}
-                                      </p>
-                                      <p class="text-danger mb-0">
-                                        Last Booked - 18 hours ago
-                                      </p>
+                                      </span>{" "}
+                                      <span class="text-black-50">
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        {hotel.HotelAddress}
+                                      </span>{" "}
+                                    </p>
+                                    <p class="hotels-amenities d-flex align-items-center mb-2 text-4">
+                                      {" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Internet/Wi-Fi"
+                                      >
+                                        <i class="fas fa-wifi"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Restaurant"
+                                      >
+                                        <i class="fas fa-utensils"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Bar"
+                                      >
+                                        <i class="fas fa-glass-martini"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Swimming Pool"
+                                      >
+                                        <i class="fas fa-swimmer"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Business Facilities"
+                                      >
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Spa"
+                                      >
+                                        <i class="fas fa-spa"></i>
+                                      </span>{" "}
+                                      <span
+                                        data-bs-toggle="tooltip"
+                                        title="Gym"
+                                      >
+                                        <i class="fas fa-dumbbell"></i>
+                                      </span>{" "}
+                                      <span class="cf border rounded-pill text-1 text-nowrap px-2">
+                                        Couple Friendly
+                                      </span>{" "}
+                                    </p>
+                                    <p class="reviews mb-2">
+                                      {" "}
+                                      <span class="reviews-score px-2 py-1 rounded fw-600 text-light">
+                                        8.2
+                                      </span>{" "}
+                                      <span class="fw-600">
+                                        {hotel.HotelPromotion}
+                                      </span>{" "}
+                                      <a class="text-black-50" href="#">
+                                        (245 reviews)
+                                      </a>{" "}
+                                    </p>
+                                    <p class="text-danger mb-0">
+                                      Last Booked - 18 hours ago
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3 text-end d-flex d-sm-block align-items-center hotel-details-right">
+                                    {hotel.Price.Discount > 0 && (
+                                      <>
+                                        <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
+                                          16% Off!
+                                        </div>
+                                        <div class="d-block text-3 text-black-50 mb-0 mb-sm-2 me-2 me-sm-0 order-1">
+                                          <del class="d-block">$250</del>
+                                        </div>
+                                      </>
+                                    )}
+                                    <div class="text-dark text-6 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
+                                      ₹{hotel.Price.PublishedPriceRoundedOff}
                                     </div>
-                                    <div class="col-sm-3 text-end d-flex d-sm-block align-items-center hotel-details-right">
-                                      {hotel.Price.Discount > 0 && (
-                                        <>
-                                          <div class="text-success text-3 mb-0 mb-sm-1 order-2 ">
-                                            16% Off!
-                                          </div>
-                                          <div class="d-block text-3 text-black-50 mb-0 mb-sm-2 me-2 me-sm-0 order-1">
-                                            <del class="d-block">$250</del>
-                                          </div>
-                                        </>
-                                      )}
-                                      <div class="text-dark text-6 fw-500 mb-0 mb-sm-2 me-2 me-sm-0 order-0">
-                                        ₹{hotel.Price.PublishedPriceRoundedOff}
-                                      </div>
-                                      <div class="text-black-50 mb-0 mb-sm-2 order-3 d-none d-sm-block">
-                                        1 Room/Night
-                                      </div>
-                                      <div className="hotel-btns">
-                                        <Button
-                                          variant="outlined"
-                                          color="primary"
-                                          className="show-details-outline"
-                                          onClick={() =>
-                                            viewHotel(
-                                              hotel.ResultIndex,
-                                              hotel.HotelCode,
-                                              hotel
-                                            )
-                                          }
-                                        >
-                                          Show Details
-                                        </Button>
-                                        <Button
-                                          variant="contained"
-                                          color="primary"
-                                          onClick={() => {
-                                            bookHotel();
-                                          }}
-                                        >
-                                          Book Now
-                                        </Button>
-                                      </div>
+                                    <div class="text-black-50 mb-0 mb-sm-2 order-3 d-none d-sm-block">
+                                      1 Room/Night
+                                    </div>
+                                    <div className="hotel-btns">
+                                      <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        className="show-details-outline"
+                                        onClick={() =>
+                                          viewHotel(
+                                            hotel.ResultIndex,
+                                            hotel.HotelCode,
+                                            hotel
+                                          )
+                                        }
+                                      >
+                                        Show Details
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                          bookHotel();
+                                        }}
+                                      >
+                                        Book Now
+                                      </Button>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         );
                       }
                     )}
